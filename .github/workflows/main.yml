@@ -56,9 +56,9 @@ jobs:
                       response.read().decode("utf-8")
                   )
 
-          # =========================
-          # KANAL
-          # =========================
+          # ==========================================
+          # 1. KANAL MƏLUMATLARI
+          # ==========================================
 
           channel_data = api_get(
               "channels",
@@ -72,34 +72,44 @@ jobs:
               raise RuntimeError("YouTube channel not found.")
 
           channel = channel_data["items"][0]
-          channel_statistics = channel.get("statistics", {})
+
+          channel_statistics = channel.get(
+              "statistics",
+              {}
+          )
 
           channel_stats = {
               "channelId": channel["id"],
+
               "title": channel.get(
-                  "snippet", {}
+                  "snippet",
+                  {}
               ).get(
                   "title",
                   "Bizdə Belədir"
               ),
+
               "subscribers": int(
                   channel_statistics.get(
                       "subscriberCount",
                       0
                   )
               ),
+
               "views": int(
                   channel_statistics.get(
                       "viewCount",
                       0
                   )
               ),
+
               "videos": int(
                   channel_statistics.get(
                       "videoCount",
                       0
                   )
               ),
+
               "hiddenSubscriberCount":
                   channel_statistics.get(
                       "hiddenSubscriberCount",
@@ -119,9 +129,9 @@ jobs:
                   indent=2
               )
 
-          # =========================
-          # SON 50 VIDEO
-          # =========================
+          # ==========================================
+          # 2. SON 50 VIDEO
+          # ==========================================
 
           uploads_playlist = (
               channel["contentDetails"]
@@ -153,11 +163,14 @@ jobs:
           if not video_ids:
               raise RuntimeError("No videos found.")
 
+          # ==========================================
+          # 3. VIDEO MƏLUMATLARI
+          # ==========================================
+
           video_data = api_get(
               "videos",
               {
-                  "part":
-                      "snippet,statistics,contentDetails",
+                  "part": "snippet,statistics,contentDetails",
                   "id": ",".join(video_ids)
               }
           )
@@ -167,9 +180,21 @@ jobs:
           for item in video_data.get("items", []):
 
               video_id = item["id"]
-              snippet = item.get("snippet", {})
-              stats = item.get("statistics", {})
-              content = item.get("contentDetails", {})
+
+              snippet = item.get(
+                  "snippet",
+                  {}
+              )
+
+              statistics = item.get(
+                  "statistics",
+                  {}
+              )
+
+              content = item.get(
+                  "contentDetails",
+                  {}
+              )
 
               all_videos.append({
                   "id": video_id,
@@ -202,7 +227,7 @@ jobs:
                       + "/hqdefault.jpg",
 
                   "views": int(
-                      stats.get(
+                      statistics.get(
                           "viewCount",
                           0
                       )
@@ -224,11 +249,17 @@ jobs:
                   "No video details found."
               )
 
+          # Ən yeni videolar birinci
+
           all_videos.sort(
               key=lambda video:
                   video["publishedAt"],
               reverse=True
           )
+
+          # ==========================================
+          # 4. ALL-VIDEOS.JSON
+          # ==========================================
 
           with open(
               "all-videos.json",
@@ -242,9 +273,9 @@ jobs:
                   indent=2
               )
 
-          # =========================
-          # TOP 3
-          # =========================
+          # ==========================================
+          # 5. TOP 3
+          # ==========================================
 
           top_videos = sorted(
               all_videos,
@@ -265,9 +296,9 @@ jobs:
                   indent=2
               )
 
-          # =========================
-          # VIDEO SƏHİFƏLƏRİ
-          # =========================
+          # ==========================================
+          # 6. VIDEO SƏHİFƏLƏRİ
+          # ==========================================
 
           if os.path.exists("video"):
               shutil.rmtree("video")
@@ -296,8 +327,6 @@ jobs:
                   + ".html"
               )
 
-              # HTML üçün təhlükəsiz mətn
-
               html_title = html.escape(
                   title,
                   quote=True
@@ -308,7 +337,9 @@ jobs:
                   quote=True
               )
 
-              # JSON-LD ayrıca json.dumps ilə hazırlanır
+              # ======================================
+              # VIDEOOBJECT
+              # ======================================
 
               video_object = {
                   "@context": "https://schema.org",
@@ -341,12 +372,10 @@ jobs:
                   },
 
                   "interactionStatistic": {
-                      "@type":
-                          "InteractionCounter",
+                      "@type": "InteractionCounter",
 
                       "interactionType": {
-                          "@type":
-                              "WatchAction"
+                          "@type": "WatchAction"
                       },
 
                       "userInteractionCount":
@@ -362,9 +391,15 @@ jobs:
                   "<\\/"
               )
 
+              # ======================================
+              # VIDEO HTML
+              # ======================================
+
               page = f"""<!DOCTYPE html>
           <html lang="az">
+
           <head>
+
             <meta charset="UTF-8">
 
             <meta
@@ -382,6 +417,11 @@ jobs:
             <meta
               name="robots"
               content="index, follow"
+            >
+
+            <meta
+              name="theme-color"
+              content="#080808"
             >
 
             <link
@@ -419,6 +459,7 @@ jobs:
             </script>
 
             <style>
+
               * {{
                 box-sizing: border-box;
               }}
@@ -500,7 +541,14 @@ jobs:
                 text-decoration: none;
                 font-weight: 900;
               }}
+
+              .home-button {{
+                background: #181818;
+                border: 1px solid #303030;
+              }}
+
             </style>
+
           </head>
 
           <body>
@@ -514,7 +562,9 @@ jobs:
                 ← BİZDƏ BELƏDİR
               </a>
 
-              <h1>{html_title}</h1>
+              <h1>
+                {html_title}
+              </h1>
 
               <div class="player">
 
@@ -545,9 +595,17 @@ jobs:
                 ▶ YouTube-da izlə
               </a>
 
+              <a
+                class="button home-button"
+                href="{SITE}/videos.html"
+              >
+                🎬 Digər videolara bax
+              </a>
+
             </main>
 
           </body>
+
           </html>
           """
 
@@ -561,22 +619,33 @@ jobs:
               ) as file:
                   file.write(page)
 
-          # =========================
-          # SITEMAP
-          # =========================
+          # ==========================================
+          # 7. SITEMAP
+          # ==========================================
 
           today = datetime.now(
               timezone.utc
-          ).strftime("%Y-%m-%d")
+          ).strftime(
+              "%Y-%m-%d"
+          )
 
           sitemap_lines = [
               '<?xml version="1.0" encoding="UTF-8"?>',
+
               '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+
               '  <url>',
               f'    <loc>{SITE}/</loc>',
               f'    <lastmod>{today}</lastmod>',
+              '  </url>',
+
+              '  <url>',
+              f'    <loc>{SITE}/videos.html</loc>',
+              f'    <lastmod>{today}</lastmod>',
               '  </url>'
           ]
+
+          # Bütün video səhifələrini sitemap-a əlavə et
 
           for video in all_videos:
 
@@ -610,20 +679,49 @@ jobs:
               encoding="utf-8"
           ) as file:
               file.write(
-                  "\n".join(sitemap_lines)
+                  "\n".join(
+                      sitemap_lines
+                  )
                   + "\n"
               )
 
+          # ==========================================
+          # NƏTİCƏ
+          # ==========================================
+
           print(
-              "Created",
-              len(all_videos),
-              "video pages."
+              "Channel:",
+              channel_stats["title"]
           )
 
           print(
-              "Sitemap contains",
-              len(all_videos) + 1,
-              "URLs."
+              "Subscribers:",
+              channel_stats["subscribers"]
+          )
+
+          print(
+              "Total views:",
+              channel_stats["views"]
+          )
+
+          print(
+              "Channel videos:",
+              channel_stats["videos"]
+          )
+
+          print(
+              "Loaded videos:",
+              len(all_videos)
+          )
+
+          print(
+              "Created video pages:",
+              len(all_videos)
+          )
+
+          print(
+              "Sitemap URLs:",
+              len(all_videos) + 2
           )
 
       - name: Commit updated data
@@ -642,5 +740,5 @@ jobs:
             exit 0
           fi
 
-          git commit -m "Update YouTube data and video pages"
+          git commit -m "Update YouTube data, video pages and sitemap"
           git push
