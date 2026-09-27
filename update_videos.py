@@ -385,7 +385,11 @@ for video in all_videos:
         )
 
         recommendations_html += f"""
-        <a class="rec" href="{rec_url}">
+        <a
+          class="rec"
+          href="{rec_url}"
+          data-recommended-video="{item['id']}"
+        >
           <img
             src="{item['thumbnail']}"
             alt="{rec_title}"
@@ -813,6 +817,7 @@ iframe{{
 
   <a
     class="btn youtube"
+    id="youtube-watch"
     href="{video['shortsUrl']}"
     target="_blank"
     rel="noopener noreferrer"
@@ -865,64 +870,202 @@ iframe{{
 const shareButton =
   document.getElementById("share");
 
+const youtubeButton =
+  document.getElementById("youtube-watch");
+
 const message =
   document.getElementById("message");
 
-shareButton.addEventListener(
-  "click",
-  async () => {{
 
-    const data = {{
-      title: {share_title_json},
-      text:
-        "Bizdə Belədir videosuna bax 👀",
-      url: {share_url_json}
-    }};
+function trackEvent(
+  eventName,
+  parameters = {{}}
+) {{
 
-    try {{
+  if (
+    typeof gtag === "function"
+  ) {{
 
-      if (navigator.share) {{
+    gtag(
+      "event",
+      eventName,
+      parameters
+    );
 
-        await navigator.share(data);
-
-      }} else if (
-        navigator.clipboard
-      ) {{
-
-        await navigator.clipboard.writeText(
-          data.url
-        );
-
-        message.textContent =
-          "✅ Video linki kopyalandı!";
-
-        message.style.display =
-          "block";
-
-      }} else {{
-
-        message.textContent =
-          data.url;
-
-        message.style.display =
-          "block";
-      }}
-
-    }} catch (error) {{
-
-      if (
-        error.name !== "AbortError"
-      ) {{
-
-        message.textContent =
-          "Linki paylaşmaq mümkün olmadı.";
-
-        message.style.display =
-          "block";
-      }}
-    }}
   }}
-);
+
+}}
+
+
+// ==================================================
+// YOUTUBE DÜYMƏSİ
+// ==================================================
+
+if (youtubeButton) {{
+
+  youtubeButton.addEventListener(
+    "click",
+    () => {{
+
+      trackEvent(
+        "youtube_click",
+        {{
+          video_id: "{video_id}",
+          video_title: {share_title_json}
+        }}
+      );
+
+    }}
+  );
+
+}}
+
+
+// ==================================================
+// TÖVSİYƏ OLUNAN VİDEOLAR
+// ==================================================
+
+document
+  .querySelectorAll(
+    "[data-recommended-video]"
+  )
+  .forEach(
+    link => {{
+
+      link.addEventListener(
+        "click",
+        () => {{
+
+          trackEvent(
+            "recommended_video_click",
+            {{
+              source_video_id:
+                "{video_id}",
+
+              target_video_id:
+                link.dataset.recommendedVideo
+            }}
+          );
+
+        }}
+      );
+
+    }}
+  );
+
+
+// ==================================================
+// PAYLAŞ DÜYMƏSİ
+// ==================================================
+
+if (shareButton) {{
+
+  shareButton.addEventListener(
+    "click",
+    async () => {{
+
+      const data = {{
+        title: {share_title_json},
+
+        text:
+          "Bizdə Belədir videosuna bax 👀",
+
+        url: {share_url_json}
+      }};
+
+
+      try {{
+
+        if (navigator.share) {{
+
+          await navigator.share(
+            data
+          );
+
+          trackEvent(
+            "share_video",
+            {{
+              video_id:
+                "{video_id}",
+
+              video_title:
+                {share_title_json},
+
+              share_method:
+                "native_share"
+            }}
+          );
+
+        }} else if (
+          navigator.clipboard
+        ) {{
+
+          await navigator.clipboard.writeText(
+            data.url
+          );
+
+          trackEvent(
+            "share_video",
+            {{
+              video_id:
+                "{video_id}",
+
+              video_title:
+                {share_title_json},
+
+              share_method:
+                "clipboard"
+            }}
+          );
+
+          message.textContent =
+            "✅ Video linki kopyalandı!";
+
+          message.style.display =
+            "block";
+
+        }} else {{
+
+          trackEvent(
+            "share_video",
+            {{
+              video_id:
+                "{video_id}",
+
+              video_title:
+                {share_title_json},
+
+              share_method:
+                "manual"
+            }}
+          );
+
+          message.textContent =
+            data.url;
+
+          message.style.display =
+            "block";
+        }}
+
+      }} catch (error) {{
+
+        if (
+          error.name !== "AbortError"
+        ) {{
+
+          message.textContent =
+            "Linki paylaşmaq mümkün olmadı.";
+
+          message.style.display =
+            "block";
+        }}
+
+      }}
+
+    }}
+  );
+
+}}
 
 </script>
 
@@ -1139,53 +1282,3 @@ sitemap_url_count = (
     2 + len(all_videos)
 )
 
-
-print(
-    "Channel:",
-    channel_stats["title"]
-)
-
-print(
-    "Subscribers:",
-    channel_stats["subscribers"]
-)
-
-print(
-    "Total views:",
-    channel_stats["views"]
-)
-
-print(
-    "Channel videos:",
-    channel_stats["videos"]
-)
-
-print(
-    "Loaded videos:",
-    len(all_videos)
-)
-
-print(
-    "Created video pages:",
-    len(all_videos)
-)
-
-print(
-    "Sitemap URLs:",
-    sitemap_url_count
-)
-
-print(
-    "Video sitemap entries:",
-    len(all_videos)
-)
-
-print(
-    "Google Analytics:",
-    GA_ID
-)
-
-print(
-    "Video sitemap:",
-    "OK"
-        )
