@@ -241,12 +241,19 @@
     .video-info strong {
       display: block;
       font-size: 17px;
+      line-height: 1.4;
       margin-bottom: 6px;
     }
 
     .video-info span {
       color: #888;
       font-size: 14px;
+    }
+
+    .loading {
+      color: #888;
+      text-align: center;
+      padding: 25px;
     }
 
     .about-box {
@@ -393,77 +400,13 @@
       <h2 class="section-title">🎬 Son videolar</h2>
 
       <p class="section-subtitle">
-        Baxmaq üçün videonun üzərinə toxun.
+        YouTube kanalımızdakı ən son videolar. Baxmaq üçün videoya toxun.
       </p>
 
-      <div class="videos">
-
-        <a
-          class="video-card"
-          href="https://youtube.com/shorts/GPBS-ZDtIEQ?si=U_19ASpYAVMiBDWy"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div class="thumb-wrap">
-            <img
-              src="https://i.ytimg.com/vi/GPBS-ZDtIEQ/hqdefault.jpg"
-              alt="Bizdə Belədir YouTube Shorts videosu"
-              loading="lazy"
-            >
-            <div class="play">▶</div>
-          </div>
-
-          <div class="video-info">
-            <strong>Bizdə Belədir #1</strong>
-            <span>YouTube Shorts-da bax →</span>
-          </div>
-        </a>
-
-
-        <a
-          class="video-card"
-          href="https://youtube.com/shorts/EcqxFdZIvvA?si=Eysl64Em-kU9B7iw"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div class="thumb-wrap">
-            <img
-              src="https://i.ytimg.com/vi/EcqxFdZIvvA/hqdefault.jpg"
-              alt="Bizdə Belədir YouTube Shorts videosu"
-              loading="lazy"
-            >
-            <div class="play">▶</div>
-          </div>
-
-          <div class="video-info">
-            <strong>Bizdə Belədir #2</strong>
-            <span>YouTube Shorts-da bax →</span>
-          </div>
-        </a>
-
-
-        <a
-          class="video-card"
-          href="https://youtube.com/shorts/yhnpH0dF66I?si=eSHM66GeT4pSH1dj"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div class="thumb-wrap">
-            <img
-              src="https://i.ytimg.com/vi/yhnpH0dF66I/hqdefault.jpg"
-              alt="Bizdə Belədir YouTube Shorts videosu"
-              loading="lazy"
-            >
-            <div class="play">▶</div>
-          </div>
-
-          <div class="video-info">
-            <strong>Bizdə Belədir #3</strong>
-            <span>YouTube Shorts-da bax →</span>
-          </div>
-        </a>
-
+      <div class="videos" id="latest-videos">
+        <div class="loading">Son videolar yüklənir...</div>
       </div>
+
     </div>
   </section>
 
@@ -495,6 +438,80 @@
   <footer>
     © 2026 BİZDƏ BELƏDİR • Bütün hüquqlar qorunur
   </footer>
+
+
+  <script>
+    async function loadLatestVideos() {
+      const container = document.getElementById("latest-videos");
+
+      try {
+        const response = await fetch(
+          "videos.json?ts=" + Date.now(),
+          { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+          throw new Error("videos.json yüklənmədi");
+        }
+
+        const videos = await response.json();
+
+        if (!Array.isArray(videos) || videos.length === 0) {
+          throw new Error("Video siyahısı boşdur");
+        }
+
+        container.innerHTML = "";
+
+        videos.slice(0, 3).forEach((video) => {
+          const card = document.createElement("a");
+          card.className = "video-card";
+          card.href = video.url;
+          card.target = "_blank";
+          card.rel = "noopener noreferrer";
+
+          const thumbWrap = document.createElement("div");
+          thumbWrap.className = "thumb-wrap";
+
+          const img = document.createElement("img");
+          img.src = video.thumbnail;
+          img.alt = video.title || "Bizdə Belədir YouTube Shorts videosu";
+          img.loading = "lazy";
+
+          const play = document.createElement("div");
+          play.className = "play";
+          play.textContent = "▶";
+
+          thumbWrap.appendChild(img);
+          thumbWrap.appendChild(play);
+
+          const info = document.createElement("div");
+          info.className = "video-info";
+
+          const title = document.createElement("strong");
+          title.textContent = video.title || "Bizdə Belədir";
+
+          const linkText = document.createElement("span");
+          linkText.textContent = "YouTube Shorts-da bax →";
+
+          info.appendChild(title);
+          info.appendChild(linkText);
+
+          card.appendChild(thumbWrap);
+          card.appendChild(info);
+
+          container.appendChild(card);
+        });
+
+      } catch (error) {
+        console.error(error);
+
+        container.innerHTML =
+          '<div class="loading">Videolar hazırda göstərilə bilmir. YouTube kanalımıza keçə bilərsiniz.</div>';
+      }
+    }
+
+    loadLatestVideos();
+  </script>
 
 </body>
 </html>
