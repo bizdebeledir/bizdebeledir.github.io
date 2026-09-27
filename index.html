@@ -155,6 +155,37 @@
     ]
   }
   </script>
+
+  <!-- Yuxarıdakı kiçik səhifə keçidləri -->
+  <style>
+    .quick-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      margin: -4px 0 22px;
+      flex-wrap: wrap;
+    }
+
+    .quick-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 35px;
+      padding: 7px 12px;
+      border: 1px solid #303030;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      color: #aaa;
+      font-size: 11px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .quick-link:active {
+      transform: scale(0.97);
+    }
+  </style>
 </head>
 
 <body>
@@ -187,6 +218,27 @@
         “bu eynən məndə də olur” dediyin videolar. 😄
       </p>
 
+      <!-- MƏXFİLİK + ƏLAQƏ -->
+      <nav
+        class="quick-links"
+        aria-label="Sayt keçidləri"
+      >
+        <a
+          class="quick-link"
+          href="/privacy.html"
+        >
+          🔐 Məxfilik
+        </a>
+
+        <a
+          class="quick-link"
+          href="/contact.html"
+        >
+          📩 Əlaqə
+        </a>
+      </nav>
+
+      <!-- STATİSTİKA -->
       <div class="stats">
 
         <div class="stat-card">
@@ -242,6 +294,7 @@
 
       </div>
 
+      <!-- YOUTUBE -->
       <a
         class="main-social"
         href="https://youtube.com/@bizde.beledir"
@@ -265,6 +318,7 @@
         </span>
       </a>
 
+      <!-- SOSİAL ŞƏBƏKƏLƏR -->
       <div class="small-socials">
 
         <a
@@ -351,6 +405,7 @@
 
   <main>
 
+    <!-- TOP 3 -->
     <section class="section">
 
       <div class="container">
@@ -381,6 +436,7 @@
     </section>
 
 
+    <!-- SON VİDEOLAR -->
     <section class="section alt">
 
       <div class="container">
@@ -411,6 +467,7 @@
     </section>
 
 
+    <!-- DÜYMƏLƏR -->
     <section class="section">
 
       <div class="container">
@@ -468,6 +525,7 @@
     </section>
 
 
+    <!-- HAQQINDA -->
     <section class="section alt">
 
       <div class="container">
@@ -523,45 +581,9 @@
   <footer>
 
     <div class="container">
-
-      <div
-        style="
-          display:flex;
-          justify-content:center;
-          gap:18px;
-          flex-wrap:wrap;
-          margin-bottom:15px;
-        "
-      >
-
-        <a
-          href="/privacy.html"
-          style="
-            color:#888;
-            text-decoration:none;
-            font-weight:700;
-          "
-        >
-          🔐 Məxfilik
-        </a>
-
-        <a
-          href="/contact.html"
-          style="
-            color:#888;
-            text-decoration:none;
-            font-weight:700;
-          "
-        >
-          📩 Əlaqə
-        </a>
-
-      </div>
-
       © 2026 Bizdə Belədir
       <br>
       Azərbaycan 🇦🇿
-
     </div>
 
   </footer>
