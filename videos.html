@@ -56,6 +56,18 @@
     href="https://bizdebeledir.github.io/videos.html"
   >
 
+  <link
+    rel="manifest"
+    href="/manifest.webmanifest"
+  >
+
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="192x192"
+    href="/icon-192.png"
+  >
+
   <style>
 
     * {
@@ -67,6 +79,12 @@
       font-family: Arial, Helvetica, sans-serif;
       background: #080808;
       color: #fff;
+    }
+
+    button,
+    input,
+    a {
+      -webkit-tap-highlight-color: transparent;
     }
 
     .page {
@@ -129,6 +147,10 @@
       border-color: #666;
     }
 
+    .search input::placeholder {
+      color: #777;
+    }
+
     .search-icon {
       position: absolute;
       left: 18px;
@@ -136,6 +158,44 @@
       transform: translateY(-50%);
       pointer-events: none;
     }
+
+    /* TARİX FİLTRİ */
+
+    .date-filter {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 11px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+
+    .date-filter::-webkit-scrollbar {
+      display: none;
+    }
+
+    .date-btn {
+      flex: 0 0 auto;
+      min-height: 43px;
+      padding: 0 15px;
+      border: 1px solid #303030;
+      border-radius: 999px;
+      background: #121212;
+      color: #999;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .date-btn.active {
+      border-color: #fff;
+      background: #fff;
+      color: #080808;
+    }
+
+    /* SIRALAMA */
 
     .filter-row {
       display: grid;
@@ -192,6 +252,10 @@
       overflow: hidden;
     }
 
+    .card:active {
+      transform: scale(0.99);
+    }
+
     .thumbnail {
       position: relative;
       width: 100%;
@@ -215,7 +279,7 @@
       width: 52px;
       height: 52px;
       border-radius: 50%;
-      background: rgba(0,0,0,.78);
+      background: rgba(0, 0, 0, 0.78);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -261,6 +325,7 @@
       border-radius: 20px;
       text-align: center;
       color: #888;
+      line-height: 1.6;
     }
 
     .youtube {
@@ -318,13 +383,15 @@
 
       <p class="subtitle">
         Bizdə Belədir kanalının videolarını
-        axtar və istədiyin qaydada sırala.
+        axtar, tarixə görə seç və istədiyin qaydada sırala.
       </p>
 
     </header>
 
 
     <section class="controls">
+
+      <!-- AXTARIŞ -->
 
       <div class="search">
 
@@ -341,6 +408,47 @@
 
       </div>
 
+
+      <!-- TARİX -->
+
+      <div class="date-filter">
+
+        <button
+          class="date-btn active"
+          data-days="all"
+          type="button"
+        >
+          Hamısı
+        </button>
+
+        <button
+          class="date-btn"
+          data-days="today"
+          type="button"
+        >
+          Bu gün
+        </button>
+
+        <button
+          class="date-btn"
+          data-days="7"
+          type="button"
+        >
+          Son 7 gün
+        </button>
+
+        <button
+          class="date-btn"
+          data-days="30"
+          type="button"
+        >
+          Son 30 gün
+        </button>
+
+      </div>
+
+
+      <!-- SIRALAMA -->
 
       <div class="filter-row">
 
@@ -407,10 +515,16 @@
 
   <script>
 
+    "use strict";
+
+
     let allVideos = [];
 
     let currentSort =
       "newest";
+
+    let currentDateFilter =
+      "all";
 
 
     const grid =
@@ -443,6 +557,15 @@
         "sort-label"
       );
 
+    const dateButtons =
+      document.querySelectorAll(
+        ".date-btn"
+      );
+
+
+    /* =========================
+       KÖMƏKÇİ FUNKSİYALAR
+    ========================= */
 
     function escapeHTML(text) {
 
@@ -452,9 +575,29 @@
         );
 
       element.textContent =
-        text || "";
+        String(text || "");
 
       return element.innerHTML;
+    }
+
+
+    function safeThumbnail(url) {
+
+      if (
+        typeof url !== "string"
+      ) {
+        return "";
+      }
+
+      if (
+        url.startsWith("https://")
+        ||
+        url.startsWith("http://")
+      ) {
+        return escapeHTML(url);
+      }
+
+      return "";
     }
 
 
@@ -496,7 +639,103 @@
     }
 
 
+    /* =========================
+       TARİX FİLTRİ
+    ========================= */
+
+    function matchesDateFilter(video) {
+
+      if (
+        currentDateFilter ===
+        "all"
+      ) {
+        return true;
+      }
+
+
+      const published =
+        new Date(
+          video.publishedAt
+        );
+
+
+      if (
+        Number.isNaN(
+          published.getTime()
+        )
+      ) {
+        return false;
+      }
+
+
+      const now =
+        new Date();
+
+
+      if (
+        currentDateFilter ===
+        "today"
+      ) {
+
+        return (
+          published.getFullYear()
+            ===
+          now.getFullYear()
+          &&
+          published.getMonth()
+            ===
+          now.getMonth()
+          &&
+          published.getDate()
+            ===
+          now.getDate()
+        );
+      }
+
+
+      const days =
+        Number(
+          currentDateFilter
+        );
+
+
+      if (
+        !Number.isFinite(days)
+      ) {
+        return true;
+      }
+
+
+      const limit =
+        new Date();
+
+      limit.setDate(
+        limit.getDate() - days
+      );
+
+
+      return (
+        published >= limit
+        &&
+        published <= now
+      );
+    }
+
+
+    /* =========================
+       VİDEO KARTI
+    ========================= */
+
     function createCard(video) {
+
+      if (
+        !video
+        ||
+        !video.id
+      ) {
+        return "";
+      }
+
 
       const pageURL =
         "video/"
@@ -505,22 +744,42 @@
           )
         + ".html";
 
+
+      const title =
+        escapeHTML(
+          video.title ||
+          "Bizdə Belədir"
+        );
+
+
+      const thumbnail =
+        safeThumbnail(
+          video.thumbnail
+        );
+
+
       return `
         <a
           class="card"
           href="${pageURL}"
+          aria-label="${title}"
         >
 
           <div class="thumbnail">
 
             <img
-              src="${video.thumbnail}"
-              alt="${escapeHTML(video.title)}"
+              src="${thumbnail}"
+              alt="${title}"
               loading="lazy"
               decoding="async"
+              width="480"
+              height="270"
             >
 
-            <span class="play">
+            <span
+              class="play"
+              aria-hidden="true"
+            >
               ▶
             </span>
 
@@ -529,7 +788,7 @@
           <div class="card-body">
 
             <div class="title">
-              ${escapeHTML(video.title)}
+              ${title}
             </div>
 
             <div class="meta">
@@ -551,6 +810,10 @@
     }
 
 
+    /* =========================
+       VİDEOLARI GÖSTƏR
+    ========================= */
+
     function renderVideos() {
 
       const query =
@@ -565,6 +828,15 @@
         allVideos.filter(
           video => {
 
+            if (
+              !video
+              ||
+              !video.id
+            ) {
+              return false;
+            }
+
+
             const title =
               (
                 video.title || ""
@@ -572,6 +844,7 @@
               .toLocaleLowerCase(
                 "az"
               );
+
 
             const description =
               (
@@ -581,10 +854,23 @@
                 "az"
               );
 
-            return (
+
+            const matchesSearch =
               title.includes(query)
               ||
-              description.includes(query)
+              description.includes(query);
+
+
+            const matchesDate =
+              matchesDateFilter(
+                video
+              );
+
+
+            return (
+              matchesSearch
+              &&
+              matchesDate
             );
           }
         );
@@ -607,11 +893,11 @@
         videos.sort(
           (a, b) =>
             new Date(
-              b.publishedAt
+              b.publishedAt || 0
             )
             -
             new Date(
-              a.publishedAt
+              a.publishedAt || 0
             )
         );
       }
@@ -625,7 +911,7 @@
 
         grid.innerHTML = `
           <div class="empty">
-            🔎 Axtarışa uyğun video tapılmadı.
+            🔎 Seçdiyin filtrə uyğun video tapılmadı.
           </div>
         `;
 
@@ -641,6 +927,10 @@
           .join("");
     }
 
+
+    /* =========================
+       SIRALAMA
+    ========================= */
 
     function setSort(type) {
 
@@ -691,6 +981,10 @@
     }
 
 
+    /* =========================
+       DÜYMƏLƏR
+    ========================= */
+
     newestButton
       .addEventListener(
         "click",
@@ -713,6 +1007,40 @@
       );
 
 
+    dateButtons.forEach(
+      button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            currentDateFilter =
+              button.dataset.days
+              ||
+              "all";
+
+
+            dateButtons.forEach(
+              item => {
+                item.classList.remove(
+                  "active"
+                );
+              }
+            );
+
+
+            button.classList.add(
+              "active"
+            );
+
+
+            renderVideos();
+          }
+        );
+      }
+    );
+
+
     search
       .addEventListener(
         "input",
@@ -720,16 +1048,22 @@
       );
 
 
+    /* =========================
+       VİDEOLARI YÜKLƏ
+    ========================= */
+
     async function loadVideos() {
 
       try {
 
         const response =
           await fetch(
-            "all-videos.json",
+            "all-videos.json"
+            + "?v="
+            + Date.now(),
             {
               cache:
-                "no-cache"
+                "no-store"
             }
           );
 
@@ -775,6 +1109,10 @@
       }
     }
 
+
+    /* =========================
+       BAŞLAT
+    ========================= */
 
     loadVideos();
 
