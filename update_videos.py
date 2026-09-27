@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 API_KEY = os.environ["YOUTUBE_API_KEY"]
 HANDLE = "@bizde.beledir"
 SITE = "https://bizdebeledir.github.io"
+GA_ID = "G-THZTTZJGRJ"
 
 
 # ==================================================
@@ -327,7 +328,6 @@ os.makedirs(
 for video in all_videos:
 
     video_id = video["id"]
-
     title = video["title"]
 
     description = (
@@ -367,7 +367,6 @@ for video in all_videos:
         for item in all_videos
         if item["id"] != video_id
     ][:3]
-
 
     recommendations_html = ""
 
@@ -495,6 +494,30 @@ for video in all_videos:
   name="viewport"
   content="width=device-width,initial-scale=1"
 >
+
+<!-- Google Analytics -->
+<script
+  async
+  src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"
+></script>
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag(){{
+    dataLayer.push(arguments);
+  }}
+
+  gtag(
+    "js",
+    new Date()
+  );
+
+  gtag(
+    "config",
+    "{GA_ID}"
+  );
+</script>
 
 <title>{safe_title} | Bizdə Belədir</title>
 
@@ -719,6 +742,7 @@ iframe{{
 }}
 
 @media(min-width:700px){{
+
   .buttons{{
     grid-template-columns:1fr 1fr
   }}
@@ -1154,6 +1178,11 @@ print(
 print(
     "Video sitemap entries:",
     len(all_videos)
+)
+
+print(
+    "Google Analytics:",
+    GA_ID
 )
 
 print(
