@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Update YouTube videos
+      - name: Update YouTube data
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         shell: python
@@ -52,11 +52,14 @@ jobs:
                       response.read().decode("utf-8")
                   )
 
-          # Kanalı handle vasitəsilə tap
+          # ==========================================
+          # 1. KANAL MƏLUMATLARI
+          # ==========================================
+
           channel_data = api_get(
               "channels",
               {
-                  "part": "snippet,contentDetails",
+                  "part": "snippet,contentDetails,statistics",
                   "forHandle": HANDLE
               }
           )
@@ -68,18 +71,85 @@ jobs:
 
           channel = channel_data["items"][0]
 
+          channel_id = channel["id"]
+
+          channel_title = (
+              channel
+              .get("snippet", {})
+              .get("title", "Bizdə Belədir")
+          )
+
+          statistics = channel.get(
+              "statistics",
+              {}
+          )
+
+          subscriber_count = int(
+              statistics.get(
+                  "subscriberCount",
+                  0
+              )
+          )
+
+          total_views = int(
+              statistics.get(
+                  "viewCount",
+                  0
+              )
+          )
+
+          video_count = int(
+              statistics.get(
+                  "videoCount",
+                  0
+              )
+          )
+
+          hidden_subscribers = (
+              statistics.get(
+                  "hiddenSubscriberCount",
+                  False
+              )
+          )
+
+          # Kanal statistikasını ayrıca saxla
+
+          channel_stats = {
+              "channelId": channel_id,
+              "title": channel_title,
+              "subscribers": subscriber_count,
+              "views": total_views,
+              "videos": video_count,
+              "hiddenSubscriberCount": hidden_subscribers
+          }
+
+          with open(
+              "channel-stats.json",
+              "w",
+              encoding="utf-8"
+          ) as file:
+              json.dump(
+                  channel_stats,
+                  file,
+                  ensure_ascii=False,
+                  indent=2
+              )
+
+          print("CHANNEL STATS")
+          print("Subscribers:", subscriber_count)
+          print("Total views:", total_views)
+          print("Videos:", video_count)
+
+          # ==========================================
+          # 2. UPLOADS PLAYLIST
+          # ==========================================
+
           uploads_playlist = (
               channel["contentDetails"]
               ["relatedPlaylists"]
               ["uploads"]
           )
 
-          print(
-              "Channel:",
-              channel["snippet"]["title"]
-          )
-
-          # Son 50 videonu götür
           playlist_data = api_get(
               "playlistItems",
               {
@@ -91,9 +161,13 @@ jobs:
 
           video_ids = []
 
-          for item in playlist_data.get("items", []):
+          for item in playlist_data.get(
+              "items",
+              []
+          ):
               video_id = (
-                  item.get("contentDetails", {})
+                  item
+                  .get("contentDetails", {})
                   .get("videoId")
               )
 
@@ -105,18 +179,25 @@ jobs:
                   "No YouTube videos found."
               )
 
-          # Video məlumatları və baxış sayı
+          # ==========================================
+          # 3. VİDEO MƏLUMATLARI
+          # ==========================================
+
           video_data = api_get(
               "videos",
               {
-                  "part": "snippet,statistics,contentDetails",
+                  "part":
+                      "snippet,statistics,contentDetails",
                   "id": ",".join(video_ids)
               }
           )
 
           all_videos = []
 
-          for item in video_data.get("items", []):
+          for item in video_data.get(
+              "items",
+              []
+          ):
               video_id = item["id"]
 
               snippet = item.get(
@@ -124,13 +205,13 @@ jobs:
                   {}
               )
 
-              statistics = item.get(
+              video_statistics = item.get(
                   "statistics",
                   {}
               )
 
               views = int(
-                  statistics.get(
+                  video_statistics.get(
                       "viewCount",
                       0
                   )
@@ -138,20 +219,23 @@ jobs:
 
               all_videos.append({
                   "id": video_id,
+
                   "title": snippet.get(
                       "title",
                       "Bizdə Belədir"
                   ),
-                  "url": (
+
+                  "url":
                       "https://www.youtube.com/shorts/"
-                      + video_id
-                  ),
-                  "thumbnail": (
+                      + video_id,
+
+                  "thumbnail":
                       "https://i.ytimg.com/vi/"
                       + video_id
-                      + "/hqdefault.jpg"
-                  ),
+                      + "/hqdefault.jpg",
+
                   "views": views,
+
                   "publishedAt": snippet.get(
                       "publishedAt",
                       ""
@@ -163,13 +247,16 @@ jobs:
                   "No video details found."
               )
 
-          # Yeni videolar birinci
+          # ==========================================
+          # 4. SON VİDEOLAR
+          # ==========================================
+
           all_videos.sort(
-              key=lambda video: video["publishedAt"],
+              key=lambda video:
+                  video["publishedAt"],
               reverse=True
           )
 
-          # Təsadüfi video sistemi üçün son 50
           with open(
               "all-videos.json",
               "w",
@@ -182,10 +269,14 @@ jobs:
                   indent=2
               )
 
-          # Baxış sayına görə TOP 3
+          # ==========================================
+          # 5. TOP 3
+          # ==========================================
+
           top_videos = sorted(
               all_videos,
-              key=lambda video: video["views"],
+              key=lambda video:
+                  video["views"],
               reverse=True
           )[:3]
 
@@ -204,10 +295,10 @@ jobs:
           print(
               "Saved",
               len(all_videos),
-              "videos to all-videos.json"
+              "videos."
           )
 
-          print("TOP 3:")
+          print("TOP 3")
 
           for video in top_videos:
               print(
@@ -216,17 +307,17 @@ jobs:
                   video["title"]
               )
 
-      - name: Commit updated videos
+      - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add videos.json all-videos.json
+          git add videos.json all-videos.json channel-stats.json
 
           if git diff --cached --quiet; then
             echo "No changes."
             exit 0
           fi
 
-          git commit -m "Update YouTube video data"
+          git commit -m "Update YouTube data"
           git push
