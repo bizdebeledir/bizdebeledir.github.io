@@ -336,6 +336,7 @@ Yeni gülməli memlər üçün abunə ol.
 
   <a
     class="btn youtube"
+    id="youtube-watch"
     href="https://www.youtube.com/shorts/uNquO4ujtUc"
     target="_blank"
     rel="noopener noreferrer"
@@ -377,7 +378,11 @@ Yeni gülməli memlər üçün abunə ol.
 
 <div class="rec-grid">
 
-        <a class="rec" href="https://bizdebeledir.github.io/video/we9HuByyqAs.html">
+        <a
+          class="rec"
+          href="https://bizdebeledir.github.io/video/we9HuByyqAs.html"
+          data-recommended-video="we9HuByyqAs"
+        >
           <img
             src="https://i.ytimg.com/vi/we9HuByyqAs/hqdefault.jpg"
             alt="Bu bayraq üçün canından keçənləri unutmadıq🇦🇿🥀#27Sentyabr #AnımGünü#ŞəhidlərimiziAnırıq #Unutmadıq"
@@ -387,12 +392,16 @@ Yeni gülməli memlər üçün abunə ol.
           <div class="rec-info">
             <strong>Bu bayraq üçün canından keçənləri unutmadıq🇦🇿🥀#27Sentyabr #AnımGünü#ŞəhidlərimiziAnırıq #Unutmadıq</strong>
             <span>
-              👁 302 baxış
+              👁 331 baxış
             </span>
           </div>
         </a>
         
-        <a class="rec" href="https://bizdebeledir.github.io/video/OFd4v31kMwo.html">
+        <a
+          class="rec"
+          href="https://bizdebeledir.github.io/video/OFd4v31kMwo.html"
+          data-recommended-video="OFd4v31kMwo"
+        >
           <img
             src="https://i.ytimg.com/vi/OFd4v31kMwo/hqdefault.jpg"
             alt="Bəzi yerlər heç vaxt dolmur... 🥀🇦🇿 #27Sentyabr#AnımGünü #ŞəhidlərimiziAnırıq#Unutmadıq #Azərbaycan"
@@ -402,12 +411,16 @@ Yeni gülməli memlər üçün abunə ol.
           <div class="rec-info">
             <strong>Bəzi yerlər heç vaxt dolmur... 🥀🇦🇿 #27Sentyabr#AnımGünü #ŞəhidlərimiziAnırıq#Unutmadıq #Azərbaycan</strong>
             <span>
-              👁 804 baxış
+              👁 833 baxış
             </span>
           </div>
         </a>
         
-        <a class="rec" href="https://bizdebeledir.github.io/video/AbE57TRy4s8.html">
+        <a
+          class="rec"
+          href="https://bizdebeledir.github.io/video/AbE57TRy4s8.html"
+          data-recommended-video="AbE57TRy4s8"
+        >
           <img
             src="https://i.ytimg.com/vi/AbE57TRy4s8/hqdefault.jpg"
             alt="Unutmadıq, unutmayacağıq... 🇦🇿🥀 #27Sentyabr #AnımGünü #ŞəhidlərimiziAnırıq #Unutmadıq"
@@ -417,7 +430,7 @@ Yeni gülməli memlər üçün abunə ol.
           <div class="rec-info">
             <strong>Unutmadıq, unutmayacağıq... 🇦🇿🥀 #27Sentyabr #AnımGünü #ŞəhidlərimiziAnırıq #Unutmadıq</strong>
             <span>
-              👁 532 baxış
+              👁 536 baxış
             </span>
           </div>
         </a>
@@ -433,64 +446,202 @@ Yeni gülməli memlər üçün abunə ol.
 const shareButton =
   document.getElementById("share");
 
+const youtubeButton =
+  document.getElementById("youtube-watch");
+
 const message =
   document.getElementById("message");
 
-shareButton.addEventListener(
-  "click",
-  async () => {
 
-    const data = {
-      title: "Bu 3 vəziyyətdən neçəsini yaşamısan? 😂",
-      text:
-        "Bizdə Belədir videosuna bax 👀",
-      url: "https://bizdebeledir.github.io/video/uNquO4ujtUc.html"
-    };
+function trackEvent(
+  eventName,
+  parameters = {}
+) {
 
-    try {
+  if (
+    typeof gtag === "function"
+  ) {
 
-      if (navigator.share) {
+    gtag(
+      "event",
+      eventName,
+      parameters
+    );
 
-        await navigator.share(data);
-
-      } else if (
-        navigator.clipboard
-      ) {
-
-        await navigator.clipboard.writeText(
-          data.url
-        );
-
-        message.textContent =
-          "✅ Video linki kopyalandı!";
-
-        message.style.display =
-          "block";
-
-      } else {
-
-        message.textContent =
-          data.url;
-
-        message.style.display =
-          "block";
-      }
-
-    } catch (error) {
-
-      if (
-        error.name !== "AbortError"
-      ) {
-
-        message.textContent =
-          "Linki paylaşmaq mümkün olmadı.";
-
-        message.style.display =
-          "block";
-      }
-    }
   }
-);
+
+}
+
+
+// ==================================================
+// YOUTUBE DÜYMƏSİ
+// ==================================================
+
+if (youtubeButton) {
+
+  youtubeButton.addEventListener(
+    "click",
+    () => {
+
+      trackEvent(
+        "youtube_click",
+        {
+          video_id: "uNquO4ujtUc",
+          video_title: "Bu 3 vəziyyətdən neçəsini yaşamısan? 😂"
+        }
+      );
+
+    }
+  );
+
+}
+
+
+// ==================================================
+// TÖVSİYƏ OLUNAN VİDEOLAR
+// ==================================================
+
+document
+  .querySelectorAll(
+    "[data-recommended-video]"
+  )
+  .forEach(
+    link => {
+
+      link.addEventListener(
+        "click",
+        () => {
+
+          trackEvent(
+            "recommended_video_click",
+            {
+              source_video_id:
+                "uNquO4ujtUc",
+
+              target_video_id:
+                link.dataset.recommendedVideo
+            }
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+// ==================================================
+// PAYLAŞ DÜYMƏSİ
+// ==================================================
+
+if (shareButton) {
+
+  shareButton.addEventListener(
+    "click",
+    async () => {
+
+      const data = {
+        title: "Bu 3 vəziyyətdən neçəsini yaşamısan? 😂",
+
+        text:
+          "Bizdə Belədir videosuna bax 👀",
+
+        url: "https://bizdebeledir.github.io/video/uNquO4ujtUc.html"
+      };
+
+
+      try {
+
+        if (navigator.share) {
+
+          await navigator.share(
+            data
+          );
+
+          trackEvent(
+            "share_video",
+            {
+              video_id:
+                "uNquO4ujtUc",
+
+              video_title:
+                "Bu 3 vəziyyətdən neçəsini yaşamısan? 😂",
+
+              share_method:
+                "native_share"
+            }
+          );
+
+        } else if (
+          navigator.clipboard
+        ) {
+
+          await navigator.clipboard.writeText(
+            data.url
+          );
+
+          trackEvent(
+            "share_video",
+            {
+              video_id:
+                "uNquO4ujtUc",
+
+              video_title:
+                "Bu 3 vəziyyətdən neçəsini yaşamısan? 😂",
+
+              share_method:
+                "clipboard"
+            }
+          );
+
+          message.textContent =
+            "✅ Video linki kopyalandı!";
+
+          message.style.display =
+            "block";
+
+        } else {
+
+          trackEvent(
+            "share_video",
+            {
+              video_id:
+                "uNquO4ujtUc",
+
+              video_title:
+                "Bu 3 vəziyyətdən neçəsini yaşamısan? 😂",
+
+              share_method:
+                "manual"
+            }
+          );
+
+          message.textContent =
+            data.url;
+
+          message.style.display =
+            "block";
+        }
+
+      } catch (error) {
+
+        if (
+          error.name !== "AbortError"
+        ) {
+
+          message.textContent =
+            "Linki paylaşmaq mümkün olmadı.";
+
+          message.style.display =
+            "block";
+        }
+
+      }
+
+    }
+  );
+
+}
 
 </script>
 
