@@ -31,6 +31,7 @@ jobs:
 
           def api_get(endpoint, params):
               params["key"] = API_KEY
+
               url = (
                   "https://www.googleapis.com/youtube/v3/"
                   + endpoint
@@ -38,15 +39,20 @@ jobs:
                   + urllib.parse.urlencode(params)
               )
 
-              req = urllib.request.Request(
+              request = urllib.request.Request(
                   url,
                   headers={"User-Agent": "Mozilla/5.0"}
               )
 
-              with urllib.request.urlopen(req, timeout=30) as response:
-                  return json.loads(response.read().decode("utf-8"))
+              with urllib.request.urlopen(
+                  request,
+                  timeout=30
+              ) as response:
+                  return json.loads(
+                      response.read().decode("utf-8")
+                  )
 
-          # 1. Find the exact channel from its handle.
+          # Kanalı handle vasitəsilə tap
           channel_data = api_get(
               "channels",
               {
@@ -56,7 +62,9 @@ jobs:
           )
 
           if not channel_data.get("items"):
-              raise RuntimeError("YouTube channel could not be found.")
+              raise RuntimeError(
+                  "YouTube channel could not be found."
+              )
 
           channel = channel_data["items"][0]
 
@@ -66,10 +74,12 @@ jobs:
               ["uploads"]
           )
 
-          print("Channel:", channel["snippet"]["title"])
-          print("Uploads playlist:", uploads_playlist)
+          print(
+              "Channel:",
+              channel["snippet"]["title"]
+          )
 
-          # 2. Get up to 50 latest uploads.
+          # Son 50 videonu götür
           playlist_data = api_get(
               "playlistItems",
               {
@@ -91,9 +101,11 @@ jobs:
                   video_ids.append(video_id)
 
           if not video_ids:
-              raise RuntimeError("No YouTube videos found.")
+              raise RuntimeError(
+                  "No YouTube videos found."
+              )
 
-          # 3. Get statistics and details for those videos.
+          # Video məlumatları və baxış sayı
           video_data = api_get(
               "videos",
               {
@@ -102,18 +114,29 @@ jobs:
               }
           )
 
-          videos = []
+          all_videos = []
 
           for item in video_data.get("items", []):
               video_id = item["id"]
-              snippet = item.get("snippet", {})
-              statistics = item.get("statistics", {})
 
-              view_count = int(
-                  statistics.get("viewCount", 0)
+              snippet = item.get(
+                  "snippet",
+                  {}
               )
 
-              videos.append({
+              statistics = item.get(
+                  "statistics",
+                  {}
+              )
+
+              views = int(
+                  statistics.get(
+                      "viewCount",
+                      0
+                  )
+              )
+
+              all_videos.append({
                   "id": video_id,
                   "title": snippet.get(
                       "title",
@@ -128,36 +151,65 @@ jobs:
                       + video_id
                       + "/hqdefault.jpg"
                   ),
-                  "views": view_count,
+                  "views": views,
                   "publishedAt": snippet.get(
                       "publishedAt",
                       ""
                   )
               })
 
-          # 4. Sort by views, highest first.
-          videos.sort(
-              key=lambda video: video["views"],
+          if not all_videos:
+              raise RuntimeError(
+                  "No video details found."
+              )
+
+          # Yeni videolar birinci
+          all_videos.sort(
+              key=lambda video: video["publishedAt"],
               reverse=True
           )
 
-          # Keep the top 3.
-          videos = videos[:3]
+          # Təsadüfi video sistemi üçün son 50
+          with open(
+              "all-videos.json",
+              "w",
+              encoding="utf-8"
+          ) as file:
+              json.dump(
+                  all_videos,
+                  file,
+                  ensure_ascii=False,
+                  indent=2
+              )
+
+          # Baxış sayına görə TOP 3
+          top_videos = sorted(
+              all_videos,
+              key=lambda video: video["views"],
+              reverse=True
+          )[:3]
 
           with open(
               "videos.json",
               "w",
               encoding="utf-8"
-          ) as f:
+          ) as file:
               json.dump(
-                  videos,
-                  f,
+                  top_videos,
+                  file,
                   ensure_ascii=False,
                   indent=2
               )
 
-          print("Top videos:")
-          for video in videos:
+          print(
+              "Saved",
+              len(all_videos),
+              "videos to all-videos.json"
+          )
+
+          print("TOP 3:")
+
+          for video in top_videos:
               print(
                   video["views"],
                   "-",
@@ -169,12 +221,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add videos.json
+          git add videos.json all-videos.json
 
           if git diff --cached --quiet; then
             echo "No changes."
             exit 0
           fi
 
-          git commit -m "Update YouTube videos"
+          git commit -m "Update YouTube video data"
           git push
