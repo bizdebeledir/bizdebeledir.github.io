@@ -265,9 +265,12 @@ jobs:
           if os.path.exists("video"):
               shutil.rmtree("video")
 
-          os.makedirs("video", exist_ok=True)
+          os.makedirs(
+              "video",
+              exist_ok=True
+          )
 
-          for current_index, video in enumerate(all_videos):
+          for video in all_videos:
 
               video_id = video["id"]
               title = video["title"]
@@ -293,6 +296,10 @@ jobs:
               meta_description = html.escape(
                   description[:250],
                   quote=True
+              )
+
+              safe_description_body = html.escape(
+                  description
               )
 
               # ======================================
@@ -332,7 +339,9 @@ jobs:
                         alt="{rec_title}"
                         loading="lazy"
                       >
-                      <span class="recommend-play">▶</span>
+                      <span class="recommend-play">
+                        ▶
+                      </span>
                     </div>
 
                     <div class="recommend-info">
@@ -384,10 +393,6 @@ jobs:
               ).replace(
                   "</",
                   "<\\/"
-              )
-
-              safe_description_body = html.escape(
-                  description
               )
 
               # ======================================
@@ -527,24 +532,51 @@ jobs:
                 overflow-wrap: anywhere;
               }}
 
+              .buttons {{
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-top: 20px;
+              }}
+
               .button {{
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 width: 100%;
                 min-height: 62px;
-                margin-top: 20px;
                 border-radius: 18px;
                 background: #ff0033;
                 color: #fff;
                 text-decoration: none;
+                font-family: inherit;
+                font-size: 16px;
                 font-weight: 900;
                 padding: 15px;
+                border: 0;
+                cursor: pointer;
+              }}
+
+              .share-button {{
+                background: #fff;
+                color: #080808;
               }}
 
               .home-button {{
                 background: #181818;
                 border: 1px solid #303030;
+              }}
+
+              .share-message {{
+                display: none;
+                margin-top: 12px;
+                padding: 12px 15px;
+                background: #151515;
+                border: 1px solid #303030;
+                border-radius: 14px;
+                color: #ccc;
+                font-size: 14px;
+                text-align: center;
               }}
 
               .recommend-section {{
@@ -635,6 +667,14 @@ jobs:
 
               @media (min-width: 700px) {{
 
+                .buttons {{
+                  grid-template-columns: 1fr 1fr;
+                }}
+
+                .home-button {{
+                  grid-column: 1 / -1;
+                }}
+
                 .recommend-grid {{
                   grid-template-columns:
                     repeat(3, 1fr);
@@ -693,49 +733,7 @@ jobs:
           {safe_description_body}
               </div>
 
-              <a
-                class="button"
-                href="{video['shortsUrl']}"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                ▶ YouTube-da izlə
-              </a>
+              <div class="buttons">
 
-              <a
-                class="button home-button"
-                href="{SITE}/videos.html"
-              >
-                🎬 Bütün videolara bax
-              </a>
-
-              <section class="recommend-section">
-
-                <h2>
-                  🔥 Bunlara da bax
-                </h2>
-
-                <p class="recommend-subtitle">
-                  Bizdə Belədir-dən başqa videolar.
-                </p>
-
-                <div class="recommend-grid">
-                  {recommendations_html}
-                </div>
-
-              </section>
-
-            </main>
-
-          </body>
-
-          </html>
-          """
-
-              with open(
-                  os.path.join(
-                      "video",
-                      video_id + ".html"
-                  ),
-                  "w",
-                  encoding=
+                <a
+         я
