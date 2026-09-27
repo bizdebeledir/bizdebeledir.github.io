@@ -110,7 +110,41 @@
       font-size: 18px;
       line-height: 1.6;
       max-width: 590px;
-      margin: 0 auto 34px;
+      margin: 0 auto 30px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 0 auto 32px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,.055);
+      border: 1px solid #333;
+      border-radius: 18px;
+      padding: 18px 7px;
+      min-width: 0;
+    }
+
+    .stat-icon {
+      font-size: 20px;
+      margin-bottom: 7px;
+    }
+
+    .stat-number {
+      font-size: clamp(17px, 5vw, 25px);
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .stat-label {
+      color: #888;
+      font-size: 11px;
+      margin-top: 5px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
     }
 
     .socials {
@@ -424,6 +458,10 @@
       .intro {
         font-size: 17px;
       }
+
+      .stat-card {
+        padding: 15px 4px;
+      }
     }
   </style>
 </head>
@@ -440,8 +478,7 @@
       <div class="profile">
         <img
           src="file_0000000059908210b6e69fc5a5cd05f1.png"
-          alt="Bizdə Belədir rəsmi profil şəkli"
-        >
+          alt="Bizdə Belədir rəsmi profil şəkli">
       </div>
 
       <h1>BİZDƏ<br>BELƏDİR</h1>
@@ -451,6 +488,29 @@
         qısa videolar və bir az da gülüş.
         Baxıb “bu eynən məndə də olur” deyəcəksən.
       </p>
+
+      <!-- CANLI STATİSTİKA -->
+      <div class="stats">
+
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-number" id="subscribers">...</div>
+          <div class="stat-label">Abunəçi</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">👁</div>
+          <div class="stat-number" id="total-views">...</div>
+          <div class="stat-label">Baxış</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">🎬</div>
+          <div class="stat-number" id="video-count">...</div>
+          <div class="stat-label">Video</div>
+        </div>
+
+      </div>
 
       <div class="socials">
 
@@ -486,7 +546,9 @@
   <section class="section">
     <div class="container">
 
-      <h2 class="section-title">🔥 Ən çox baxılan videolar</h2>
+      <h2 class="section-title">
+        🔥 Ən çox baxılan videolar
+      </h2>
 
       <p class="section-subtitle">
         YouTube kanalımızdan ən çox baxılan videolar avtomatik yenilənir.
@@ -503,7 +565,9 @@
   <section class="section alt">
     <div class="container">
 
-      <h2 class="section-title">🆕 Son videolar</h2>
+      <h2 class="section-title">
+        🆕 Son videolar
+      </h2>
 
       <p class="section-subtitle">
         Bizdə Belədir kanalında ən yeni yayımlanan videolar.
@@ -522,9 +586,10 @@
           📺 Bütün videolara bax
         </a>
 
-        <button class="action-btn random"
-                id="random-video"
-                type="button">
+        <button
+          class="action-btn random"
+          id="random-video"
+          type="button">
           🎲 Təsadüfi video
         </button>
 
@@ -535,9 +600,10 @@
           🔴 YouTube-da abunə ol
         </a>
 
-        <button class="action-btn"
-                id="share-site"
-                type="button">
+        <button
+          class="action-btn"
+          id="share-site"
+          type="button">
           🔗 Saytı paylaş
         </button>
 
@@ -597,8 +663,10 @@
   <script>
     let allVideos = [];
 
-    function formatViews(number) {
-      return new Intl.NumberFormat("az-AZ").format(number || 0);
+    function formatNumber(number) {
+      return new Intl.NumberFormat("az-AZ").format(
+        Number(number) || 0
+      );
     }
 
     function escapeHTML(text) {
@@ -638,7 +706,7 @@
             <div class="video-meta">
 
               <span class="views">
-                👁 ${formatViews(video.views)} baxış
+                👁 ${formatNumber(video.views)} baxış
               </span>
 
               <span>YouTube →</span>
@@ -648,6 +716,51 @@
           </div>
         </a>
       `;
+    }
+
+
+    async function loadStats() {
+      try {
+
+        const response = await fetch(
+          "channel-stats.json?v=" + Date.now(),
+          { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+          throw new Error("Statistika yüklənmədi");
+        }
+
+        const stats = await response.json();
+
+        const subscribers =
+          document.getElementById("subscribers");
+
+        if (stats.hiddenSubscriberCount) {
+          subscribers.textContent = "Gizli";
+        } else {
+          subscribers.textContent =
+            formatNumber(stats.subscribers);
+        }
+
+        document
+          .getElementById("total-views")
+          .textContent =
+            formatNumber(stats.views);
+
+        document
+          .getElementById("video-count")
+          .textContent =
+            formatNumber(stats.videos);
+
+      } catch (error) {
+
+        console.error(error);
+
+        document.getElementById("subscribers").textContent = "—";
+        document.getElementById("total-views").textContent = "—";
+        document.getElementById("video-count").textContent = "—";
+      }
     }
 
 
@@ -664,7 +777,7 @@
         );
 
         if (!response.ok) {
-          throw new Error("videos.json yüklənmədi");
+          throw new Error("TOP videolar yüklənmədi");
         }
 
         const videos = await response.json();
@@ -705,7 +818,7 @@
         );
 
         if (!response.ok) {
-          throw new Error("all-videos.json yüklənmədi");
+          throw new Error("Videolar yüklənmədi");
         }
 
         const data = await response.json();
@@ -720,11 +833,9 @@
             new Date(a.publishedAt)
         );
 
-        const latestVideos =
-          allVideos.slice(0, 3);
-
         container.innerHTML =
-          latestVideos
+          allVideos
+            .slice(0, 3)
             .map(video => createVideoCard(video, true))
             .join("");
 
@@ -809,6 +920,7 @@
       });
 
 
+    loadStats();
     loadTopVideos();
     loadAllVideos();
   </script>
