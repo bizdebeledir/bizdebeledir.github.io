@@ -1,52 +1,61 @@
-const CACHE_NAME = "bizde-beledir-v1";
+"use strict";
 
-const APP_FILES = [
-  "/",
-  "/index.html",
-  "/style.css",
-  "/script.js",
-  "/videos.html",
-  "/manifest.webmanifest",
+const CACHE_NAME = "bizde-beledir-pwa-v1";
+
+const ICON_FILES = [
   "/icon-192.png",
   "/icon-512.png"
 ];
 
+
+/* =========================
+   INSTALL
+========================= */
+
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_FILES))
+    caches
+      .open(CACHE_NAME)
+      .then(cache => cache.addAll(ICON_FILES))
   );
 
   self.skipWaiting();
 });
 
+
+/* =========================
+   ACTIVATE
+========================= */
+
 self.addEventListener("activate", event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
-      )
-    )
-  );
-
-  self.clients.claim();
-});
-
-self.addEventListener("fetch", event => {
-  if (event.request.method !== "GET") return;
-
-  event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        const copy = response.clone();
-
-        caches.open(CACHE_NAME)
-          .then(cache => cache.put(event.request, copy));
-
-        return response;
+    caches
+      .keys()
+      .then(cacheNames => {
+        return Promise.all(
+          cacheNames
+            .filter(name => name !== CACHE_NAME)
+            .map(name => caches.delete(name))
+        );
       })
-      .catch(() => caches.match(event.request))
+      .then(() => self.clients.claim())
   );
 });
+
+
+/* =========================
+   FETCH
+========================= */
+
+/*
+  Qəsdən fetch handler yoxdur.
+
+  Service Worker saytın:
+  - HTML
+  - CSS
+  - JavaScript
+  - JSON
+  - video səhifələri
+
+  sorğularına müdaxilə etmir.
+*/
