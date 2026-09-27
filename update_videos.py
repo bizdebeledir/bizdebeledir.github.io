@@ -6,10 +6,15 @@ import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 
+
 API_KEY = os.environ["YOUTUBE_API_KEY"]
 HANDLE = "@bizde.beledir"
 SITE = "https://bizdebeledir.github.io"
 
+
+# ==================================================
+# KÖMƏKÇİ FUNKSİYALAR
+# ==================================================
 
 def api_get(endpoint, params):
     params["key"] = API_KEY
@@ -23,7 +28,9 @@ def api_get(endpoint, params):
 
     request = urllib.request.Request(
         url,
-        headers={"User-Agent": "Mozilla/5.0"}
+        headers={
+            "User-Agent": "Mozilla/5.0"
+        }
     )
 
     with urllib.request.urlopen(
@@ -53,6 +60,13 @@ def format_views(number):
     return f"{int(number):,}"
 
 
+def xml_escape(value):
+    return html.escape(
+        str(value or ""),
+        quote=True
+    )
+
+
 # ==================================================
 # 1. KANAL
 # ==================================================
@@ -79,6 +93,7 @@ statistics = channel.get(
 
 channel_stats = {
     "channelId": channel["id"],
+
     "title": channel.get(
         "snippet",
         {}
@@ -86,24 +101,28 @@ channel_stats = {
         "title",
         "Bizdə Belədir"
     ),
+
     "subscribers": int(
         statistics.get(
             "subscriberCount",
             0
         )
     ),
+
     "views": int(
         statistics.get(
             "viewCount",
             0
         )
     ),
+
     "videos": int(
         statistics.get(
             "videoCount",
             0
         )
     ),
+
     "hiddenSubscriberCount":
         statistics.get(
             "hiddenSubscriberCount",
@@ -171,6 +190,7 @@ video_data = api_get(
     {
         "part":
             "snippet,statistics,contentDetails",
+
         "id":
             ",".join(video_ids)
     }
@@ -182,7 +202,6 @@ for item in video_data.get(
     "items",
     []
 ):
-
     video_id = item["id"]
 
     snippet = item.get(
@@ -201,7 +220,8 @@ for item in video_data.get(
     )
 
     all_videos.append({
-        "id": video_id,
+        "id":
+            video_id,
 
         "title":
             snippet.get(
@@ -371,6 +391,7 @@ for video in all_videos:
             src="{item['thumbnail']}"
             alt="{rec_title}"
             loading="lazy"
+            decoding="async"
           >
           <div class="rec-info">
             <strong>{rec_title}</strong>
@@ -898,7 +919,7 @@ shareButton.addEventListener(
 
 
 # ==================================================
-# 6. SITEMAP
+# 6. SITEMAP + VIDEO SEO
 # ==================================================
 
 today = datetime.now(
@@ -906,54 +927,165 @@ today = datetime.now(
 ).date().isoformat()
 
 
-sitemap_urls = [
+lines = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+
     (
-        SITE + "/",
-        today
-    ),
-    (
-        SITE + "/videos.html",
-        today
+        '<urlset '
+        'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
+        'xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">'
     )
 ]
 
+
+# ==================================================
+# ANA SƏHİFƏ
+# ==================================================
+
+lines.extend([
+    "  <url>",
+
+    "    <loc>"
+    + xml_escape(
+        SITE + "/"
+    )
+    + "</loc>",
+
+    "    <lastmod>"
+    + today
+    + "</lastmod>",
+
+    "  </url>"
+])
+
+
+# ==================================================
+# BÜTÜN VİDEOLAR SƏHİFƏSİ
+# ==================================================
+
+lines.extend([
+    "  <url>",
+
+    "    <loc>"
+    + xml_escape(
+        SITE + "/videos.html"
+    )
+    + "</loc>",
+
+    "    <lastmod>"
+    + today
+    + "</lastmod>",
+
+    "  </url>"
+])
+
+
+# ==================================================
+# HƏR VİDEO ÜÇÜN VIDEO SITEMAP
+# ==================================================
 
 for video in all_videos:
 
+    video_id = video["id"]
+
+    page_url = (
+        SITE
+        + "/video/"
+        + video_id
+        + ".html"
+    )
+
+    published_at = (
+        video.get(
+            "publishedAt"
+        )
+        or ""
+    )
+
     published_date = (
-        video["publishedAt"][:10]
-        if video["publishedAt"]
+        published_at[:10]
+        if published_at
         else today
     )
 
-    sitemap_urls.append(
-        (
-            SITE
-            + "/video/"
-            + video["id"]
-            + ".html",
-
-            published_date
+    title = (
+        video.get(
+            "title"
         )
+        or "Bizdə Belədir"
+    )
+
+    description = (
+        video.get(
+            "description",
+            ""
+        ).strip()
+        or
+        "Bizdə Belədir kanalından Azərbaycan yumor videosu."
+    )
+
+    thumbnail = (
+        video.get(
+            "thumbnail"
+        )
+        or ""
+    )
+
+    embed_url = (
+        video.get(
+            "embedUrl"
+        )
+        or ""
+    )
+
+    sitemap_description = (
+        description[:1800]
     )
 
 
-lines = [
-    '<?xml version="1.0" encoding="UTF-8"?>',
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
-]
-
-
-for url, lastmod in sitemap_urls:
-
     lines.extend([
         "  <url>",
+
         "    <loc>"
-        + html.escape(url)
+        + xml_escape(
+            page_url
+        )
         + "</loc>",
+
         "    <lastmod>"
-        + lastmod
+        + xml_escape(
+            published_date
+        )
         + "</lastmod>",
+
+        "    <video:video>",
+
+        "      <video:thumbnail_loc>"
+        + xml_escape(
+            thumbnail
+        )
+        + "</video:thumbnail_loc>",
+
+        "      <video:title>"
+        + xml_escape(
+            title
+        )
+        + "</video:title>",
+
+        "      <video:description>"
+        + xml_escape(
+            sitemap_description
+        )
+        + "</video:description>",
+
+        "      <video:player_loc>"
+        + xml_escape(
+            embed_url
+        )
+        + "</video:player_loc>",
+
+        "    </video:video>",
+
         "  </url>"
     ])
 
@@ -978,6 +1110,11 @@ with open(
 # ==================================================
 # 7. NƏTİCƏ
 # ==================================================
+
+sitemap_url_count = (
+    2 + len(all_videos)
+)
+
 
 print(
     "Channel:",
@@ -1011,5 +1148,15 @@ print(
 
 print(
     "Sitemap URLs:",
-    len(sitemap_urls)
-  )
+    sitemap_url_count
+)
+
+print(
+    "Video sitemap entries:",
+    len(all_videos)
+)
+
+print(
+    "Video sitemap:",
+    "OK"
+        )
