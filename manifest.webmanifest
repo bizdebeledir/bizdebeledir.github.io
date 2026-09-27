@@ -1,7 +1,8 @@
 {
+  "id": "/",
   "name": "Bizdə Belədir",
   "short_name": "Bizdə Belədir",
-  "description": "Azərbaycan yumoru, gündəlik həyat və tanış vəziyyətlər.",
+  "description": "Azərbaycan yumoru, gündəlik həyat və hamımıza tanış vəziyyətlər.",
   "lang": "az",
   "start_url": "/",
   "scope": "/",
