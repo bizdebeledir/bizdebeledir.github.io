@@ -500,6 +500,33 @@ if (elements.shareButton) {
 
 
 /* =========================
+   PWA SERVICE WORKER
+========================= */
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener(
+    "load",
+    function () {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then(registration => {
+          console.log(
+            "Service Worker qeydiyyatdan keçdi:",
+            registration.scope
+          );
+        })
+        .catch(error => {
+          console.error(
+            "Service Worker qeydiyyat xətası:",
+            error
+          );
+        });
+    }
+  );
+}
+
+
+/* =========================
    BAŞLAT
 ========================= */
 
