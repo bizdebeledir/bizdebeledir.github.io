@@ -13,6 +13,7 @@
   <meta name="theme-color" content="#080808">
 
   <link rel="canonical" href="https://bizdebeledir.github.io/">
+  <link rel="stylesheet" href="style.css">
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="Bizdə Belədir | Azərbaycan Yumor Videoları">
@@ -39,509 +40,6 @@
     ]
   }
   </script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #080808;
-      color: #fff;
-      min-height: 100vh;
-    }
-
-    a, button {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .hero {
-      position: relative;
-      overflow: hidden;
-      padding: 42px 17px 48px;
-      background:
-        radial-gradient(circle at 50% -10%, #303030 0%, #151515 38%, #080808 75%);
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      width: 280px;
-      height: 280px;
-      top: -170px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-radius: 50%;
-      background: rgba(255,255,255,.06);
-      filter: blur(35px);
-      pointer-events: none;
-    }
-
-    .container {
-      position: relative;
-      width: 100%;
-      max-width: 760px;
-      margin: auto;
-    }
-
-    .hero .container {
-      text-align: center;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      min-height: 34px;
-      padding: 7px 13px;
-      margin-bottom: 24px;
-      border: 1px solid #3b3b3b;
-      border-radius: 999px;
-      background: rgba(255,255,255,.035);
-      color: #bbb;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: .4px;
-    }
-
-    .profile {
-      width: 108px;
-      height: 108px;
-      margin: 0 auto 20px;
-      border: 3px solid #fff;
-      border-radius: 50%;
-      overflow: hidden;
-      background: #222;
-      box-shadow: 0 16px 45px rgba(0,0,0,.55);
-    }
-
-    .profile img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    h1 {
-      margin-bottom: 20px;
-      font-size: clamp(52px, 15vw, 82px);
-      line-height: .88;
-      letter-spacing: -4px;
-      font-weight: 900;
-    }
-
-    .intro {
-      max-width: 570px;
-      margin: 0 auto 26px;
-      color: #aaa;
-      font-size: 16px;
-      line-height: 1.6;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 25px;
-    }
-
-    .stat-card {
-      min-width: 0;
-      padding: 15px 5px;
-      border: 1px solid #303030;
-      border-radius: 17px;
-      background: rgba(255,255,255,.045);
-    }
-
-    .stat-icon {
-      margin-bottom: 6px;
-      font-size: 18px;
-    }
-
-    .stat-number {
-      font-size: clamp(16px, 5vw, 24px);
-      font-weight: 900;
-      overflow-wrap: anywhere;
-    }
-
-    .stat-label {
-      margin-top: 5px;
-      color: #777;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    .main-social {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      min-height: 68px;
-      padding: 0 20px;
-      border-radius: 19px;
-      background: #ff0033;
-      color: #fff;
-      text-decoration: none;
-      font-size: 19px;
-      font-weight: 900;
-      box-shadow: 0 12px 28px rgba(255,0,51,.14);
-    }
-
-    .main-social-left {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-    }
-
-    .main-social-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 35px;
-      height: 35px;
-      border-radius: 10px;
-      background: rgba(255,255,255,.16);
-      font-size: 16px;
-    }
-
-    .small-socials {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 9px;
-      margin-top: 10px;
-    }
-
-    .small-social {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      min-height: 54px;
-      padding: 0 13px;
-      border: 1px solid #303030;
-      border-radius: 16px;
-      background: #141414;
-      color: #fff;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 800;
-      overflow: hidden;
-    }
-
-    .small-social .icon {
-      display: flex;
-      flex: 0 0 31px;
-      align-items: center;
-      justify-content: center;
-      width: 31px;
-      height: 31px;
-      border-radius: 9px;
-      background: #222;
-      font-size: 15px;
-    }
-
-    .small-social.instagram .icon {
-      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
-    }
-
-    .small-social.telegram .icon {
-      background: #229ed9;
-    }
-
-    .small-social.facebook .icon {
-      background: #1877f2;
-    }
-
-    .small-social.threads .icon {
-      background: #000;
-      border: 1px solid #444;
-    }
-
-    .social-name {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .section {
-      padding: 50px 17px;
-    }
-
-    .section.alt {
-      background: #0c0c0c;
-      border-top: 1px solid #171717;
-      border-bottom: 1px solid #171717;
-    }
-
-    .section-head {
-      margin-bottom: 21px;
-    }
-
-    .section-title {
-      margin-bottom: 7px;
-      font-size: 29px;
-      line-height: 1.15;
-      font-weight: 900;
-    }
-
-    .section-subtitle {
-      color: #888;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .videos {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-
-    .video-card {
-      position: relative;
-      display: block;
-      overflow: hidden;
-      border: 1px solid #292929;
-      border-radius: 20px;
-      background: #141414;
-      color: #fff;
-      text-decoration: none;
-    }
-
-    .video-card:active {
-      transform: scale(.99);
-    }
-
-    .top-card {
-      border-color: #383838;
-    }
-
-    .top-card.top-1 {
-      box-shadow: 0 12px 35px rgba(255,200,0,.07);
-    }
-
-    .rank-badge {
-      position: absolute;
-      z-index: 5;
-      top: 11px;
-      left: 11px;
-      padding: 7px 10px;
-      border: 1px solid rgba(255,255,255,.2);
-      border-radius: 999px;
-      background: rgba(0,0,0,.84);
-      font-size: 11px;
-      font-weight: 900;
-      backdrop-filter: blur(8px);
-    }
-
-    .rank-badge.rank-1 {
-      background: rgba(83,60,0,.92);
-    }
-
-    .rank-badge.rank-2 {
-      background: rgba(55,55,55,.92);
-    }
-
-    .rank-badge.rank-3 {
-      background: rgba(78,41,18,.92);
-    }
-
-    .thumb-wrap {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      overflow: hidden;
-      background: #222;
-    }
-
-    .thumb-wrap img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .play {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 52px;
-      height: 52px;
-      padding-left: 3px;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      background: rgba(0,0,0,.76);
-      font-size: 20px;
-    }
-
-    .new-badge {
-      position: absolute;
-      top: 11px;
-      left: 11px;
-      padding: 6px 9px;
-      border-radius: 999px;
-      background: #ff0033;
-      font-size: 10px;
-      font-weight: 900;
-    }
-
-    .video-info {
-      padding: 14px 15px 16px;
-    }
-
-    .video-title {
-      display: -webkit-box;
-      overflow: hidden;
-      margin-bottom: 9px;
-      font-size: 16px;
-      line-height: 1.35;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-    }
-
-    .video-meta {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      color: #888;
-      font-size: 12px;
-    }
-
-    .views {
-      color: #ccc;
-      font-weight: 700;
-    }
-
-    .loading {
-      grid-column: 1 / -1;
-      padding: 25px;
-      border-radius: 18px;
-      background: #111;
-      color: #888;
-      text-align: center;
-    }
-
-    .actions {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .action-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      min-height: 58px;
-      padding: 13px 15px;
-      border: 1px solid #303030;
-      border-radius: 17px;
-      background: #151515;
-      color: #fff;
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 900;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .action-btn.primary {
-      border-color: #ff0033;
-      background: #ff0033;
-    }
-
-    .action-btn.random {
-      border-color: #fff;
-      background: #fff;
-      color: #080808;
-    }
-
-    .about-box {
-      padding: 24px 20px;
-      border: 1px solid #292929;
-      border-radius: 22px;
-      background: linear-gradient(145deg, #181818, #101010);
-    }
-
-    .about-box h2 {
-      margin-bottom: 12px;
-      font-size: 25px;
-    }
-
-    .about-box p {
-      color: #aaa;
-      font-size: 15px;
-      line-height: 1.7;
-    }
-
-    .question {
-      margin-top: 18px;
-      font-size: 20px;
-      font-weight: 900;
-    }
-
-    .follow-box {
-      margin-top: 18px;
-      padding: 22px 19px;
-      border: 1px solid #292929;
-      border-radius: 22px;
-      background: #111;
-    }
-
-    .follow-box h3 {
-      margin-bottom: 7px;
-      font-size: 21px;
-    }
-
-    .follow-box p {
-      margin-bottom: 16px;
-      color: #999;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    footer {
-      padding: 30px 17px 38px;
-      border-top: 1px solid #1e1e1e;
-      color: #666;
-      font-size: 12px;
-      text-align: center;
-    }
-
-    @media (min-width: 700px) {
-      .hero {
-        padding-top: 55px;
-      }
-
-      .small-socials {
-        grid-template-columns: repeat(5, 1fr);
-      }
-
-      .small-social {
-        justify-content: center;
-        flex-direction: column;
-        min-height: 78px;
-        gap: 6px;
-      }
-
-      .videos {
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .actions {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-  </style>
 </head>
 
 <body>
@@ -549,9 +47,7 @@
 <section class="hero">
   <div class="container">
 
-    <div class="tag">
-      🇦🇿 GÜNDƏLİK HƏYAT • MİZAH • VİDEO
-    </div>
+    <div class="tag">🇦🇿 GÜNDƏLİK HƏYAT • MİZAH • VİDEO</div>
 
     <div class="profile">
       <img
@@ -589,11 +85,10 @@
 
     </div>
 
-    <a
-      class="main-social"
-      href="https://youtube.com/@bizde.beledir"
-      target="_blank"
-      rel="noopener noreferrer">
+    <a class="main-social"
+       href="https://youtube.com/@bizde.beledir"
+       target="_blank"
+       rel="noopener noreferrer">
 
       <span class="main-social-left">
         <span class="main-social-icon">▶</span>
@@ -605,49 +100,44 @@
 
     <div class="small-socials">
 
-      <a
-        class="small-social instagram"
-        href="https://www.instagram.com/bizde.beledir"
-        target="_blank"
-        rel="noopener noreferrer">
+      <a class="small-social instagram"
+         href="https://www.instagram.com/bizde.beledir"
+         target="_blank"
+         rel="noopener noreferrer">
         <span class="icon">◎</span>
-        <span class="social-name">Instagram</span>
+        <span>Instagram</span>
       </a>
 
-      <a
-        class="small-social"
-        href="https://www.tiktok.com/@bizde.beledir"
-        target="_blank"
-        rel="noopener noreferrer">
+      <a class="small-social"
+         href="https://www.tiktok.com/@bizde.beledir"
+         target="_blank"
+         rel="noopener noreferrer">
         <span class="icon">♪</span>
-        <span class="social-name">TikTok</span>
+        <span>TikTok</span>
       </a>
 
-      <a
-        class="small-social telegram"
-        href="https://t.me/Bizdebeledir"
-        target="_blank"
-        rel="noopener noreferrer">
+      <a class="small-social telegram"
+         href="https://t.me/Bizdebeledir"
+         target="_blank"
+         rel="noopener noreferrer">
         <span class="icon">➤</span>
-        <span class="social-name">Telegram</span>
+        <span>Telegram</span>
       </a>
 
-      <a
-        class="small-social facebook"
-        href="https://www.facebook.com/share/1JU7XLwLea/"
-        target="_blank"
-        rel="noopener noreferrer">
+      <a class="small-social facebook"
+         href="https://www.facebook.com/share/1JU7XLwLea/"
+         target="_blank"
+         rel="noopener noreferrer">
         <span class="icon">f</span>
-        <span class="social-name">Facebook</span>
+        <span>Facebook</span>
       </a>
 
-      <a
-        class="small-social threads"
-        href="https://www.threads.com/@bizde.beledir"
-        target="_blank"
-        rel="noopener noreferrer">
+      <a class="small-social threads"
+         href="https://www.threads.com/@bizde.beledir"
+         target="_blank"
+         rel="noopener noreferrer">
         <span class="icon">@</span>
-        <span class="social-name">Threads</span>
+        <span>Threads</span>
       </a>
 
     </div>
@@ -660,19 +150,14 @@
   <div class="container">
 
     <div class="section-head">
-      <h2 class="section-title">
-        🏆 TOP 3 video
-      </h2>
-
+      <h2 class="section-title">🏆 TOP 3 video</h2>
       <p class="section-subtitle">
         Son 50 video arasında hazırda ən çox baxış toplayan 3 video.
       </p>
     </div>
 
     <div class="videos" id="top-videos">
-      <div class="loading">
-        TOP videolar yüklənir...
-      </div>
+      <div class="loading">TOP videolar yüklənir...</div>
     </div>
 
   </div>
@@ -683,48 +168,38 @@
   <div class="container">
 
     <div class="section-head">
-      <h2 class="section-title">
-        🆕 Son videolar
-      </h2>
-
+      <h2 class="section-title">🆕 Son videolar</h2>
       <p class="section-subtitle">
         Bizdə Belədir kanalında ən yeni yayımlanan videolar.
       </p>
     </div>
 
     <div class="videos" id="latest-videos">
-      <div class="loading">
-        Videolar yüklənir...
-      </div>
+      <div class="loading">Videolar yüklənir...</div>
     </div>
 
     <div class="actions">
 
-      <a
-        class="action-btn primary"
-        href="videos.html">
+      <a class="action-btn primary" href="videos.html">
         🎬 Bütün videolara bax
       </a>
 
-      <button
-        class="action-btn random"
-        id="random-video"
-        type="button">
+      <button class="action-btn random"
+              id="random-video"
+              type="button">
         🎲 Təsadüfi video
       </button>
 
-      <a
-        class="action-btn"
-        href="https://youtube.com/@bizde.beledir?sub_confirmation=1"
-        target="_blank"
-        rel="noopener noreferrer">
+      <a class="action-btn"
+         href="https://youtube.com/@bizde.beledir?sub_confirmation=1"
+         target="_blank"
+         rel="noopener noreferrer">
         🔴 YouTube-da abunə ol
       </a>
 
-      <button
-        class="action-btn"
-        id="share-site"
-        type="button">
+      <button class="action-btn"
+              id="share-site"
+              type="button">
         🔗 Saytı paylaş
       </button>
 
@@ -763,11 +238,10 @@
         Bizdə Belədir-i YouTube-da izlə və yeni videolardan xəbərdar ol.
       </p>
 
-      <a
-        class="action-btn primary"
-        href="https://youtube.com/@bizde.beledir?sub_confirmation=1"
-        target="_blank"
-        rel="noopener noreferrer">
+      <a class="action-btn primary"
+         href="https://youtube.com/@bizde.beledir?sub_confirmation=1"
+         target="_blank"
+         rel="noopener noreferrer">
         ▶ YouTube-da abunə ol
       </a>
 
@@ -781,212 +255,7 @@
   © 2026 BİZDƏ BELƏDİR • Bütün hüquqlar qorunur
 </footer>
 
+<script src="script.js"></script>
 
-<script>
-
-let allVideos = [];
-
-
-function formatNumber(number) {
-  return new Intl.NumberFormat("az-AZ").format(
-    Number(number) || 0
-  );
-}
-
-
-function escapeHTML(text) {
-  const div = document.createElement("div");
-  div.textContent = text || "";
-  return div.innerHTML;
-}
-
-
-function createVideoCard(video, options = {}) {
-
-  const {
-    isNew = false,
-    rank = null
-  } = options;
-
-  const localURL =
-    "video/" +
-    encodeURIComponent(video.id) +
-    ".html";
-
-  const medals = {
-    1: "🥇",
-    2: "🥈",
-    3: "🥉"
-  };
-
-  const rankHTML = rank
-    ? `
-      <div class="rank-badge rank-${rank}">
-        ${medals[rank]} ${rank}-ci yer
-      </div>
-    `
-    : "";
-
-  const newHTML = isNew
-    ? `<div class="new-badge">YENİ</div>`
-    : "";
-
-  const topClasses = rank
-    ? ` top-card top-${rank}`
-    : "";
-
-  return `
-    <a
-      class="video-card${topClasses}"
-      href="${localURL}">
-
-      ${rankHTML}
-
-      <div class="thumb-wrap">
-
-        <img
-          src="${video.thumbnail}"
-          alt="${escapeHTML(video.title)}"
-          loading="lazy">
-
-        ${newHTML}
-
-        <div class="play">▶</div>
-
-      </div>
-
-      <div class="video-info">
-
-        <strong class="video-title">
-          ${escapeHTML(video.title)}
-        </strong>
-
-        <div class="video-meta">
-
-          <span class="views">
-            👁 ${formatNumber(video.views)} baxış
-          </span>
-
-          <span>Bax →</span>
-
-        </div>
-
-      </div>
-
-    </a>
-  `;
-}
-
-
-async function loadStats() {
-
-  try {
-
-    const response = await fetch(
-      "channel-stats.json?v=" + Date.now(),
-      { cache: "no-store" }
-    );
-
-    if (!response.ok) {
-      throw new Error("Statistika yüklənmədi");
-    }
-
-    const stats = await response.json();
-
-    document
-      .getElementById("subscribers")
-      .textContent =
-        stats.hiddenSubscriberCount
-        ? "Gizli"
-        : formatNumber(stats.subscribers);
-
-    document
-      .getElementById("total-views")
-      .textContent =
-        formatNumber(stats.views);
-
-    document
-      .getElementById("video-count")
-      .textContent =
-        formatNumber(stats.videos);
-
-  } catch (error) {
-
-    console.error(error);
-
-    document.getElementById("subscribers").textContent = "—";
-    document.getElementById("total-views").textContent = "—";
-    document.getElementById("video-count").textContent = "—";
-  }
-}
-
-
-async function loadTopVideos() {
-
-  const container =
-    document.getElementById("top-videos");
-
-  try {
-
-    const response = await fetch(
-      "videos.json?v=" + Date.now(),
-      { cache: "no-store" }
-    );
-
-    if (!response.ok) {
-      throw new Error("TOP videolar yüklənmədi");
-    }
-
-    const videos = await response.json();
-
-    container.innerHTML =
-      videos
-        .slice(0, 3)
-        .map(
-          (video, index) =>
-            createVideoCard(
-              video,
-              { rank: index + 1 }
-            )
-        )
-        .join("");
-
-  } catch (error) {
-
-    console.error(error);
-
-    container.innerHTML = `
-      <div class="loading">
-        TOP videolar hazırda göstərilə bilmir.
-      </div>
-    `;
-  }
-}
-
-
-async function loadAllVideos() {
-
-  const container =
-    document.getElementById("latest-videos");
-
-  try {
-
-    const response = await fetch(
-      "all-videos.json?v=" + Date.now(),
-      { cache: "no-store" }
-    );
-
-    if (!response.ok) {
-      throw new Error("Videolar yüklənmədi");
-    }
-
-    const data = await response.json();
-
-    allVideos =
-      [...data].sort(
-        (a, b) =>
-          new Date(b.publishedAt) -
-          new Date(a.publishedAt)
-      );
-
-  
+</body>
+</html>
