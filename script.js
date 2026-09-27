@@ -1,19 +1,86 @@
+"use strict";
+
 let allVideos = [];
 
-function formatNumber(number) {
-  return new Intl.NumberFormat("az-AZ").format(
-    Number(number) || 0
-  );
+const SITE_URL = "https://bizdebeledir.github.io/";
+
+const elements = {
+  subscribers: document.getElementById("subscribers"),
+  totalViews: document.getElementById("total-views"),
+  videoCount: document.getElementById("video-count"),
+  topVideos: document.getElementById("top-videos"),
+  latestVideos: document.getElementById("latest-videos"),
+  randomButton: document.getElementById("random-video"),
+  shareButton: document.getElementById("share-site")
+};
+
+
+/* =========================
+   KÖMƏKÇİ FUNKSİYALAR
+========================= */
+
+function formatNumber(value) {
+  const number = Number(value);
+
+  if (!Number.isFinite(number)) {
+    return "0";
+  }
+
+  return new Intl.NumberFormat("az-AZ").format(number);
 }
 
-function escapeHTML(text) {
+
+function escapeHTML(value) {
   const div = document.createElement("div");
-  div.textContent = text || "";
+  div.textContent = String(value ?? "");
   return div.innerHTML;
 }
 
+
+function safeThumbnail(url) {
+  if (typeof url !== "string") {
+    return "";
+  }
+
+  if (
+    url.startsWith("https://") ||
+    url.startsWith("http://")
+  ) {
+    return escapeHTML(url);
+  }
+
+  return "";
+}
+
+
+async function fetchJSON(file) {
+  const response = await fetch(
+    `${file}?v=${Date.now()}`,
+    {
+      cache: "no-store"
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `${file}: HTTP ${response.status}`
+    );
+  }
+
+  return response.json();
+}
+
+
+/* =========================
+   VİDEO KARTI
+========================= */
+
 function createVideoCard(video, options = {}) {
-  const isNew = options.isNew || false;
+  if (!video || !video.id) {
+    return "";
+  }
+
+  const isNew = Boolean(options.isNew);
   const rank = options.rank || null;
 
   const localURL =
@@ -27,46 +94,60 @@ function createVideoCard(video, options = {}) {
     3: "🥉"
   };
 
-  const rankHTML = rank
-    ? `
+  let rankHTML = "";
+
+  if (rank && medals[rank]) {
+    rankHTML = `
       <div class="rank-badge rank-${rank}">
         ${medals[rank]} ${rank}-ci yer
       </div>
-    `
-    : "";
+    `;
+  }
 
   const newHTML = isNew
     ? `<div class="new-badge">YENİ</div>`
     : "";
 
-  const topClasses = rank
+  const topClass = rank
     ? ` top-card top-${rank}`
     : "";
 
+  const title =
+    escapeHTML(video.title || "Bizdə Belədir");
+
+  const thumbnail =
+    safeThumbnail(video.thumbnail);
+
   return `
     <a
-      class="video-card${topClasses}"
-      href="${localURL}">
+      class="video-card${topClass}"
+      href="${localURL}"
+      aria-label="${title}">
 
       ${rankHTML}
 
       <div class="thumb-wrap">
 
         <img
-          src="${escapeHTML(video.thumbnail)}"
-          alt="${escapeHTML(video.title)}"
-          loading="lazy">
+          src="${thumbnail}"
+          alt="${title}"
+          loading="lazy"
+          decoding="async"
+          width="480"
+          height="270">
 
         ${newHTML}
 
-        <div class="play">▶</div>
+        <div class="play" aria-hidden="true">
+          ▶
+        </div>
 
       </div>
 
       <div class="video-info">
 
         <strong class="video-title">
-          ${escapeHTML(video.title)}
+          ${title}
         </strong>
 
         <div class="video-meta">
@@ -75,7 +156,9 @@ function createVideoCard(video, options = {}) {
             👁 ${formatNumber(video.views)} baxış
           </span>
 
-          <span>Bax →</span>
+          <span>
+            Bax →
+          </span>
 
         </div>
 
@@ -85,116 +168,135 @@ function createVideoCard(video, options = {}) {
   `;
 }
 
-async function loadStats() {
-  try {
-    const response = await fetch(
-      "channel-stats.json?v=" + Date.now(),
-      {
-        cache: "no-store"
-      }
+
+/* =========================
+   KANAL STATİSTİKASI
+========================= */
+
+function renderStats(stats) {
+  if (!stats) {
+    throw new Error(
+      "Statistika məlumatı tapılmadı"
     );
+  }
 
-    if (!response.ok) {
-      throw new Error("Statistika yüklənmədi");
-    }
-
-    const stats = await response.json();
-
-    document.getElementById("subscribers").textContent =
+  if (elements.subscribers) {
+    elements.subscribers.textContent =
       stats.hiddenSubscriberCount
         ? "Gizli"
         : formatNumber(stats.subscribers);
+  }
 
-    document.getElementById("total-views").textContent =
+  if (elements.totalViews) {
+    elements.totalViews.textContent =
       formatNumber(stats.views);
+  }
 
-    document.getElementById("video-count").textContent =
+  if (elements.videoCount) {
+    elements.videoCount.textContent =
       formatNumber(stats.videos);
-
-  } catch (error) {
-    console.error("Statistika xətası:", error);
-
-    document.getElementById("subscribers").textContent = "—";
-    document.getElementById("total-views").textContent = "—";
-    document.getElementById("video-count").textContent = "—";
   }
 }
 
-async function loadTopVideos() {
-  const container =
-    document.getElementById("top-videos");
 
-  try {
-    const response = await fetch(
-      "videos.json?v=" + Date.now(),
-      {
-        cache: "no-store"
-      }
-    );
+function renderStatsError() {
+  if (elements.subscribers) {
+    elements.subscribers.textContent = "—";
+  }
 
-    if (!response.ok) {
-      throw new Error("TOP videolar yüklənmədi");
-    }
+  if (elements.totalViews) {
+    elements.totalViews.textContent = "—";
+  }
 
-    const videos = await response.json();
-
-    if (!Array.isArray(videos) || videos.length === 0) {
-      throw new Error("TOP video siyahısı boşdur");
-    }
-
-    container.innerHTML = videos
-      .slice(0, 3)
-      .map(
-        (video, index) =>
-          createVideoCard(
-            video,
-            {
-              rank: index + 1
-            }
-          )
-      )
-      .join("");
-
-  } catch (error) {
-    console.error("TOP video xətası:", error);
-
-    container.innerHTML = `
-      <div class="loading">
-        TOP videolar hazırda göstərilə bilmir.
-      </div>
-    `;
+  if (elements.videoCount) {
+    elements.videoCount.textContent = "—";
   }
 }
 
-async function loadAllVideos() {
-  const container =
-    document.getElementById("latest-videos");
 
-  try {
-    const response = await fetch(
-      "all-videos.json?v=" + Date.now(),
-      {
-        cache: "no-store"
-      }
+/* =========================
+   TOP 3
+========================= */
+
+function renderTopVideos(videos) {
+  if (!elements.topVideos) {
+    return;
+  }
+
+  if (!Array.isArray(videos) || !videos.length) {
+    throw new Error(
+      "TOP video siyahısı boşdur"
     );
+  }
 
-    if (!response.ok) {
-      throw new Error("Videolar yüklənmədi");
-    }
+  const html = videos
+    .filter(video => video && video.id)
+    .slice(0, 3)
+    .map(
+      (video, index) =>
+        createVideoCard(
+          video,
+          {
+            rank: index + 1
+          }
+        )
+    )
+    .join("");
 
-    const data = await response.json();
+  if (!html) {
+    throw new Error(
+      "TOP video kartları yaradıla bilmədi"
+    );
+  }
 
-    if (!Array.isArray(data) || data.length === 0) {
-      throw new Error("Video siyahısı boşdur");
-    }
+  elements.topVideos.innerHTML = html;
+}
 
-    allVideos = [...data].sort(
+
+function renderTopError() {
+  if (!elements.topVideos) {
+    return;
+  }
+
+  elements.topVideos.innerHTML = `
+    <div class="loading">
+      TOP videolar hazırda göstərilə bilmir.
+    </div>
+  `;
+}
+
+
+/* =========================
+   SON VİDEOLAR
+========================= */
+
+function renderLatestVideos(videos) {
+  if (!elements.latestVideos) {
+    return;
+  }
+
+  if (!Array.isArray(videos) || !videos.length) {
+    throw new Error(
+      "Video siyahısı boşdur"
+    );
+  }
+
+  allVideos = videos
+    .filter(video => video && video.id)
+    .sort(
       (a, b) =>
-        new Date(b.publishedAt) -
-        new Date(a.publishedAt)
+        new Date(b.publishedAt || 0) -
+        new Date(a.publishedAt || 0)
     );
 
-    container.innerHTML = allVideos
+  if (!allVideos.length) {
+    throw new Error(
+      "Etibarlı video tapılmadı"
+    );
+  }
+
+  elements.latestVideos.innerHTML =
+    allVideos
       .slice(0, 3)
       .map(
         video =>
@@ -206,84 +308,186 @@ async function loadAllVideos() {
           )
       )
       .join("");
+}
 
-  } catch (error) {
-    console.error("Son videolar xətası:", error);
 
-    allVideos = [];
+function renderLatestError() {
+  allVideos = [];
 
-    container.innerHTML = `
-      <div class="loading">
-        Son videolar hazırda göstərilə bilmir.
-      </div>
-    `;
+  if (!elements.latestVideos) {
+    return;
+  }
+
+  elements.latestVideos.innerHTML = `
+    <div class="loading">
+      Son videolar hazırda göstərilə bilmir.
+    </div>
+  `;
+}
+
+
+/* =========================
+   MƏLUMATLARI YÜKLƏ
+========================= */
+
+async function loadPageData() {
+  const [
+    statsResult,
+    topResult,
+    allResult
+  ] = await Promise.allSettled([
+    fetchJSON("channel-stats.json"),
+    fetchJSON("videos.json"),
+    fetchJSON("all-videos.json")
+  ]);
+
+
+  /* Statistika */
+
+  if (statsResult.status === "fulfilled") {
+    try {
+      renderStats(statsResult.value);
+    } catch (error) {
+      console.error(
+        "Statistika göstərilmədi:",
+        error
+      );
+
+      renderStatsError();
+    }
+  } else {
+    console.error(
+      "Statistika yüklənmədi:",
+      statsResult.reason
+    );
+
+    renderStatsError();
+  }
+
+
+  /* TOP 3 */
+
+  if (topResult.status === "fulfilled") {
+    try {
+      renderTopVideos(topResult.value);
+    } catch (error) {
+      console.error(
+        "TOP videolar göstərilmədi:",
+        error
+      );
+
+      renderTopError();
+    }
+  } else {
+    console.error(
+      "TOP videolar yüklənmədi:",
+      topResult.reason
+    );
+
+    renderTopError();
+  }
+
+
+  /* Son videolar */
+
+  if (allResult.status === "fulfilled") {
+    try {
+      renderLatestVideos(allResult.value);
+    } catch (error) {
+      console.error(
+        "Son videolar göstərilmədi:",
+        error
+      );
+
+      renderLatestError();
+    }
+  } else {
+    console.error(
+      "Son videolar yüklənmədi:",
+      allResult.reason
+    );
+
+    renderLatestError();
   }
 }
 
-const randomButton =
-  document.getElementById("random-video");
 
-if (randomButton) {
-  randomButton.addEventListener(
+/* =========================
+   TƏSADÜFİ VİDEO
+========================= */
+
+if (elements.randomButton) {
+  elements.randomButton.addEventListener(
     "click",
     function () {
-
       if (!allVideos.length) {
-        window.location.href = "videos.html";
+        window.location.href =
+          "videos.html";
+
         return;
       }
 
-      const randomIndex =
+      const index =
         Math.floor(
-          Math.random() * allVideos.length
+          Math.random() *
+          allVideos.length
         );
 
-      const randomVideo =
-        allVideos[randomIndex];
+      const video =
+        allVideos[index];
 
       window.location.href =
         "video/" +
-        encodeURIComponent(randomVideo.id) +
+        encodeURIComponent(video.id) +
         ".html";
     }
   );
 }
 
-const shareButton =
-  document.getElementById("share-site");
 
-if (shareButton) {
-  shareButton.addEventListener(
+/* =========================
+   SAYTI PAYLAŞ
+========================= */
+
+if (elements.shareButton) {
+  elements.shareButton.addEventListener(
     "click",
     async function () {
-
       const shareData = {
         title: "Bizdə Belədir",
         text:
           "Bizdə Belədir 🇦🇿 Gündəlik həyat, yumor və videolar.",
-        url:
-          "https://bizdebeledir.github.io/"
+        url: SITE_URL
       };
 
       try {
         if (navigator.share) {
-          await navigator.share(shareData);
+          await navigator.share(
+            shareData
+          );
+
           return;
         }
 
         if (navigator.clipboard) {
           await navigator.clipboard.writeText(
-            shareData.url
+            SITE_URL
           );
 
-          alert("Saytın linki kopyalandı!");
+          alert(
+            "Saytın linki kopyalandı!"
+          );
+
           return;
         }
 
-        alert(shareData.url);
+        alert(SITE_URL);
 
       } catch (error) {
-        if (error.name !== "AbortError") {
+        if (
+          error &&
+          error.name !== "AbortError"
+        ) {
           console.error(
             "Paylaşma xətası:",
             error
@@ -294,6 +498,9 @@ if (shareButton) {
   );
 }
 
-loadStats();
-loadTopVideos();
-loadAllVideos();
+
+/* =========================
+   BAŞLAT
+========================= */
+
+loadPageData();
