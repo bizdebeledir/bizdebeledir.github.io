@@ -220,6 +220,7 @@
     }
 
     .video-card {
+      position: relative;
       display: block;
       text-decoration: none;
       color: #fff;
@@ -228,6 +229,49 @@
       border-radius: 22px;
       overflow: hidden;
       text-align: left;
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    .video-card:active {
+      transform: scale(.985);
+    }
+
+    .top-card {
+      border-color: #3a3a3a;
+    }
+
+    .top-card.top-1 {
+      box-shadow: 0 10px 32px rgba(255, 200, 0, .08);
+    }
+
+    .rank-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.84);
+      border: 1px solid rgba(255,255,255,.2);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+      backdrop-filter: blur(8px);
+    }
+
+    .rank-badge.rank-1 {
+      background: rgba(80, 58, 0, .92);
+    }
+
+    .rank-badge.rank-2 {
+      background: rgba(55, 55, 55, .92);
+    }
+
+    .rank-badge.rank-3 {
+      background: rgba(75, 39, 18, .92);
     }
 
     .thumb-wrap {
@@ -477,21 +521,24 @@
 
       <a class="social youtube"
          href="https://youtube.com/@bizde.beledir"
-         target="_blank">
+         target="_blank"
+         rel="noopener noreferrer">
         <span>YouTube</span>
         <span class="arrow">→</span>
       </a>
 
       <a class="social instagram"
          href="https://www.instagram.com/bizde.beledir"
-         target="_blank">
+         target="_blank"
+         rel="noopener noreferrer">
         <span>Instagram</span>
         <span class="arrow">→</span>
       </a>
 
       <a class="social tiktok"
          href="https://www.tiktok.com/@bizde.beledir"
-         target="_blank">
+         target="_blank"
+         rel="noopener noreferrer">
         <span>TikTok</span>
         <span class="arrow">→</span>
       </a>
@@ -506,16 +553,16 @@
   <div class="container">
 
     <h2 class="section-title">
-      🔥 Ən çox baxılan videolar
+      🏆 TOP 3 video
     </h2>
 
     <p class="section-subtitle">
-      Kanalımızın ən çox baxılan videolarından seçilənlər.
+      Son 50 video arasında hazırda ən çox baxış toplayan 3 video.
     </p>
 
     <div class="videos" id="top-videos">
       <div class="loading">
-        Videolar yüklənir...
+        TOP videolar yüklənir...
       </div>
     </div>
 
@@ -543,8 +590,6 @@
 
     <div class="actions">
 
-      <!-- YENİ: SAYTIN BÜTÜN VİDEOLAR SƏHİFƏSİ -->
-
       <a
         class="action-btn primary"
         href="videos.html">
@@ -561,7 +606,8 @@
       <a
         class="action-btn"
         href="https://youtube.com/@bizde.beledir?sub_confirmation=1"
-        target="_blank">
+        target="_blank"
+        rel="noopener noreferrer">
         🔴 YouTube-da abunə ol
       </a>
 
@@ -616,7 +662,8 @@
       <a
         class="action-btn primary"
         href="https://youtube.com/@bizde.beledir?sub_confirmation=1"
-        target="_blank">
+        target="_blank"
+        rel="noopener noreferrer">
         ▶ YouTube-da abunə ol
       </a>
 
@@ -656,24 +703,63 @@ function escapeHTML(text) {
 }
 
 
-function createVideoCard(video, isNew = false) {
+function createVideoCard(
+  video,
+  options = {}
+) {
 
-  /*
-    Video kartına basanda artıq birbaşa
-    YouTube-a yox, saytımızdakı video
-    səhifəsinə keçir.
-  */
+  const {
+    isNew = false,
+    rank = null
+  } = options;
+
 
   const localURL =
     "video/"
     + encodeURIComponent(video.id)
     + ".html";
 
+
+  const medals = {
+    1: "🥇",
+    2: "🥈",
+    3: "🥉"
+  };
+
+
+  const rankHTML =
+    rank
+    ? `
+      <div class="rank-badge rank-${rank}">
+        ${medals[rank]} ${rank}-ci yer
+      </div>
+    `
+    : "";
+
+
+  const newHTML =
+    isNew
+    ? `
+      <div class="new-badge">
+        YENİ
+      </div>
+    `
+    : "";
+
+
+  const topClasses =
+    rank
+    ? ` top-card top-${rank}`
+    : "";
+
+
   return `
     <a
-      class="video-card"
+      class="video-card${topClasses}"
       href="${localURL}"
     >
+
+      ${rankHTML}
 
       <div class="thumb-wrap">
 
@@ -683,11 +769,7 @@ function createVideoCard(video, isNew = false) {
           loading="lazy"
         >
 
-        ${
-          isNew
-          ? '<div class="new-badge">YENİ</div>'
-          : ''
-        }
+        ${newHTML}
 
         <div class="play">
           ▶
@@ -819,9 +901,12 @@ async function loadTopVideos() {
       videos
         .slice(0, 3)
         .map(
-          video =>
+          (video, index) =>
             createVideoCard(
-              video
+              video,
+              {
+                rank: index + 1
+              }
             )
         )
         .join("");
@@ -832,7 +917,7 @@ async function loadTopVideos() {
 
     container.innerHTML = `
       <div class="loading">
-        Videolar hazırda göstərilə bilmir.
+        TOP videolar hazırda göstərilə bilmir.
       </div>
     `;
   }
@@ -887,7 +972,9 @@ async function loadAllVideos() {
           video =>
             createVideoCard(
               video,
-              true
+              {
+                isNew: true
+              }
             )
         )
         .join("");
@@ -965,9 +1052,7 @@ document
 
       try {
 
-        if (
-          navigator.share
-        ) {
+        if (navigator.share) {
 
           await navigator.share(
             shareData
@@ -995,6 +1080,7 @@ document
         }
 
       } catch (error) {
+
         console.log(
           "Paylaşma bağlandı."
         );
