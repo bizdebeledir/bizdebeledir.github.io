@@ -9,6 +9,31 @@
     content="width=device-width, initial-scale=1.0"
   >
 
+  <!-- Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-THZTTZJGRJ"
+  ></script>
+
+  <script>
+    window.dataLayer =
+      window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag(
+      "js",
+      new Date()
+    );
+
+    gtag(
+      "config",
+      "G-THZTTZJGRJ"
+    );
+  </script>
+
   <title>Bütün Videolar | Bizdə Belədir</title>
 
   <meta
@@ -492,6 +517,7 @@
               src="${video.thumbnail}"
               alt="${escapeHTML(video.title)}"
               loading="lazy"
+              decoding="async"
             >
 
             <span class="play">
@@ -700,11 +726,10 @@
 
         const response =
           await fetch(
-            "all-videos.json?v="
-            + Date.now(),
+            "all-videos.json",
             {
               cache:
-                "no-store"
+                "no-cache"
             }
           );
 
