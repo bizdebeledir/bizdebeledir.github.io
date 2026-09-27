@@ -6,6 +6,7 @@
 
   <title>Bizdə Belədir</title>
   <meta name="description" content="Bizdə Belədir — gündəlik həyat, yumor və qısa videolar.">
+  <meta name="theme-color" content="#090909">
 
   <style>
     * {
@@ -14,43 +15,50 @@
       padding: 0;
     }
 
-    body {
-      min-height: 100vh;
-      font-family: Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at 50% 0%, #252525 0%, #111 42%, #000 100%);
-      color: white;
-      display: flex;
-      justify-content: center;
+    html {
+      scroll-behavior: smooth;
     }
 
-    .page {
-      width: 100%;
-      max-width: 680px;
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #080808;
+      color: #fff;
       min-height: 100vh;
-      padding: 55px 28px 35px;
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at 50% 0%, #292929 0%, #121212 42%, #080808 78%);
+      padding: 48px 20px 55px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 720px;
+      margin: auto;
       text-align: center;
     }
 
     .tag {
       display: inline-block;
-      border: 1px solid #555;
+      border: 1px solid #444;
       border-radius: 999px;
-      padding: 10px 18px;
-      color: #cfcfcf;
-      font-size: 15px;
-      margin-bottom: 28px;
+      padding: 9px 16px;
+      color: #ccc;
+      font-size: 13px;
+      margin-bottom: 26px;
+      background: rgba(255,255,255,.02);
     }
 
     .profile {
-      width: 125px;
-      height: 125px;
+      width: 118px;
+      height: 118px;
       margin: 0 auto 22px;
       border-radius: 50%;
       overflow: hidden;
-      border: 4px solid white;
-      box-shadow: 0 12px 40px rgba(0,0,0,.45);
+      border: 4px solid #fff;
       background: #222;
+      box-shadow: 0 12px 38px rgba(0,0,0,.5);
     }
 
     .profile img {
@@ -61,44 +69,43 @@
     }
 
     h1 {
-      font-size: clamp(52px, 13vw, 88px);
+      font-size: clamp(52px, 13vw, 86px);
       line-height: .88;
       letter-spacing: -4px;
       font-weight: 900;
-      margin-bottom: 30px;
+      margin-bottom: 28px;
     }
 
-    .description {
-      max-width: 600px;
-      margin: 0 auto 38px;
-      color: #bdbdbd;
-      font-size: 19px;
-      line-height: 1.55;
+    .intro {
+      color: #aaa;
+      font-size: 18px;
+      line-height: 1.6;
+      max-width: 590px;
+      margin: 0 auto 34px;
     }
 
-    .links {
+    .socials {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 13px;
     }
 
-    .btn {
-      min-height: 96px;
-      border-radius: 27px;
-      padding: 0 30px;
+    .social {
+      min-height: 82px;
+      border-radius: 23px;
+      padding: 0 26px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      color: #fff;
       text-decoration: none;
-      color: white;
-      font-size: 26px;
-      font-weight: 700;
-      transition: transform .2s ease, opacity .2s ease;
+      font-size: 22px;
+      font-weight: 800;
+      transition: transform .18s ease;
     }
 
-    .btn:active {
+    .social:active {
       transform: scale(.97);
-      opacity: .9;
     }
 
     .youtube {
@@ -107,51 +114,181 @@
 
     .instagram {
       background: linear-gradient(
-        110deg,
+        105deg,
         #833ab4 0%,
         #c13584 28%,
-        #fd1d1d 58%,
+        #fd1d1d 60%,
         #fcb045 100%
       );
     }
 
     .tiktok {
-      background: #171717;
-      border: 1px solid #444;
+      background: #181818;
+      border: 1px solid #3c3c3c;
     }
 
     .arrow {
-      font-size: 34px;
+      font-size: 29px;
       font-weight: 400;
     }
 
-    .footer {
-      margin-top: 35px;
-      color: #666;
+    .section {
+      padding: 58px 20px;
+    }
+
+    .section-title {
+      font-size: 31px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      text-align: left;
+    }
+
+    .section-subtitle {
+      color: #888;
+      font-size: 15px;
+      line-height: 1.5;
+      margin-bottom: 25px;
+      text-align: left;
+    }
+
+    .videos {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .video-card {
+      display: block;
+      text-decoration: none;
+      color: white;
+      background: #151515;
+      border: 1px solid #292929;
+      border-radius: 22px;
+      overflow: hidden;
+      text-align: left;
+      transition: transform .18s ease;
+    }
+
+    .video-card:active {
+      transform: scale(.98);
+    }
+
+    .thumb-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #222;
+      overflow: hidden;
+    }
+
+    .thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .play {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: rgba(0,0,0,.78);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      padding-left: 4px;
+      border: 1px solid rgba(255,255,255,.25);
+    }
+
+    .video-info {
+      padding: 16px 18px 18px;
+    }
+
+    .video-info strong {
+      display: block;
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+
+    .video-info span {
+      color: #888;
       font-size: 14px;
     }
 
+    .about-box {
+      background: linear-gradient(145deg, #181818, #101010);
+      border: 1px solid #292929;
+      border-radius: 25px;
+      padding: 27px 23px;
+      text-align: left;
+    }
+
+    .about-box h2 {
+      font-size: 27px;
+      margin-bottom: 14px;
+    }
+
+    .about-box p {
+      color: #aaa;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .question {
+      margin-top: 20px;
+      font-size: 21px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    footer {
+      border-top: 1px solid #1e1e1e;
+      text-align: center;
+      padding: 32px 20px 40px;
+      color: #666;
+      font-size: 13px;
+    }
+
+    @media (min-width: 700px) {
+      .socials {
+        flex-direction: row;
+      }
+
+      .social {
+        flex: 1;
+        font-size: 18px;
+      }
+
+      .videos {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .video-info strong {
+        font-size: 15px;
+      }
+    }
+
     @media (max-width: 480px) {
-      .page {
-        padding: 42px 20px 28px;
+      .hero {
+        padding-top: 38px;
       }
 
       .profile {
-        width: 110px;
-        height: 110px;
+        width: 108px;
+        height: 108px;
       }
 
       h1 {
         font-size: 58px;
       }
 
-      .description {
+      .intro {
         font-size: 17px;
-      }
-
-      .btn {
-        min-height: 88px;
-        font-size: 23px;
       }
     }
   </style>
@@ -159,68 +296,178 @@
 
 <body>
 
-  <main class="page">
+  <section class="hero">
+    <div class="container">
 
-    <div class="tag">
-      🇦🇿 GÜNDƏLİK HƏYAT • MİZAH • VİDEO
+      <div class="tag">
+        🇦🇿 GÜNDƏLİK HƏYAT • MİZAH • VİDEO
+      </div>
+
+      <div class="profile">
+        <img
+          src="file_0000000059908210b6e69fc5a5cd05f1.png"
+          alt="Bizdə Belədir"
+        >
+      </div>
+
+      <h1>
+        BİZDƏ<br>
+        BELƏDİR
+      </h1>
+
+      <p class="intro">
+        Hər gün başımıza gələn tanış vəziyyətlər, qısa videolar və bir az da gülüş.
+        Baxıb “bu eynən məndə də olur” deyəcəksən.
+      </p>
+
+      <div class="socials">
+
+        <a
+          class="social youtube"
+          href="https://youtube.com/@bizde.beledir?si=G3l2_xXgRBlblG6c"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span>YouTube</span>
+          <span class="arrow">→</span>
+        </a>
+
+        <a
+          class="social instagram"
+          href="https://www.instagram.com/bizde.beledir?stkn=MWs0YWlsOWhpcDE4eA=="
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span>Instagram</span>
+          <span class="arrow">→</span>
+        </a>
+
+        <a
+          class="social tiktok"
+          href="https://www.tiktok.com/@bizde.beledir?_r=1&amp;_t=ZS-9A4xRlrkP5u"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span>TikTok</span>
+          <span class="arrow">→</span>
+        </a>
+
+      </div>
+
     </div>
+  </section>
 
-    <div class="profile">
-      <img
-        src="file_0000000059908210b6e69fc5a5cd05f1.png"
-        alt="Bizdə Belədir"
-      >
+
+  <section class="section">
+    <div class="container">
+
+      <h2 class="section-title">🎬 Son videolar</h2>
+
+      <p class="section-subtitle">
+        Baxmaq üçün videonun üzərinə toxun.
+      </p>
+
+      <div class="videos">
+
+        <a
+          class="video-card"
+          href="https://youtube.com/shorts/GPBS-ZDtIEQ?si=U_19ASpYAVMiBDWy"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div class="thumb-wrap">
+            <img
+              src="https://i.ytimg.com/vi/GPBS-ZDtIEQ/hqdefault.jpg"
+              alt="Bizdə Belədir YouTube Shorts"
+              loading="lazy"
+            >
+            <div class="play">▶</div>
+          </div>
+
+          <div class="video-info">
+            <strong>Bizdə Belədir #1</strong>
+            <span>YouTube Shorts-da bax →</span>
+          </div>
+        </a>
+
+
+        <a
+          class="video-card"
+          href="https://youtube.com/shorts/EcqxFdZIvvA?si=Eysl64Em-kU9B7iw"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div class="thumb-wrap">
+            <img
+              src="https://i.ytimg.com/vi/EcqxFdZIvvA/hqdefault.jpg"
+              alt="Bizdə Belədir YouTube Shorts"
+              loading="lazy"
+            >
+            <div class="play">▶</div>
+          </div>
+
+          <div class="video-info">
+            <strong>Bizdə Belədir #2</strong>
+            <span>YouTube Shorts-da bax →</span>
+          </div>
+        </a>
+
+
+        <a
+          class="video-card"
+          href="https://youtube.com/shorts/yhnpH0dF66I?si=eSHM66GeT4pSH1dj"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div class="thumb-wrap">
+            <img
+              src="https://i.ytimg.com/vi/yhnpH0dF66I/hqdefault.jpg"
+              alt="Bizdə Belədir YouTube Shorts"
+              loading="lazy"
+            >
+            <div class="play">▶</div>
+          </div>
+
+          <div class="video-info">
+            <strong>Bizdə Belədir #3</strong>
+            <span>YouTube Shorts-da bax →</span>
+          </div>
+        </a>
+
+      </div>
+
     </div>
+  </section>
 
-    <h1>
-      BİZDƏ<br>
-      BELƏDİR
-    </h1>
 
-    <p class="description">
-      Hər gün başımıza gələn tanış vəziyyətlər, qısa videolar və bir az da gülüş.
-      Baxıb “bu eynən məndə də olur” deyəcəksən.
-    </p>
+  <section class="section">
+    <div class="container">
 
-    <div class="links">
+      <div class="about-box">
 
-      <a
-        class="btn youtube"
-        href="https://youtube.com/@bizde.beledir?si=G3l2_xXgRBlblG6c"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <span>YouTube</span>
-        <span class="arrow">→</span>
-      </a>
+        <h2>Bizdə Belədir nədir? 🇦🇿</h2>
 
-      <a
-        class="btn instagram"
-        href="https://www.instagram.com/bizde.beledir?stkn=MWs0YWlsOWhpcDE4eA=="
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <span>Instagram</span>
-        <span class="arrow">→</span>
-      </a>
+        <p>
+          Marketə bir şey almağa girib səbəti doldurmaq,
+          avtobusa çatmaq üçün qaçıb başqa nömrə olduğunu görmək,
+          “5 dəqiqə telefona baxım” deyib vaxtı unutmaq...
+          Bizdə Belədir hamımıza tanış olan gündəlik anları
+          qısa və əyləncəli videolara çevirir.
+        </p>
 
-      <a
-        class="btn tiktok"
-        href="https://www.tiktok.com/@bizde.beledir?_r=1&_t=ZS-9A4xRlrkP5u"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <span>TikTok</span>
-        <span class="arrow">→</span>
-      </a>
+        <div class="question">
+          Səndə də belədir? 👀
+        </div>
+
+      </div>
 
     </div>
+  </section>
 
-    <div class="footer">
-      © 2026 Bizdə Belədir
-    </div>
 
-  </main>
+  <footer>
+    © 2026 BİZDƏ BELƏDİR • Bütün hüquqlar qorunur
+  </footer>
 
 </body>
 </html>
