@@ -16,19 +16,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Update YouTube data
+      - name: Update YouTube data and video pages
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         shell: python
         run: |
           import json
           import os
+          import html
+          import shutil
           import urllib.parse
           import urllib.request
           from datetime import datetime, timezone
 
           API_KEY = os.environ["YOUTUBE_API_KEY"]
           HANDLE = "@bizde.beledir"
+          SITE = "https://bizdebeledir.github.io"
 
           def api_get(endpoint, params):
               params["key"] = API_KEY
@@ -69,8 +72,7 @@ jobs:
               raise RuntimeError("YouTube channel not found.")
 
           channel = channel_data["items"][0]
-
-          statistics = channel.get("statistics", {})
+          channel_statistics = channel.get("statistics", {})
 
           channel_stats = {
               "channelId": channel["id"],
@@ -81,16 +83,25 @@ jobs:
                   "Bizdə Belədir"
               ),
               "subscribers": int(
-                  statistics.get("subscriberCount", 0)
+                  channel_statistics.get(
+                      "subscriberCount",
+                      0
+                  )
               ),
               "views": int(
-                  statistics.get("viewCount", 0)
+                  channel_statistics.get(
+                      "viewCount",
+                      0
+                  )
               ),
               "videos": int(
-                  statistics.get("videoCount", 0)
+                  channel_statistics.get(
+                      "videoCount",
+                      0
+                  )
               ),
               "hiddenSubscriberCount":
-                  statistics.get(
+                  channel_statistics.get(
                       "hiddenSubscriberCount",
                       False
                   )
@@ -109,7 +120,7 @@ jobs:
               )
 
           # =========================
-          # SON 50 VİDEO
+          # SON 50 VIDEO
           # =========================
 
           uploads_playlist = (
@@ -131,7 +142,8 @@ jobs:
 
           for item in playlist_data.get("items", []):
               video_id = (
-                  item.get("contentDetails", {})
+                  item
+                  .get("contentDetails", {})
                   .get("videoId")
               )
 
@@ -155,7 +167,6 @@ jobs:
           for item in video_data.get("items", []):
 
               video_id = item["id"]
-
               snippet = item.get("snippet", {})
               stats = item.get("statistics", {})
               content = item.get("contentDetails", {})
@@ -191,7 +202,10 @@ jobs:
                       + "/hqdefault.jpg",
 
                   "views": int(
-                      stats.get("viewCount", 0)
+                      stats.get(
+                          "viewCount",
+                          0
+                      )
                   ),
 
                   "publishedAt": snippet.get(
@@ -206,12 +220,13 @@ jobs:
               })
 
           if not all_videos:
-              raise RuntimeError("No video details found.")
-
-          # Yeni videolar birinci
+              raise RuntimeError(
+                  "No video details found."
+              )
 
           all_videos.sort(
-              key=lambda video: video["publishedAt"],
+              key=lambda video:
+                  video["publishedAt"],
               reverse=True
           )
 
@@ -233,7 +248,8 @@ jobs:
 
           top_videos = sorted(
               all_videos,
-              key=lambda video: video["views"],
+              key=lambda video:
+                  video["views"],
               reverse=True
           )[:3]
 
@@ -250,6 +266,302 @@ jobs:
               )
 
           # =========================
+          # VIDEO SƏHİFƏLƏRİ
+          # =========================
+
+          if os.path.exists("video"):
+              shutil.rmtree("video")
+
+          os.makedirs(
+              "video",
+              exist_ok=True
+          )
+
+          for video in all_videos:
+
+              video_id = video["id"]
+
+              title = video["title"]
+
+              description = (
+                  video["description"].strip()
+                  or
+                  "Bizdə Belədir kanalından Azərbaycan yumor videosu."
+              )
+
+              page_url = (
+                  SITE
+                  + "/video/"
+                  + video_id
+                  + ".html"
+              )
+
+              # HTML üçün təhlükəsiz mətn
+
+              html_title = html.escape(
+                  title,
+                  quote=True
+              )
+
+              html_description = html.escape(
+                  description,
+                  quote=True
+              )
+
+              # JSON-LD ayrıca json.dumps ilə hazırlanır
+
+              video_object = {
+                  "@context": "https://schema.org",
+                  "@type": "VideoObject",
+
+                  "name": title,
+
+                  "description": description,
+
+                  "thumbnailUrl": [
+                      video["thumbnail"]
+                  ],
+
+                  "uploadDate":
+                      video["publishedAt"],
+
+                  "duration":
+                      video["duration"],
+
+                  "embedUrl":
+                      video["embedUrl"],
+
+                  "url":
+                      page_url,
+
+                  "creator": {
+                      "@type": "Organization",
+                      "name": "Bizdə Belədir",
+                      "url": SITE + "/"
+                  },
+
+                  "interactionStatistic": {
+                      "@type":
+                          "InteractionCounter",
+
+                      "interactionType": {
+                          "@type":
+                              "WatchAction"
+                      },
+
+                      "userInteractionCount":
+                          video["views"]
+                  }
+              }
+
+              json_ld = json.dumps(
+                  video_object,
+                  ensure_ascii=False
+              ).replace(
+                  "</",
+                  "<\\/"
+              )
+
+              page = f"""<!DOCTYPE html>
+          <html lang="az">
+          <head>
+            <meta charset="UTF-8">
+
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1.0"
+            >
+
+            <title>{html_title} | Bizdə Belədir</title>
+
+            <meta
+              name="description"
+              content="{html_description[:300]}"
+            >
+
+            <meta
+              name="robots"
+              content="index, follow"
+            >
+
+            <link
+              rel="canonical"
+              href="{page_url}"
+            >
+
+            <meta
+              property="og:type"
+              content="video.other"
+            >
+
+            <meta
+              property="og:title"
+              content="{html_title}"
+            >
+
+            <meta
+              property="og:description"
+              content="{html_description[:300]}"
+            >
+
+            <meta
+              property="og:image"
+              content="{video['thumbnail']}"
+            >
+
+            <meta
+              property="og:url"
+              content="{page_url}"
+            >
+
+            <script type="application/ld+json">
+          {json_ld}
+            </script>
+
+            <style>
+              * {{
+                box-sizing: border-box;
+              }}
+
+              body {{
+                margin: 0;
+                font-family: Arial, Helvetica, sans-serif;
+                background: #080808;
+                color: white;
+              }}
+
+              .page {{
+                width: 100%;
+                max-width: 760px;
+                margin: auto;
+                padding: 30px 18px 55px;
+              }}
+
+              .brand {{
+                display: inline-block;
+                color: #aaa;
+                text-decoration: none;
+                font-weight: 800;
+                margin-bottom: 25px;
+              }}
+
+              h1 {{
+                font-size: clamp(27px, 7vw, 43px);
+                line-height: 1.1;
+                margin: 0 0 22px;
+              }}
+
+              .player {{
+                position: relative;
+                width: 100%;
+                aspect-ratio: 9 / 16;
+                max-height: 75vh;
+                margin: auto;
+                background: #111;
+                border-radius: 24px;
+                overflow: hidden;
+                border: 1px solid #292929;
+              }}
+
+              iframe {{
+                width: 100%;
+                height: 100%;
+                border: 0;
+              }}
+
+              .meta {{
+                margin-top: 20px;
+                color: #aaa;
+                font-size: 15px;
+              }}
+
+              .description {{
+                margin-top: 20px;
+                padding: 22px;
+                border: 1px solid #292929;
+                background: #111;
+                border-radius: 20px;
+                color: #bbb;
+                line-height: 1.6;
+                white-space: pre-wrap;
+                overflow-wrap: anywhere;
+              }}
+
+              .button {{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                min-height: 62px;
+                margin-top: 20px;
+                border-radius: 18px;
+                background: #ff0033;
+                color: white;
+                text-decoration: none;
+                font-weight: 900;
+              }}
+            </style>
+          </head>
+
+          <body>
+
+            <main class="page">
+
+              <a
+                class="brand"
+                href="{SITE}/"
+              >
+                ← BİZDƏ BELƏDİR
+              </a>
+
+              <h1>{html_title}</h1>
+
+              <div class="player">
+
+                <iframe
+                  src="{video['embedUrl']}"
+                  title="{html_title}"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen>
+                </iframe>
+
+              </div>
+
+              <div class="meta">
+                👁 {video['views']:,} baxış
+              </div>
+
+              <div class="description">
+          {html.escape(description)}
+              </div>
+
+              <a
+                class="button"
+                href="{video['shortsUrl']}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ▶ YouTube-da izlə
+              </a>
+
+            </main>
+
+          </body>
+          </html>
+          """
+
+              with open(
+                  os.path.join(
+                      "video",
+                      video_id + ".html"
+                  ),
+                  "w",
+                  encoding="utf-8"
+              ) as file:
+                  file.write(page)
+
+          # =========================
           # SITEMAP
           # =========================
 
@@ -257,40 +569,78 @@ jobs:
               timezone.utc
           ).strftime("%Y-%m-%d")
 
-          sitemap = f"""<?xml version="1.0" encoding="UTF-8"?>
-          <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-            <url>
-              <loc>https://bizdebeledir.github.io/</loc>
-              <lastmod>{today}</lastmod>
-            </url>
-          </urlset>
-          """
+          sitemap_lines = [
+              '<?xml version="1.0" encoding="UTF-8"?>',
+              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+              '  <url>',
+              f'    <loc>{SITE}/</loc>',
+              f'    <lastmod>{today}</lastmod>',
+              '  </url>'
+          ]
+
+          for video in all_videos:
+
+              page_url = (
+                  SITE
+                  + "/video/"
+                  + video["id"]
+                  + ".html"
+              )
+
+              published_date = (
+                  video["publishedAt"][:10]
+                  if video["publishedAt"]
+                  else today
+              )
+
+              sitemap_lines.extend([
+                  '  <url>',
+                  f'    <loc>{page_url}</loc>',
+                  f'    <lastmod>{published_date}</lastmod>',
+                  '  </url>'
+              ])
+
+          sitemap_lines.append(
+              '</urlset>'
+          )
 
           with open(
               "sitemap.xml",
               "w",
               encoding="utf-8"
           ) as file:
-              file.write(sitemap.strip() + "\n")
+              file.write(
+                  "\n".join(sitemap_lines)
+                  + "\n"
+              )
 
-          print("Channel:", channel_stats["title"])
-          print("Subscribers:", channel_stats["subscribers"])
-          print("Total views:", channel_stats["views"])
-          print("Videos:", channel_stats["videos"])
-          print("Saved videos:", len(all_videos))
-          print("Sitemap updated:", today)
+          print(
+              "Created",
+              len(all_videos),
+              "video pages."
+          )
+
+          print(
+              "Sitemap contains",
+              len(all_videos) + 1,
+              "URLs."
+          )
 
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add videos.json all-videos.json channel-stats.json sitemap.xml
+          git add videos.json
+          git add all-videos.json
+          git add channel-stats.json
+          git add sitemap.xml
+          git add video/
 
           if git diff --cached --quiet; then
             echo "No changes."
             exit 0
           fi
 
-          git commit -m "Update YouTube data and sitemap"
+          git commit -m "Update YouTube data and video pages"
           git push
