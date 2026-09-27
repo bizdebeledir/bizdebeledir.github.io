@@ -1,0 +1,117 @@
+name: Update YouTube Videos
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 */6 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-videos:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update latest YouTube videos
+        shell: python
+        run: |
+          import json
+          import re
+          import urllib.request
+          import xml.etree.ElementTree as ET
+
+          HANDLE = "@bizde.beledir"
+          CHANNEL_URL = f"https://www.youtube.com/{HANDLE}"
+
+          headers = {
+              "User-Agent": "Mozilla/5.0"
+          }
+
+          # 1. Resolve the YouTube handle to the real UC... channel ID.
+          req = urllib.request.Request(CHANNEL_URL, headers=headers)
+          with urllib.request.urlopen(req, timeout=30) as response:
+              html = response.read().decode("utf-8", errors="ignore")
+
+          patterns = [
+              r'"channelId":"(UC[a-zA-Z0-9_-]{20,})"',
+              r'"externalId":"(UC[a-zA-Z0-9_-]{20,})"',
+              r'<meta itemprop="channelId" content="(UC[a-zA-Z0-9_-]{20,})"',
+          ]
+
+          channel_id = None
+          for pattern in patterns:
+              match = re.search(pattern, html)
+              if match:
+                  channel_id = match.group(1)
+                  break
+
+          if not channel_id:
+              raise RuntimeError("Could not resolve YouTube Channel ID.")
+
+          print("Channel ID:", channel_id)
+
+          # 2. Read the official YouTube uploads feed.
+          feed_url = (
+              "https://www.youtube.com/feeds/videos.xml"
+              f"?channel_id={channel_id}"
+          )
+
+          req = urllib.request.Request(feed_url, headers=headers)
+          with urllib.request.urlopen(req, timeout=30) as response:
+              xml_data = response.read()
+
+          root = ET.fromstring(xml_data)
+
+          ns = {
+              "atom": "http://www.w3.org/2005/Atom",
+              "yt": "http://www.youtube.com/xml/schemas/2015",
+          }
+
+          videos = []
+
+          # Keep the newest 3 uploads.
+          for entry in root.findall("atom:entry", ns)[:3]:
+              video_id = entry.findtext("yt:videoId", namespaces=ns)
+              title = entry.findtext("atom:title", namespaces=ns)
+
+              if not video_id:
+                  continue
+
+              videos.append({
+                  "id": video_id,
+                  "title": title or "Bizdə Belədir",
+                  "url": f"https://www.youtube.com/shorts/{video_id}",
+                  "thumbnail": f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg"
+              })
+
+          if not videos:
+              raise RuntimeError("No YouTube videos found.")
+
+          with open("videos.json", "w", encoding="utf-8") as f:
+              json.dump(
+                  videos,
+                  f,
+                  ensure_ascii=False,
+                  indent=2
+              )
+
+          print(f"Saved {len(videos)} videos to videos.json")
+
+      - name: Commit updated videos
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add videos.json
+
+          if git diff --cached --quiet; then
+            echo "No new videos."
+            exit 0
+          fi
+
+          git commit -m "Update latest YouTube videos"
+          git push
