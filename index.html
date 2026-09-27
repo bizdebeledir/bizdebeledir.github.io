@@ -556,7 +556,8 @@
 
 
   <script>
-    let loadedVideos = [];
+    let topVideos = [];
+    let allVideos = [];
 
     function formatViews(number) {
       return new Intl.NumberFormat("az-AZ").format(number || 0);
@@ -581,13 +582,13 @@
           throw new Error("videos.json yüklənmədi");
         }
 
-        loadedVideos = await response.json();
+        topVideos = await response.json();
 
-        if (!Array.isArray(loadedVideos) || loadedVideos.length === 0) {
-          throw new Error("Video tapılmadı");
+        if (!Array.isArray(topVideos) || topVideos.length === 0) {
+          throw new Error("TOP videolar tapılmadı");
         }
 
-        container.innerHTML = loadedVideos.map(video => `
+        container.innerHTML = topVideos.map(video => `
           <a
             class="video-card"
             href="${video.url}"
@@ -629,11 +630,36 @@
       }
     }
 
+
+    async function loadAllVideos() {
+      try {
+        const response = await fetch(
+          "all-videos.json?v=" + Date.now(),
+          { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+          throw new Error("all-videos.json yüklənmədi");
+        }
+
+        const data = await response.json();
+
+        if (Array.isArray(data)) {
+          allVideos = data;
+        }
+
+      } catch (error) {
+        console.error(error);
+        allVideos = [];
+      }
+    }
+
+
     document
       .getElementById("random-video")
       .addEventListener("click", () => {
 
-        if (!loadedVideos.length) {
+        if (!allVideos.length) {
           window.open(
             "https://youtube.com/@bizde.beledir/shorts",
             "_blank"
@@ -641,11 +667,14 @@
           return;
         }
 
-        const random =
-          loadedVideos[Math.floor(Math.random() * loadedVideos.length)];
+        const randomIndex =
+          Math.floor(Math.random() * allVideos.length);
+
+        const randomVideo =
+          allVideos[randomIndex];
 
         window.open(
-          random.url,
+          randomVideo.url,
           "_blank",
           "noopener,noreferrer"
         );
@@ -663,19 +692,32 @@
         };
 
         try {
+
           if (navigator.share) {
             await navigator.share(shareData);
-          } else {
-            await navigator.clipboard.writeText(shareData.url);
+
+          } else if (navigator.clipboard) {
+            await navigator.clipboard.writeText(
+              shareData.url
+            );
+
             alert("Saytın linki kopyalandı!");
+
+          } else {
+            alert(
+              "Saytın ünvanı: https://bizdebeledir.github.io/"
+            );
           }
+
         } catch (error) {
           console.log("Paylaşma bağlandı.");
         }
       });
 
+
     loadVideos();
+    loadAllVideos();
   </script>
 
 </body>
-</html>
+  </html>
