@@ -16,82 +16,139 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Update latest YouTube videos
+      - name: Update YouTube videos
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         shell: python
         run: |
           import json
-          import re
+          import os
+          import urllib.parse
           import urllib.request
-          import xml.etree.ElementTree as ET
 
+          API_KEY = os.environ["YOUTUBE_API_KEY"]
           HANDLE = "@bizde.beledir"
-          CHANNEL_URL = f"https://www.youtube.com/{HANDLE}"
 
-          headers = {
-              "User-Agent": "Mozilla/5.0"
-          }
+          def api_get(endpoint, params):
+              params["key"] = API_KEY
+              url = (
+                  "https://www.googleapis.com/youtube/v3/"
+                  + endpoint
+                  + "?"
+                  + urllib.parse.urlencode(params)
+              )
 
-          # 1. Resolve the YouTube handle to the real UC... channel ID.
-          req = urllib.request.Request(CHANNEL_URL, headers=headers)
-          with urllib.request.urlopen(req, timeout=30) as response:
-              html = response.read().decode("utf-8", errors="ignore")
+              req = urllib.request.Request(
+                  url,
+                  headers={"User-Agent": "Mozilla/5.0"}
+              )
 
-          patterns = [
-              r'"channelId":"(UC[a-zA-Z0-9_-]{20,})"',
-              r'"externalId":"(UC[a-zA-Z0-9_-]{20,})"',
-              r'<meta itemprop="channelId" content="(UC[a-zA-Z0-9_-]{20,})"',
-          ]
+              with urllib.request.urlopen(req, timeout=30) as response:
+                  return json.loads(response.read().decode("utf-8"))
 
-          channel_id = None
-          for pattern in patterns:
-              match = re.search(pattern, html)
-              if match:
-                  channel_id = match.group(1)
-                  break
-
-          if not channel_id:
-              raise RuntimeError("Could not resolve YouTube Channel ID.")
-
-          print("Channel ID:", channel_id)
-
-          # 2. Read the official YouTube uploads feed.
-          feed_url = (
-              "https://www.youtube.com/feeds/videos.xml"
-              f"?channel_id={channel_id}"
+          # 1. Find the exact channel from its handle.
+          channel_data = api_get(
+              "channels",
+              {
+                  "part": "snippet,contentDetails",
+                  "forHandle": HANDLE
+              }
           )
 
-          req = urllib.request.Request(feed_url, headers=headers)
-          with urllib.request.urlopen(req, timeout=30) as response:
-              xml_data = response.read()
+          if not channel_data.get("items"):
+              raise RuntimeError("YouTube channel could not be found.")
 
-          root = ET.fromstring(xml_data)
+          channel = channel_data["items"][0]
 
-          ns = {
-              "atom": "http://www.w3.org/2005/Atom",
-              "yt": "http://www.youtube.com/xml/schemas/2015",
-          }
+          uploads_playlist = (
+              channel["contentDetails"]
+              ["relatedPlaylists"]
+              ["uploads"]
+          )
+
+          print("Channel:", channel["snippet"]["title"])
+          print("Uploads playlist:", uploads_playlist)
+
+          # 2. Get up to 50 latest uploads.
+          playlist_data = api_get(
+              "playlistItems",
+              {
+                  "part": "snippet,contentDetails",
+                  "playlistId": uploads_playlist,
+                  "maxResults": 50
+              }
+          )
+
+          video_ids = []
+
+          for item in playlist_data.get("items", []):
+              video_id = (
+                  item.get("contentDetails", {})
+                  .get("videoId")
+              )
+
+              if video_id:
+                  video_ids.append(video_id)
+
+          if not video_ids:
+              raise RuntimeError("No YouTube videos found.")
+
+          # 3. Get statistics and details for those videos.
+          video_data = api_get(
+              "videos",
+              {
+                  "part": "snippet,statistics,contentDetails",
+                  "id": ",".join(video_ids)
+              }
+          )
 
           videos = []
 
-          # Keep the newest 3 uploads.
-          for entry in root.findall("atom:entry", ns)[:3]:
-              video_id = entry.findtext("yt:videoId", namespaces=ns)
-              title = entry.findtext("atom:title", namespaces=ns)
+          for item in video_data.get("items", []):
+              video_id = item["id"]
+              snippet = item.get("snippet", {})
+              statistics = item.get("statistics", {})
 
-              if not video_id:
-                  continue
+              view_count = int(
+                  statistics.get("viewCount", 0)
+              )
 
               videos.append({
                   "id": video_id,
-                  "title": title or "Bizdə Belədir",
-                  "url": f"https://www.youtube.com/shorts/{video_id}",
-                  "thumbnail": f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg"
+                  "title": snippet.get(
+                      "title",
+                      "Bizdə Belədir"
+                  ),
+                  "url": (
+                      "https://www.youtube.com/shorts/"
+                      + video_id
+                  ),
+                  "thumbnail": (
+                      "https://i.ytimg.com/vi/"
+                      + video_id
+                      + "/hqdefault.jpg"
+                  ),
+                  "views": view_count,
+                  "publishedAt": snippet.get(
+                      "publishedAt",
+                      ""
+                  )
               })
 
-          if not videos:
-              raise RuntimeError("No YouTube videos found.")
+          # 4. Sort by views, highest first.
+          videos.sort(
+              key=lambda video: video["views"],
+              reverse=True
+          )
 
-          with open("videos.json", "w", encoding="utf-8") as f:
+          # Keep the top 3.
+          videos = videos[:3]
+
+          with open(
+              "videos.json",
+              "w",
+              encoding="utf-8"
+          ) as f:
               json.dump(
                   videos,
                   f,
@@ -99,7 +156,13 @@ jobs:
                   indent=2
               )
 
-          print(f"Saved {len(videos)} videos to videos.json")
+          print("Top videos:")
+          for video in videos:
+              print(
+                  video["views"],
+                  "-",
+                  video["title"]
+              )
 
       - name: Commit updated videos
         run: |
@@ -109,9 +172,9 @@ jobs:
           git add videos.json
 
           if git diff --cached --quiet; then
-            echo "No new videos."
+            echo "No changes."
             exit 0
           fi
 
-          git commit -m "Update latest YouTube videos"
+          git commit -m "Update YouTube videos"
           git push
