@@ -1,145 +1,181 @@
 <!DOCTYPE html>
 <html lang="az">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Bütün Videolar | Bizdə Belədir</title>
 
-  <meta name="description"
-        content="Bizdə Belədir kanalının Azərbaycan yumor və gündəlik həyat videolarına bax.">
+  <meta
+    name="description"
+    content="Bizdə Belədir kanalının bütün videolarına bax. Azərbaycan gündəlik həyatı, yumor və əyləncəli qısa videolar."
+  >
 
-  <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#080808">
+  <meta
+    name="robots"
+    content="index, follow"
+  >
 
-  <link rel="canonical"
-        href="https://bizdebeledir.github.io/videos.html">
+  <meta
+    name="theme-color"
+    content="#080808"
+  >
+
+  <link
+    rel="canonical"
+    href="https://bizdebeledir.github.io/videos.html"
+  >
 
   <style>
+
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
+      margin: 0;
       font-family: Arial, Helvetica, sans-serif;
       background: #080808;
       color: #fff;
-      min-height: 100vh;
     }
 
-    .container {
+    .page {
       width: 100%;
-      max-width: 1000px;
+      max-width: 1100px;
       margin: auto;
-      padding: 30px 18px 60px;
+      padding: 28px 17px 60px;
     }
 
     .back {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
       color: #aaa;
       text-decoration: none;
+      font-size: 14px;
       font-weight: 800;
       margin-bottom: 30px;
     }
 
     .header {
-      margin-bottom: 28px;
+      margin-bottom: 27px;
     }
 
     h1 {
-      font-size: clamp(38px, 9vw, 65px);
+      margin: 0 0 10px;
+      font-size: clamp(34px, 9vw, 58px);
       line-height: 1;
       letter-spacing: -2px;
-      margin-bottom: 14px;
     }
 
     .subtitle {
       color: #999;
       font-size: 16px;
-      line-height: 1.5;
+      line-height: 1.55;
+      margin: 0;
     }
 
-    .search-box {
+    .controls {
+      margin: 27px 0 25px;
+    }
+
+    .search {
       position: relative;
-      margin: 28px 0 18px;
+      margin-bottom: 13px;
     }
 
-    .search-box input {
+    .search input {
       width: 100%;
-      height: 62px;
+      min-height: 58px;
       border-radius: 18px;
       border: 1px solid #303030;
-      background: #141414;
+      background: #121212;
       color: #fff;
-      padding: 0 20px 0 52px;
       font-size: 16px;
+      padding: 0 18px 0 49px;
       outline: none;
     }
 
-    .search-box input:focus {
+    .search input:focus {
       border-color: #666;
     }
 
     .search-icon {
       position: absolute;
-      left: 19px;
+      left: 18px;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 20px;
       pointer-events: none;
     }
 
-    .info-row {
+    .filter-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .filter-btn {
+      min-height: 52px;
+      border: 1px solid #303030;
+      border-radius: 16px;
+      background: #141414;
+      color: #aaa;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      padding: 10px;
+    }
+
+    .filter-btn.active {
+      background: #fff;
+      color: #080808;
+      border-color: #fff;
+    }
+
+    .results-info {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 15px;
-      margin-bottom: 24px;
+      margin-bottom: 17px;
       color: #888;
-      font-size: 14px;
+      font-size: 13px;
     }
 
-    .count {
-      color: #ddd;
-      font-weight: 800;
+    .results-info strong {
+      color: #fff;
     }
 
-    .videos {
+    .grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 20px;
+      gap: 18px;
     }
 
-    .video-card {
+    .card {
       display: block;
-      color: #fff;
       text-decoration: none;
-      background: #131313;
+      color: #fff;
+      background: #121212;
       border: 1px solid #292929;
-      border-radius: 22px;
+      border-radius: 21px;
       overflow: hidden;
-      transition:
-        transform .18s ease,
-        border-color .18s ease;
     }
 
-    .video-card:active {
-      transform: scale(.98);
-    }
-
-    .thumb {
+    .thumbnail {
       position: relative;
       width: 100%;
       aspect-ratio: 16 / 9;
-      background: #1b1b1b;
       overflow: hidden;
+      background: #1d1d1d;
     }
 
-    .thumb img {
+    .thumbnail img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -151,195 +187,254 @@
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      width: 58px;
-      height: 58px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
       background: rgba(0,0,0,.78);
-      border: 1px solid rgba(255,255,255,.25);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding-left: 4px;
-      font-size: 23px;
+      padding-left: 3px;
+      font-size: 21px;
     }
 
-    .video-info {
-      padding: 17px 18px 19px;
+    .card-body {
+      padding: 16px;
     }
 
-    .video-title {
-      font-size: 17px;
-      line-height: 1.35;
+    .title {
+      font-size: 16px;
+      line-height: 1.4;
       font-weight: 800;
-      margin-bottom: 12px;
-
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      min-height: 45px;
     }
 
-    .video-meta {
+    .meta {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       gap: 10px;
+      margin-top: 13px;
       color: #888;
-      font-size: 13px;
+      font-size: 12px;
     }
 
     .views {
-      color: #ccc;
+      color: #bbb;
       font-weight: 700;
     }
 
-    .empty,
-    .loading {
+    .empty {
       grid-column: 1 / -1;
       padding: 45px 20px;
+      border: 1px solid #292929;
       background: #111;
-      border: 1px solid #252525;
-      border-radius: 22px;
+      border-radius: 20px;
       text-align: center;
       color: #888;
     }
 
-    .youtube-button {
+    .youtube {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 100%;
-      max-width: 500px;
-      min-height: 64px;
-      margin: 35px auto 0;
-      border-radius: 19px;
+      min-height: 62px;
+      margin-top: 30px;
+      padding: 15px;
+      border-radius: 18px;
       background: #ff0033;
       color: #fff;
       text-decoration: none;
-      font-size: 17px;
       font-weight: 900;
     }
 
-    footer {
-      margin-top: 50px;
-      padding-top: 28px;
-      border-top: 1px solid #202020;
-      text-align: center;
-      color: #666;
-      font-size: 13px;
-    }
-
     @media (min-width: 620px) {
-      .videos {
-        grid-template-columns: repeat(2, 1fr);
+
+      .grid {
+        grid-template-columns:
+          repeat(2, 1fr);
       }
+
     }
 
     @media (min-width: 900px) {
-      .videos {
-        grid-template-columns: repeat(3, 1fr);
+
+      .grid {
+        grid-template-columns:
+          repeat(3, 1fr);
       }
 
-      .video-title {
-        font-size: 15px;
-      }
     }
+
   </style>
+
 </head>
 
 <body>
 
-  <main class="container">
+  <main class="page">
 
     <a
       class="back"
-      href="/">
-      ← Bizdə Belədir
+      href="/"
+    >
+      ← BİZDƏ BELƏDİR
     </a>
 
-    <div class="header">
+    <header class="header">
 
-      <h1>🎬 Bütün videolar</h1>
+      <h1>
+        Bütün videolar 🎬
+      </h1>
 
       <p class="subtitle">
-        Bizdə Belədir kanalının ən yeni videolarına bax.
-        İstədiyin videonu axtar və seç.
+        Bizdə Belədir kanalının videolarını
+        axtar və istədiyin qaydada sırala.
       </p>
 
-    </div>
+    </header>
 
-    <div class="search-box">
 
-      <span class="search-icon">🔎</span>
+    <section class="controls">
 
-      <input
-        id="search"
-        type="search"
-        placeholder="Video axtar..."
-        autocomplete="off"
-        aria-label="Video axtar">
+      <div class="search">
 
-    </div>
+        <span class="search-icon">
+          🔎
+        </span>
 
-    <div class="info-row">
+        <input
+          id="search"
+          type="search"
+          placeholder="Video axtar..."
+          autocomplete="off"
+        >
+
+      </div>
+
+
+      <div class="filter-row">
+
+        <button
+          id="newest"
+          class="filter-btn active"
+          type="button"
+        >
+          🆕 Ən yeni
+        </button>
+
+        <button
+          id="popular"
+          class="filter-btn"
+          type="button"
+        >
+          🔥 Ən çox baxılan
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <div class="results-info">
 
       <span>
-        🆕 Yenidən köhnəyə
+        <strong id="result-count">
+          0
+        </strong>
+        video
       </span>
 
-      <span
-        class="count"
-        id="video-count">
-        ...
+      <span id="sort-label">
+        Ən yeni
       </span>
 
     </div>
 
-    <div
-      class="videos"
-      id="videos">
 
-      <div class="loading">
+    <section
+      class="grid"
+      id="video-grid"
+    >
+
+      <div class="empty">
         Videolar yüklənir...
       </div>
 
-    </div>
+    </section>
+
 
     <a
-      class="youtube-button"
+      class="youtube"
       href="https://youtube.com/@bizde.beledir/shorts"
       target="_blank"
-      rel="noopener noreferrer">
-      ▶ YouTube-da bütün Shorts-lara bax
+      rel="noopener noreferrer"
+    >
+      ▶ YouTube kanalına keç
     </a>
-
-    <footer>
-      © 2026 BİZDƏ BELƏDİR • Bütün hüquqlar qorunur
-    </footer>
 
   </main>
 
 
   <script>
+
     let allVideos = [];
 
-    const videosContainer =
-      document.getElementById("videos");
+    let currentSort =
+      "newest";
 
-    const searchInput =
-      document.getElementById("search");
 
-    const countElement =
-      document.getElementById("video-count");
+    const grid =
+      document.getElementById(
+        "video-grid"
+      );
+
+    const search =
+      document.getElementById(
+        "search"
+      );
+
+    const newestButton =
+      document.getElementById(
+        "newest"
+      );
+
+    const popularButton =
+      document.getElementById(
+        "popular"
+      );
+
+    const resultCount =
+      document.getElementById(
+        "result-count"
+      );
+
+    const sortLabel =
+      document.getElementById(
+        "sort-label"
+      );
 
 
     function escapeHTML(text) {
-      const div = document.createElement("div");
-      div.textContent = text || "";
-      return div.innerHTML;
+
+      const element =
+        document.createElement(
+          "div"
+        );
+
+      element.textContent =
+        text || "";
+
+      return element.innerHTML;
     }
 
 
-    function formatViews(number) {
+    function formatNumber(number) {
+
       return new Intl.NumberFormat(
         "az-AZ"
       ).format(
@@ -348,48 +443,50 @@
     }
 
 
-    function formatDate(dateString) {
+    function formatDate(date) {
 
-      if (!dateString) {
+      if (!date) {
         return "";
       }
 
-      const date =
-        new Date(dateString);
+      const parsed =
+        new Date(date);
 
       if (
         Number.isNaN(
-          date.getTime()
+          parsed.getTime()
         )
       ) {
         return "";
       }
 
-      return new Intl.DateTimeFormat(
+      return parsed.toLocaleDateString(
         "az-AZ",
         {
           day: "2-digit",
           month: "2-digit",
           year: "numeric"
         }
-      ).format(date);
+      );
     }
 
 
-    function createVideoCard(video) {
+    function createCard(video) {
 
-      const videoPage =
+      const pageURL =
         "video/"
-        + encodeURIComponent(video.id)
+        + encodeURIComponent(
+            video.id
+          )
         + ".html";
 
       return `
         <a
-          class="video-card"
-          href="${videoPage}"
+          class="card"
+          href="${pageURL}"
         >
 
-          <div class="thumb">
+          <div class="thumbnail">
 
             <img
               src="${video.thumbnail}"
@@ -397,22 +494,22 @@
               loading="lazy"
             >
 
-            <div class="play">
+            <span class="play">
               ▶
-            </div>
+            </span>
 
           </div>
 
-          <div class="video-info">
+          <div class="card-body">
 
-            <div class="video-title">
+            <div class="title">
               ${escapeHTML(video.title)}
             </div>
 
-            <div class="video-meta">
+            <div class="meta">
 
               <span class="views">
-                👁 ${formatViews(video.views)}
+                👁 ${formatNumber(video.views)}
               </span>
 
               <span>
@@ -428,143 +525,236 @@
     }
 
 
-    function renderVideos(videos) {
+    function renderVideos() {
 
-      countElement.textContent =
-        videos.length + " video";
+      const query =
+        search.value
+          .trim()
+          .toLocaleLowerCase(
+            "az"
+          );
+
+
+      let videos =
+        allVideos.filter(
+          video => {
+
+            const title =
+              (
+                video.title || ""
+              )
+              .toLocaleLowerCase(
+                "az"
+              );
+
+            const description =
+              (
+                video.description || ""
+              )
+              .toLocaleLowerCase(
+                "az"
+              );
+
+            return (
+              title.includes(query)
+              ||
+              description.includes(query)
+            );
+          }
+        );
+
+
+      if (
+        currentSort ===
+        "popular"
+      ) {
+
+        videos.sort(
+          (a, b) =>
+            Number(b.views || 0)
+            -
+            Number(a.views || 0)
+        );
+
+      } else {
+
+        videos.sort(
+          (a, b) =>
+            new Date(
+              b.publishedAt
+            )
+            -
+            new Date(
+              a.publishedAt
+            )
+        );
+      }
+
+
+      resultCount.textContent =
+        videos.length;
+
 
       if (!videos.length) {
 
-        videosContainer.innerHTML = `
+        grid.innerHTML = `
           <div class="empty">
-            🔎 Bu axtarışa uyğun video tapılmadı.
+            🔎 Axtarışa uyğun video tapılmadı.
           </div>
         `;
 
         return;
       }
 
-      videosContainer.innerHTML =
+
+      grid.innerHTML =
         videos
-          .map(createVideoCard)
+          .map(
+            createCard
+          )
           .join("");
     }
+
+
+    function setSort(type) {
+
+      currentSort =
+        type;
+
+
+      if (
+        type ===
+        "popular"
+      ) {
+
+        popularButton
+          .classList
+          .add(
+            "active"
+          );
+
+        newestButton
+          .classList
+          .remove(
+            "active"
+          );
+
+        sortLabel.textContent =
+          "Ən çox baxılan";
+
+      } else {
+
+        newestButton
+          .classList
+          .add(
+            "active"
+          );
+
+        popularButton
+          .classList
+          .remove(
+            "active"
+          );
+
+        sortLabel.textContent =
+          "Ən yeni";
+      }
+
+
+      renderVideos();
+    }
+
+
+    newestButton
+      .addEventListener(
+        "click",
+        () => {
+          setSort(
+            "newest"
+          );
+        }
+      );
+
+
+    popularButton
+      .addEventListener(
+        "click",
+        () => {
+          setSort(
+            "popular"
+          );
+        }
+      );
+
+
+    search
+      .addEventListener(
+        "input",
+        renderVideos
+      );
 
 
     async function loadVideos() {
 
       try {
 
-        const response = await fetch(
-          "all-videos.json?v=" + Date.now(),
-          {
-            cache: "no-store"
-          }
-        );
+        const response =
+          await fetch(
+            "all-videos.json?v="
+            + Date.now(),
+            {
+              cache:
+                "no-store"
+            }
+          );
+
 
         if (!response.ok) {
+
           throw new Error(
-            "all-videos.json yüklənmədi"
+            "Video məlumatları yüklənmədi."
           );
         }
+
 
         const data =
           await response.json();
 
-        if (
-          !Array.isArray(data)
-          ||
-          !data.length
-        ) {
-          throw new Error(
-            "Video tapılmadı"
-          );
-        }
 
         allVideos =
-          [...data].sort(
-            (a, b) =>
-              new Date(b.publishedAt)
-              -
-              new Date(a.publishedAt)
-          );
+          Array.isArray(data)
+          ? data
+          : [];
 
-        renderVideos(
-          allVideos
+
+        setSort(
+          "newest"
         );
 
       } catch (error) {
 
-        console.error(error);
+        console.error(
+          error
+        );
 
-        countElement.textContent =
-          "0 video";
 
-        videosContainer.innerHTML = `
+        resultCount.textContent =
+          "0";
+
+
+        grid.innerHTML = `
           <div class="empty">
-            Videolar hazırda yüklənə bilmir.
+            ⚠️ Videolar hazırda yüklənə bilmir.
           </div>
         `;
       }
     }
 
 
-    searchInput.addEventListener(
-      "input",
-      () => {
-
-        const query =
-          searchInput
-            .value
-            .trim()
-            .toLocaleLowerCase("az");
-
-        if (!query) {
-
-          renderVideos(
-            allVideos
-          );
-
-          return;
-        }
-
-        const filtered =
-          allVideos.filter(
-            video => {
-
-              const title =
-                (
-                  video.title
-                  ||
-                  ""
-                )
-                .toLocaleLowerCase("az");
-
-              const description =
-                (
-                  video.description
-                  ||
-                  ""
-                )
-                .toLocaleLowerCase("az");
-
-              return (
-                title.includes(query)
-                ||
-                description.includes(query)
-              );
-            }
-          );
-
-        renderVideos(
-          filtered
-        );
-      }
-    );
-
-
     loadVideos();
+
   </script>
 
 </body>
+
 </html>
