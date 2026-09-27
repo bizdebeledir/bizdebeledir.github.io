@@ -25,6 +25,7 @@ jobs:
           import os
           import urllib.parse
           import urllib.request
+          from datetime import datetime, timezone
 
           API_KEY = os.environ["YOUTUBE_API_KEY"]
           HANDLE = "@bizde.beledir"
@@ -52,9 +53,9 @@ jobs:
                       response.read().decode("utf-8")
                   )
 
-          # ==========================================
-          # 1. KANAL MƏLUMATLARI
-          # ==========================================
+          # =========================
+          # KANAL
+          # =========================
 
           channel_data = api_get(
               "channels",
@@ -65,62 +66,34 @@ jobs:
           )
 
           if not channel_data.get("items"):
-              raise RuntimeError(
-                  "YouTube channel could not be found."
-              )
+              raise RuntimeError("YouTube channel not found.")
 
           channel = channel_data["items"][0]
 
-          channel_id = channel["id"]
-
-          channel_title = (
-              channel
-              .get("snippet", {})
-              .get("title", "Bizdə Belədir")
-          )
-
-          statistics = channel.get(
-              "statistics",
-              {}
-          )
-
-          subscriber_count = int(
-              statistics.get(
-                  "subscriberCount",
-                  0
-              )
-          )
-
-          total_views = int(
-              statistics.get(
-                  "viewCount",
-                  0
-              )
-          )
-
-          video_count = int(
-              statistics.get(
-                  "videoCount",
-                  0
-              )
-          )
-
-          hidden_subscribers = (
-              statistics.get(
-                  "hiddenSubscriberCount",
-                  False
-              )
-          )
-
-          # Kanal statistikasını ayrıca saxla
+          statistics = channel.get("statistics", {})
 
           channel_stats = {
-              "channelId": channel_id,
-              "title": channel_title,
-              "subscribers": subscriber_count,
-              "views": total_views,
-              "videos": video_count,
-              "hiddenSubscriberCount": hidden_subscribers
+              "channelId": channel["id"],
+              "title": channel.get(
+                  "snippet", {}
+              ).get(
+                  "title",
+                  "Bizdə Belədir"
+              ),
+              "subscribers": int(
+                  statistics.get("subscriberCount", 0)
+              ),
+              "views": int(
+                  statistics.get("viewCount", 0)
+              ),
+              "videos": int(
+                  statistics.get("videoCount", 0)
+              ),
+              "hiddenSubscriberCount":
+                  statistics.get(
+                      "hiddenSubscriberCount",
+                      False
+                  )
           }
 
           with open(
@@ -135,14 +108,9 @@ jobs:
                   indent=2
               )
 
-          print("CHANNEL STATS")
-          print("Subscribers:", subscriber_count)
-          print("Total views:", total_views)
-          print("Videos:", video_count)
-
-          # ==========================================
-          # 2. UPLOADS PLAYLIST
-          # ==========================================
+          # =========================
+          # SON 50 VİDEO
+          # =========================
 
           uploads_playlist = (
               channel["contentDetails"]
@@ -161,13 +129,9 @@ jobs:
 
           video_ids = []
 
-          for item in playlist_data.get(
-              "items",
-              []
-          ):
+          for item in playlist_data.get("items", []):
               video_id = (
-                  item
-                  .get("contentDetails", {})
+                  item.get("contentDetails", {})
                   .get("videoId")
               )
 
@@ -175,13 +139,7 @@ jobs:
                   video_ids.append(video_id)
 
           if not video_ids:
-              raise RuntimeError(
-                  "No YouTube videos found."
-              )
-
-          # ==========================================
-          # 3. VİDEO MƏLUMATLARI
-          # ==========================================
+              raise RuntimeError("No videos found.")
 
           video_data = api_get(
               "videos",
@@ -194,28 +152,13 @@ jobs:
 
           all_videos = []
 
-          for item in video_data.get(
-              "items",
-              []
-          ):
+          for item in video_data.get("items", []):
+
               video_id = item["id"]
 
-              snippet = item.get(
-                  "snippet",
-                  {}
-              )
-
-              video_statistics = item.get(
-                  "statistics",
-                  {}
-              )
-
-              views = int(
-                  video_statistics.get(
-                      "viewCount",
-                      0
-                  )
-              )
+              snippet = item.get("snippet", {})
+              stats = item.get("statistics", {})
+              content = item.get("contentDetails", {})
 
               all_videos.append({
                   "id": video_id,
@@ -225,8 +168,21 @@ jobs:
                       "Bizdə Belədir"
                   ),
 
+                  "description": snippet.get(
+                      "description",
+                      ""
+                  ),
+
                   "url":
+                      "https://www.youtube.com/watch?v="
+                      + video_id,
+
+                  "shortsUrl":
                       "https://www.youtube.com/shorts/"
+                      + video_id,
+
+                  "embedUrl":
+                      "https://www.youtube.com/embed/"
                       + video_id,
 
                   "thumbnail":
@@ -234,26 +190,28 @@ jobs:
                       + video_id
                       + "/hqdefault.jpg",
 
-                  "views": views,
+                  "views": int(
+                      stats.get("viewCount", 0)
+                  ),
 
                   "publishedAt": snippet.get(
                       "publishedAt",
+                      ""
+                  ),
+
+                  "duration": content.get(
+                      "duration",
                       ""
                   )
               })
 
           if not all_videos:
-              raise RuntimeError(
-                  "No video details found."
-              )
+              raise RuntimeError("No video details found.")
 
-          # ==========================================
-          # 4. SON VİDEOLAR
-          # ==========================================
+          # Yeni videolar birinci
 
           all_videos.sort(
-              key=lambda video:
-                  video["publishedAt"],
+              key=lambda video: video["publishedAt"],
               reverse=True
           )
 
@@ -269,14 +227,13 @@ jobs:
                   indent=2
               )
 
-          # ==========================================
-          # 5. TOP 3
-          # ==========================================
+          # =========================
+          # TOP 3
+          # =========================
 
           top_videos = sorted(
               all_videos,
-              key=lambda video:
-                  video["views"],
+              key=lambda video: video["views"],
               reverse=True
           )[:3]
 
@@ -292,32 +249,48 @@ jobs:
                   indent=2
               )
 
-          print(
-              "Saved",
-              len(all_videos),
-              "videos."
-          )
+          # =========================
+          # SITEMAP
+          # =========================
 
-          print("TOP 3")
+          today = datetime.now(
+              timezone.utc
+          ).strftime("%Y-%m-%d")
 
-          for video in top_videos:
-              print(
-                  video["views"],
-                  "-",
-                  video["title"]
-              )
+          sitemap = f"""<?xml version="1.0" encoding="UTF-8"?>
+          <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+            <url>
+              <loc>https://bizdebeledir.github.io/</loc>
+              <lastmod>{today}</lastmod>
+            </url>
+          </urlset>
+          """
+
+          with open(
+              "sitemap.xml",
+              "w",
+              encoding="utf-8"
+          ) as file:
+              file.write(sitemap.strip() + "\n")
+
+          print("Channel:", channel_stats["title"])
+          print("Subscribers:", channel_stats["subscribers"])
+          print("Total views:", channel_stats["views"])
+          print("Videos:", channel_stats["videos"])
+          print("Saved videos:", len(all_videos))
+          print("Sitemap updated:", today)
 
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add videos.json all-videos.json channel-stats.json
+          git add videos.json all-videos.json channel-stats.json sitemap.xml
 
           if git diff --cached --quiet; then
             echo "No changes."
             exit 0
           fi
 
-          git commit -m "Update YouTube data"
+          git commit -m "Update YouTube data and sitemap"
           git push
