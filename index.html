@@ -159,11 +159,16 @@
 
     .arrow {
       font-size: 29px;
-      font-weight: 400;
     }
 
     .section {
       padding: 58px 20px;
+    }
+
+    .section.alt {
+      background: #0c0c0c;
+      border-top: 1px solid #171717;
+      border-bottom: 1px solid #171717;
     }
 
     .section-title {
@@ -233,6 +238,18 @@
       font-size: 24px;
       padding-left: 4px;
       border: 1px solid rgba(255,255,255,.25);
+    }
+
+    .new-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 7px 10px;
+      background: #ff0033;
+      color: #fff;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 900;
     }
 
     .video-info {
@@ -333,7 +350,6 @@
       margin-top: 20px;
       font-size: 21px;
       font-weight: 900;
-      color: #fff;
     }
 
     .follow-box {
@@ -476,8 +492,25 @@
         YouTube kanalımızdan ən çox baxılan videolar avtomatik yenilənir.
       </p>
 
-      <div class="videos" id="videos">
+      <div class="videos" id="top-videos">
         <div class="loading">Videolar yüklənir...</div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <section class="section alt">
+    <div class="container">
+
+      <h2 class="section-title">🆕 Son videolar</h2>
+
+      <p class="section-subtitle">
+        Bizdə Belədir kanalında ən yeni yayımlanan videolar.
+      </p>
+
+      <div class="videos" id="latest-videos">
+        <div class="loading">Son videolar yüklənir...</div>
       </div>
 
       <div class="actions">
@@ -489,7 +522,9 @@
           📺 Bütün videolara bax
         </a>
 
-        <button class="action-btn random" id="random-video" type="button">
+        <button class="action-btn random"
+                id="random-video"
+                type="button">
           🎲 Təsadüfi video
         </button>
 
@@ -500,7 +535,9 @@
           🔴 YouTube-da abunə ol
         </a>
 
-        <button class="action-btn" id="share-site" type="button">
+        <button class="action-btn"
+                id="share-site"
+                type="button">
           🔗 Saytı paylaş
         </button>
 
@@ -532,6 +569,7 @@
       </div>
 
       <div class="follow-box">
+
         <h3>Yeni videoları qaçırma 🔥</h3>
 
         <p>
@@ -544,6 +582,7 @@
            rel="noopener noreferrer">
           ▶ YouTube-da abunə ol
         </a>
+
       </div>
 
     </div>
@@ -556,7 +595,6 @@
 
 
   <script>
-    let topVideos = [];
     let allVideos = [];
 
     function formatViews(number) {
@@ -569,10 +607,57 @@
       return div.innerHTML;
     }
 
-    async function loadVideos() {
-      const container = document.getElementById("videos");
+    function createVideoCard(video, isNew = false) {
+      return `
+        <a
+          class="video-card"
+          href="${video.url}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div class="thumb-wrap">
+
+            <img
+              src="${video.thumbnail}"
+              alt="${escapeHTML(video.title)}"
+              loading="lazy"
+            >
+
+            ${isNew ? '<div class="new-badge">YENİ</div>' : ''}
+
+            <div class="play">▶</div>
+
+          </div>
+
+          <div class="video-info">
+
+            <strong class="video-title">
+              ${escapeHTML(video.title)}
+            </strong>
+
+            <div class="video-meta">
+
+              <span class="views">
+                👁 ${formatViews(video.views)} baxış
+              </span>
+
+              <span>YouTube →</span>
+
+            </div>
+
+          </div>
+        </a>
+      `;
+    }
+
+
+    async function loadTopVideos() {
+
+      const container =
+        document.getElementById("top-videos");
 
       try {
+
         const response = await fetch(
           "videos.json?v=" + Date.now(),
           { cache: "no-store" }
@@ -582,44 +667,20 @@
           throw new Error("videos.json yüklənmədi");
         }
 
-        topVideos = await response.json();
+        const videos = await response.json();
 
-        if (!Array.isArray(topVideos) || topVideos.length === 0) {
-          throw new Error("TOP videolar tapılmadı");
+        if (!Array.isArray(videos) || !videos.length) {
+          throw new Error("TOP video tapılmadı");
         }
 
-        container.innerHTML = topVideos.map(video => `
-          <a
-            class="video-card"
-            href="${video.url}"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <div class="thumb-wrap">
-              <img
-                src="${video.thumbnail}"
-                alt="${escapeHTML(video.title)}"
-                loading="lazy"
-              >
-              <div class="play">▶</div>
-            </div>
-
-            <div class="video-info">
-              <strong class="video-title">
-                ${escapeHTML(video.title)}
-              </strong>
-
-              <div class="video-meta">
-                <span class="views">
-                  👁 ${formatViews(video.views)} baxış
-                </span>
-                <span>YouTube →</span>
-              </div>
-            </div>
-          </a>
-        `).join("");
+        container.innerHTML =
+          videos
+            .slice(0, 3)
+            .map(video => createVideoCard(video))
+            .join("");
 
       } catch (error) {
+
         console.error(error);
 
         container.innerHTML = `
@@ -632,7 +693,12 @@
 
 
     async function loadAllVideos() {
+
+      const container =
+        document.getElementById("latest-videos");
+
       try {
+
         const response = await fetch(
           "all-videos.json?v=" + Date.now(),
           { cache: "no-store" }
@@ -644,13 +710,35 @@
 
         const data = await response.json();
 
-        if (Array.isArray(data)) {
-          allVideos = data;
+        if (!Array.isArray(data) || !data.length) {
+          throw new Error("Video tapılmadı");
         }
 
+        allVideos = [...data].sort(
+          (a, b) =>
+            new Date(b.publishedAt) -
+            new Date(a.publishedAt)
+        );
+
+        const latestVideos =
+          allVideos.slice(0, 3);
+
+        container.innerHTML =
+          latestVideos
+            .map(video => createVideoCard(video, true))
+            .join("");
+
       } catch (error) {
+
         console.error(error);
+
         allVideos = [];
+
+        container.innerHTML = `
+          <div class="loading">
+            Son videolar hazırda göstərilə bilmir.
+          </div>
+        `;
       }
     }
 
@@ -660,21 +748,22 @@
       .addEventListener("click", () => {
 
         if (!allVideos.length) {
+
           window.open(
             "https://youtube.com/@bizde.beledir/shorts",
             "_blank"
           );
+
           return;
         }
 
         const randomIndex =
-          Math.floor(Math.random() * allVideos.length);
-
-        const randomVideo =
-          allVideos[randomIndex];
+          Math.floor(
+            Math.random() * allVideos.length
+          );
 
         window.open(
-          randomVideo.url,
+          allVideos[randomIndex].url,
           "_blank",
           "noopener,noreferrer"
         );
@@ -687,16 +776,20 @@
 
         const shareData = {
           title: "Bizdə Belədir",
-          text: "Bizdə Belədir 🇦🇿 Gündəlik həyat, yumor və videolar.",
-          url: "https://bizdebeledir.github.io/"
+          text:
+            "Bizdə Belədir 🇦🇿 Gündəlik həyat, yumor və videolar.",
+          url:
+            "https://bizdebeledir.github.io/"
         };
 
         try {
 
           if (navigator.share) {
+
             await navigator.share(shareData);
 
           } else if (navigator.clipboard) {
+
             await navigator.clipboard.writeText(
               shareData.url
             );
@@ -704,6 +797,7 @@
             alert("Saytın linki kopyalandı!");
 
           } else {
+
             alert(
               "Saytın ünvanı: https://bizdebeledir.github.io/"
             );
@@ -715,9 +809,9 @@
       });
 
 
-    loadVideos();
+    loadTopVideos();
     loadAllVideos();
   </script>
 
 </body>
-  </html>
+</html>
