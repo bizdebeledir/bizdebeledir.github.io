@@ -92,6 +92,14 @@
     href="https://bizdebeledir.github.io/"
   >
 
+  <!-- Profil şəklini əvvəlcədən yüklə -->
+  <link
+    rel="preload"
+    href="/profile.webp"
+    as="image"
+    type="image/webp"
+  >
+
   <link
     rel="preload"
     href="style.css"
@@ -126,7 +134,7 @@
 
   <meta
     property="og:image"
-    content="https://bizdebeledir.github.io/file_0000000059908210b6e69fc5a5cd05f1.png"
+    content="https://bizdebeledir.github.io/profile.webp"
   >
 
   <!-- Structured Data -->
@@ -136,7 +144,7 @@
     "@type": "Organization",
     "name": "Bizdə Belədir",
     "url": "https://bizdebeledir.github.io/",
-    "logo": "https://bizdebeledir.github.io/file_0000000059908210b6e69fc5a5cd05f1.png",
+    "logo": "https://bizdebeledir.github.io/profile.webp",
     "sameAs": [
       "https://youtube.com/@bizde.beledir",
       "https://www.instagram.com/bizde.beledir",
@@ -151,7 +159,6 @@
 
 <body>
 
-  <!-- HERO -->
   <header class="hero">
 
     <div class="container">
@@ -162,11 +169,12 @@
 
       <div class="profile">
         <img
-          src="file_0000000059908210b6e69fc5a5cd05f1.png"
+          src="/profile.webp"
           alt="Bizdə Belədir"
           width="108"
           height="108"
           fetchpriority="high"
+          decoding="async"
         >
       </div>
 
@@ -179,7 +187,6 @@
         “bu eynən məndə də olur” dediyin videolar. 😄
       </p>
 
-      <!-- STATİSTİKA -->
       <div class="stats">
 
         <div class="stat-card">
@@ -235,7 +242,6 @@
 
       </div>
 
-      <!-- YOUTUBE -->
       <a
         class="main-social"
         href="https://youtube.com/@bizde.beledir"
@@ -259,7 +265,6 @@
         </span>
       </a>
 
-      <!-- SOSİAL ŞƏBƏKƏLƏR -->
       <div class="small-socials">
 
         <a
@@ -346,7 +351,6 @@
 
   <main>
 
-    <!-- TOP 3 -->
     <section class="section">
 
       <div class="container">
@@ -377,7 +381,6 @@
     </section>
 
 
-    <!-- SON VİDEOLAR -->
     <section class="section alt">
 
       <div class="container">
@@ -408,7 +411,6 @@
     </section>
 
 
-    <!-- DÜYMƏLƏR -->
     <section class="section">
 
       <div class="container">
@@ -466,7 +468,6 @@
     </section>
 
 
-    <!-- HAQQINDA -->
     <section class="section alt">
 
       <div class="container">
@@ -537,4 +538,4 @@
 
 </body>
 
-</html>
+  </html>
