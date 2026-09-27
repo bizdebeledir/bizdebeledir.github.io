@@ -13,6 +13,9 @@
   <meta name="theme-color" content="#080808">
 
   <link rel="canonical" href="https://bizdebeledir.github.io/">
+
+  <!-- SÜRƏT -->
+  <link rel="preload" href="style.css" as="style">
   <link rel="stylesheet" href="style.css">
 
   <meta property="og:type" content="website">
@@ -47,12 +50,17 @@
 <section class="hero">
   <div class="container">
 
-    <div class="tag">🇦🇿 GÜNDƏLİK HƏYAT • MİZAH • VİDEO</div>
+    <div class="tag">
+      🇦🇿 GÜNDƏLİK HƏYAT • MİZAH • VİDEO
+    </div>
 
     <div class="profile">
       <img
         src="file_0000000059908210b6e69fc5a5cd05f1.png"
-        alt="Bizdə Belədir">
+        alt="Bizdə Belədir"
+        width="108"
+        height="108"
+        fetchpriority="high">
     </div>
 
     <h1>BİZDƏ<br>BELƏDİR</h1>
@@ -151,13 +159,16 @@
 
     <div class="section-head">
       <h2 class="section-title">🏆 TOP 3 video</h2>
+
       <p class="section-subtitle">
         Son 50 video arasında hazırda ən çox baxış toplayan 3 video.
       </p>
     </div>
 
     <div class="videos" id="top-videos">
-      <div class="loading">TOP videolar yüklənir...</div>
+      <div class="loading">
+        TOP videolar yüklənir...
+      </div>
     </div>
 
   </div>
@@ -169,18 +180,22 @@
 
     <div class="section-head">
       <h2 class="section-title">🆕 Son videolar</h2>
+
       <p class="section-subtitle">
         Bizdə Belədir kanalında ən yeni yayımlanan videolar.
       </p>
     </div>
 
     <div class="videos" id="latest-videos">
-      <div class="loading">Videolar yüklənir...</div>
+      <div class="loading">
+        Videolar yüklənir...
+      </div>
     </div>
 
     <div class="actions">
 
-      <a class="action-btn primary" href="videos.html">
+      <a class="action-btn primary"
+         href="videos.html">
         🎬 Bütün videolara bax
       </a>
 
@@ -255,7 +270,8 @@
   © 2026 BİZDƏ BELƏDİR • Bütün hüquqlar qorunur
 </footer>
 
-<script src="script.js"></script>
+<!-- JavaScript HTML-in açılmasını saxlamır -->
+<script src="script.js" defer></script>
 
 </body>
 </html>
