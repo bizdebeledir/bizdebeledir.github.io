@@ -130,10 +130,8 @@ channel_stats = {
         )
 }
 
-save_json(
-    "channel-stats.json",
-    channel_stats
-)
+# Persist metadata only after video list is verified; prevent partial writes.
+
 
 
 # ==================================================
@@ -289,6 +287,11 @@ all_videos.sort(
 )
 
 
+# Safe video list validation, sync status and 24h snapshot history.
+from video_sync import prepare as prepare_video_sync
+channel_stats = prepare_video_sync(all_videos, channel_stats)
+save_json("channel-stats.json", channel_stats)
+
 save_json(
     "all-videos.json",
     all_videos
@@ -328,6 +331,7 @@ for video in all_videos:
 
     video_id = video["id"]
     title = video["title"]
+    clean_title = title.split("#")[0].strip() or title
 
     description = (
         video["description"].strip()
@@ -343,7 +347,7 @@ for video in all_videos:
     )
 
     safe_title = html.escape(
-        title,
+        clean_title,
         quote=True
     )
 
@@ -352,7 +356,7 @@ for video in all_videos:
     )
 
     meta_description = html.escape(
-        description[:250],
+        (clean_title + " · " + description.splitlines()[0].strip())[:150],
         quote=True
     )
 
@@ -417,7 +421,7 @@ for video in all_videos:
             "VideoObject",
 
         "name":
-            title,
+            clean_title,
 
         "description":
             description,
@@ -446,7 +450,9 @@ for video in all_videos:
                 "Bizdə Belədir",
 
             "url":
-                SITE + "/"
+                SITE + "/",
+            "logo":
+                SITE + "/profile.webp"
         },
 
         "interactionStatistic": {
@@ -1072,6 +1078,7 @@ if (shareButton) {{
 <script src="/discovery.js" defer></script>
 <script src="/site-actions.js" defer></script>
 <script src="/video-enhance.js" defer></script>
+<script src="/phase2.js" defer></script>
 <script src="/visitor.js" defer></script>
 
 </body>
@@ -1157,6 +1164,13 @@ lines.extend([
     "    <loc>" + SITE + "/shorts.html</loc>",
     "  </url>"
 ])
+
+for extra_page in ("favorites.html","trending.html","ideas.html"):
+    lines.extend([
+        "  <url>",
+        "    <loc>" + SITE + "/" + extra_page + "</loc>",
+        "  </url>"
+    ])
 
 # ==================================================
 # HƏR VİDEO ÜÇÜN VIDEO SITEMAP
@@ -1290,6 +1304,14 @@ with open(
 # ==================================================
 
 sitemap_url_count = (
-    2 + len(all_videos)
+    6 + len(all_videos)
 )
 
+
+
+# Check generated files before GitHub Actions stages any changes.
+from site_doctor import audit as run_site_doctor
+_site_errors = run_site_doctor(os.getcwd())
+if _site_errors:
+    raise RuntimeError("Site Doctor failed: " + "; ".join(_site_errors[:8]))
+print("SITE_DOCTOR_OK")

@@ -31,6 +31,7 @@
     counter.textContent=(index+1)+" / "+list.length+" • Azərbaycan yumoru";
     youtube.href="https://www.youtube.com/shorts/"+encodeURIComponent(v.id);
     share.dataset.shareVideo=v.id;
+    window.dispatchEvent(new CustomEvent("bb:feed-change",{detail:v}));
     share.dataset.title=d.title(v);
     prev.disabled=index===0;
     next.disabled=index===list.length-1;

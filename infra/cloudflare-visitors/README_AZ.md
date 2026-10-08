@@ -31,3 +31,10 @@ Rəsmi sənədlər:
 https://developers.cloudflare.com/d1/wrangler-commands/
 https://developers.cloudflare.com/d1/reference/faq/
 https://developers.cloudflare.com/changelog/post/2026-09-01-d1-free-tier-limit-enforcement/
+
+## İdeya qəbulu
+- Yeni Worker /v1/idea ünvanı ilə anonim təklifləri D1 ideas cədvəlində pending statusunda saxlayır.
+- Hər şəbəkə mənbəyi üçün 24 saat ərzində maksimum iki təklif qəbul edir; xam IP saxlamır.
+- D1 ideas cədvəli ELMAR OS-a avtomatik ötürülmür; Cloudflare hesabına girişdən sonra moderasiya/export inteqrasiyası lazımdır.
+- Hazırkı Termux serverində ayrıca idea_moderation.py operator skripti yaradılıb.
+- Saytın visitor.js və ideas.js faylları gələcək bb-site-visitors.<subdomain>.workers.dev domeninə hazırdır.

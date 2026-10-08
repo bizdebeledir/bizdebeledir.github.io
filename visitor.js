@@ -74,7 +74,7 @@
     const url = typeof response.endpoint === "string"
       ? response.endpoint.trim().replace(/\/+$/, "")
       : "";
-    if (!/^https:\/\/[a-z0-9-]+\.trycloudflare\.com$/.test(url)) {
+    if (!/^https:\/\/(?:[a-z0-9-]+\.trycloudflare\.com|bb-site-visitors\.[a-z0-9-]+\.workers\.dev)$/.test(url)) {
       throw new Error("Visitor backend not configured");
     }
     endpoint = url;
