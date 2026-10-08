@@ -1,7 +1,6 @@
 import json
 import os
 import html
-import shutil
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -138,71 +137,73 @@ save_json(
 
 
 # ==================================================
-# 2. SON 50 VIDEO
+# 2. BÜTÜN YÜKLƏNMİŞ VİDEOLAR (SƏHİFƏLƏMƏ)
 # ==================================================
-
 uploads_playlist = (
     channel["contentDetails"]
     ["relatedPlaylists"]
     ["uploads"]
 )
 
-playlist_data = api_get(
-    "playlistItems",
-    {
+video_ids = []
+seen_ids = set()
+next_page_token = None
+seen_page_tokens = set()
+
+# 20 səhifə = maksimum 1000 video. Limitə çatanda səssizcə kəsmə.
+for page_no in range(20):
+    params = {
         "part": "contentDetails",
         "playlistId": uploads_playlist,
         "maxResults": 50
     }
-)
 
-video_ids = [
-    item.get(
-        "contentDetails",
-        {}
-    ).get(
-        "videoId"
-    )
-    for item
-    in playlist_data.get(
-        "items",
-        []
-    )
-]
+    if next_page_token:
+        params["pageToken"] = next_page_token
 
-video_ids = [
-    video_id
-    for video_id in video_ids
-    if video_id
-]
+    playlist_data = api_get("playlistItems", params)
+
+    for item in playlist_data.get("items", []):
+        video_id = item.get("contentDetails", {}).get("videoId")
+        if video_id and video_id not in seen_ids:
+            seen_ids.add(video_id)
+            video_ids.append(video_id)
+
+    next_page_token = playlist_data.get("nextPageToken")
+    if not next_page_token:
+        break
+
+    if next_page_token in seen_page_tokens:
+        raise RuntimeError("YouTube returned a repeated page token.")
+
+    seen_page_tokens.add(next_page_token)
+else:
+    raise RuntimeError("Video playlist exceeds the 1000-video safety limit.")
 
 if not video_ids:
-    raise RuntimeError(
-        "No videos found."
-    )
+    raise RuntimeError("No videos found.")
 
 
 # ==================================================
 # 3. VIDEO MƏLUMATLARI
 # ==================================================
 
-video_data = api_get(
-    "videos",
-    {
-        "part":
-            "snippet,statistics,contentDetails",
+# YouTube videos.list bir sorğuda maksimum 50 ID qəbul edir.
+video_items = []
+for offset in range(0, len(video_ids), 50):
+    video_data = api_get(
+        "videos",
+        {
+            "part": "snippet,statistics,contentDetails",
+            "id": ",".join(video_ids[offset:offset + 50])
+        }
+    )
+    video_items.extend(video_data.get("items", []))
 
-        "id":
-            ",".join(video_ids)
-    }
-)
 
 all_videos = []
 
-for item in video_data.get(
-    "items",
-    []
-):
+for item in video_items:
     video_id = item["id"]
 
     snippet = item.get(
@@ -312,9 +313,7 @@ save_json(
 # 4. VIDEO QOVLUĞU
 # ==================================================
 
-if os.path.exists("video"):
-    shutil.rmtree("video")
-
+# Köhnə video səhifələrini silmə: əvvəlki linklər işlək qalsın.
 os.makedirs(
     "video",
     exist_ok=True
