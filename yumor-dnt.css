@@ -1,0 +1,99 @@
+/* Bizdə Belədir · Yumor DNT Laboratory. Lightweight, no external fonts/images. */
+:root { color-scheme:dark; --bg:#0c0e13; --line:#333943; --muted:#b4bdc3; --neon:#c9ff86; --pink:#ff678f; }
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0;background:var(--bg);color:#f8f9fa;font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100dvh;overflow-x:hidden; }
+button,a { -webkit-tap-highlight-color:transparent; }
+button { font:inherit;cursor:pointer; }
+button:disabled { opacity:.55;cursor:wait; }
+button:focus-visible,a:focus-visible { outline:3px solid var(--neon);outline-offset:3px; }
+a { color:inherit; }
+[hidden] { display:none!important; }
+.lab-glow { position:absolute;pointer-events:none;z-index:-1;left:0;right:0;top:0;height:480px;background:radial-gradient(ellipse 60% 47% at 75% 21%,#682d5340,transparent 87%),radial-gradient(ellipse 52% 63% at 3% 60%,#43755324,transparent 79%); }
+.lab-header { padding:19px max(18px,env(safe-area-inset-right));display:flex;align-items:center;justify-content:space-between;gap:14px;max-width:860px;margin:auto; }
+.lab-header a { font-weight:780;font-size:13px;text-decoration:none;color:#e5eae8;padding:9px 11px;border:1px solid #34383e;border-radius:13px;background:#1d2027; }
+.lab-header a.lab-quick { color:var(--neon); }
+.lab-wrap { width:min(100%,780px);padding:15px 18px 60px;margin:0 auto; }
+.lab-intro { text-align:center;padding:40px 0 42px; }
+.lab-pill {display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border:1px solid #4e6652;background:#1a2820;border-radius:999px;font-size:10px;letter-spacing:.7px;font-weight:900;color:var(--neon);}
+.lab-dot {height:7px;width:7px;border-radius:50%;background:var(--neon);box-shadow:0 0 10px var(--neon);}
+.lab-helix {height:122px;display:flex;gap:8px;justify-content:center;align-items:center;margin:20px auto 4px;color:#c4ff7e;font-size:37px;text-shadow:0 0 22px #bdff6e55;}
+.lab-helix span:nth-child(even){color:var(--pink);transform:translateY(18px);}
+.lab-helix span:nth-child(odd){transform:translateY(-18px);}
+.lab-helix span {animation:helix 3.3s ease-in-out infinite alternate;}
+.lab-helix span:nth-child(2){animation-delay:-1.2s;}
+.lab-helix span:nth-child(3){animation-delay:-2.1s;}
+.lab-helix span:nth-child(4){animation-delay:-.7s;}
+.lab-helix span:nth-child(5){animation-delay:-1.7s;}
+@keyframes helix { from{filter:brightness(.85);transform:translateY(-16px) scale(.92);}to{filter:brightness(1.2);transform:translateY(16px) scale(1.12);} }
+.lab-intro h1 {font-size:clamp(38px,9vw,72px);font-weight:950;letter-spacing:-2.9px;line-height:1.05;max-width:650px;margin:10px auto 18px;}
+.lab-intro h1 em {font-style:normal;color:var(--neon);}
+.lab-lead {max-width:590px;margin:0 auto 20px;font-size:clamp(14px,3.5vw,17px);line-height:1.65;color:var(--muted);}
+.lab-benefits {display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:19px 0 24px;}
+.lab-benefits span {background:#1d2229;border:1px solid #33383c;padding:8px 11px;border-radius:999px;font-size:11px;color:#d8deda;font-weight:700;}
+.lab-primary {border:0;border-radius:17px;color:#131811;background:linear-gradient(100deg,#caff86,#a4e5ba);font-size:15px;font-weight:950;padding:16px 21px;box-shadow:0 10px 28px #adf37922;min-height:52px;}
+.lab-primary span {margin-left:12px;}
+.lab-primary:active,.lab-choice:active {transform:scale(.99);}
+.lab-note {color:#abb2b7;font-size:11px;line-height:1.6;margin:14px auto 0;}
+.lab-challenge-intro {background:#242037;border:1px solid #564975;border-radius:14px;padding:13px;margin:16px auto;max-width:540px;color:#ebdfff;font-weight:700;font-size:13px;}
+.lab-quiz {margin:48px 0 20px;}
+.lab-step-info {display:flex;justify-content:space-between;color:#b9c3c0;gap:15px;font-weight:850;font-size:11px;margin-bottom:13px;}
+.lab-progress {background:#292e34;height:9px;border-radius:999px;overflow:hidden;margin-bottom:43px;}
+.lab-progress>div {height:100%;width:0;background:linear-gradient(90deg,#bafa80,#ff9eb2);border-radius:999px;transition:width .23s ease;}
+.lab-question-number {font-size:12px;color:var(--neon);letter-spacing:2px;font-weight:900;}
+.lab-quiz h2 {font-size:clamp(24px,6vw,39px);line-height:1.25;letter-spacing:-.9px;max-width:650px;margin:11px 0 27px;}
+.lab-options {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;}
+.lab-choice {display:flex;flex-direction:column;align-items:flex-start;gap:14px;justify-content:space-between;text-align:left;border:1px solid #40464d;background:#1a1d25;color:#fafafa;min-height:130px;padding:16px;border-radius:18px;font-weight:800;line-height:1.35;font-size:14px;transition:border-color .14s,background .14s,transform .14s;}
+.lab-choice:hover,.lab-choice:focus-visible {border-color:#bcf68c;background:#222a28;}
+.lab-choice-icon {font-size:27px;}
+.lab-choice-idx {color:#7e8b93;font-size:10px;margin-left:auto;}
+.lab-foot-actions {display:flex;justify-content:space-between;gap:10px;margin-top:22px;}
+.lab-ghost {border:1px solid #3b4647;background:transparent;color:#d4e3de;padding:11px 16px;border-radius:12px;font-size:12px;font-weight:850;min-height:43px;}
+.lab-result {padding:16px 0 20px;}
+.lab-result-kicker {color:#aaff93;letter-spacing:2px;font-size:11px;font-weight:900;text-align:center;margin:17px 0 19px;}
+.lab-passport {--dna-accent:#caff86;max-width:680px;position:relative;background:linear-gradient(150deg,#242930 0%,#1a1e26 55%,#27202f 100%);border:1px solid #72757e;border-radius:27px;padding:26px 23px;box-shadow:0 18px 60px #0008;overflow:hidden;text-align:center;}
+.lab-passport::before {content:"";position:absolute;top:-130px;left:50%;width:330px;height:330px;background:radial-gradient(circle,var(--dna-accent),transparent 65%);opacity:.12;pointer-events:none;transform:translateX(-50%);}
+.lab-passport-top,.lab-passport-end {display:flex;align-items:center;justify-content:space-between;gap:10px;color:#b2bdc1;font-size:9px;letter-spacing:.8px;font-weight:900;text-align:left;}
+.lab-passport-top span:last-child {text-align:right;}
+.lab-seal {width:92px;height:92px;display:grid;place-items:center;font-size:41px;background:radial-gradient(circle,#ffffff21,#101217);border:2px solid var(--dna-accent);border-radius:28px;margin:27px auto 20px;box-shadow:0 0 24px #caff8627;}
+.lab-passport-caption {font-size:10px;color:var(--dna-accent);font-weight:900;letter-spacing:2px;margin-bottom:5px;}
+.lab-passport h2 {font-size:clamp(32px,8vw,52px);line-height:1.12;letter-spacing:-1.5px;margin:4px 0 12px;color:#fff;}
+.lab-motto {font-size:16px;color:var(--dna-accent);font-weight:900;margin:0 0 14px;}
+.lab-description {max-width:410px;margin:0 auto;color:#cad2d0;font-size:13px;line-height:1.65;}
+.lab-strands {display:flex;align-items:center;justify-content:center;gap:6px;height:30px;margin:21px 0;}
+.lab-strands span {display:block;width:28px;height:8px;border-radius:999px;background:var(--dna-accent);opacity:.4;transform:rotate(30deg);}
+.lab-strands span:nth-child(2n){transform:rotate(-30deg);opacity:.8;background:var(--pink);}
+.lab-score {margin:0 auto 24px;max-width:480px;display:grid;gap:9px;}
+.lab-score-row {display:grid;grid-template-columns:minmax(0,115px) 1fr 22px;gap:8px;align-items:center;text-align:left;}
+.lab-score-row strong {font-size:11px;color:#d8e4e1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lab-score-rail {height:8px;border-radius:999px;background:#42464c;overflow:hidden;}
+.lab-score-fill {height:100%;border-radius:999px;background:var(--dna-accent);}
+.lab-score-points {text-align:right;font-size:10px;color:#b8c6c2;}
+.lab-passport-end {padding-top:16px;border-top:1px solid #42494b;}
+.lab-compare {max-width:680px;margin:18px auto;padding:17px 19px;background:#241c35;border:1px solid #735c9d;border-radius:19px;}
+.lab-compare h3 {font-size:18px;margin:0 0 5px;}
+.lab-compare p:not(.lab-note){font-size:15px;line-height:1.5;margin:5px 0;}
+.lab-share-actions {max-width:680px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:19px auto 0;}
+.lab-secondary {border:1px solid #53615b;background:#242b2a;color:#fff;min-height:53px;border-radius:15px;padding:12px;font-size:13px;font-weight:900;}
+#lab-image {grid-column:1/-1;}
+.lab-share-note {max-width:680px;margin:9px auto;min-height:24px;font-size:12px;color:#bbff9a;overflow-wrap:anywhere;}
+.lab-videos {max-width:680px;margin:34px auto 25px;padding-top:22px;border-top:1px solid #343c40;}
+.lab-videos-heading>span {font-size:10px;font-weight:900;color:var(--neon);letter-spacing:1px;}
+.lab-videos-heading h3 {font-size:clamp(20px,5vw,28px);margin:7px 0;letter-spacing:-.5px;}
+.lab-videos-heading p {font-size:12px;color:#a8b6b2;}
+.lab-videos-list {display:grid;gap:10px;margin-top:21px;}
+.lab-video-card {display:grid;grid-template-columns:135px minmax(0,1fr);gap:12px;align-items:center;border:1px solid #3a4246;background:#1a1e24;text-decoration:none;border-radius:15px;overflow:hidden;color:#fff;}
+.lab-video-card img {width:100%;height:100px;object-fit:cover;background:#262d31;display:block;}
+.lab-video-card strong {display:block;line-height:1.36;font-size:13px;margin-bottom:6px;}
+.lab-video-card small {color:#a5bbb4;font-size:11px;}
+.lab-video-card div {padding:11px 11px 11px 0;}
+.lab-loading {color:#b4bcba;font-size:13px;}
+.lab-bottom {display:flex;align-items:center;justify-content:space-between;max-width:680px;margin:24px auto;gap:10px;}
+.lab-home-link {text-decoration:none;font-size:12px;color:#bac9c5;font-weight:850;}
+.lab-footer {text-align:center;color:#818a91;font-size:11px;padding:18px 14px 30px;border-top:1px solid #222b2e;}
+.lab-footer a {text-decoration:none;color:#b5cdc3;}
+.lab-footer p {margin:7px auto 0;}
+.lab-noscript {padding:20px;text-align:center;}
+@media(min-width:750px){.lab-wrap{padding-top:30px}.lab-quiz{padding:0 30px}.lab-passport{padding:29px 46px}}
+@media(max-width:430px){.lab-header{padding:14px 12px}.lab-wrap{padding:4px 14px 43px}.lab-intro{padding:20px 0}.lab-intro h1{letter-spacing:-1.4px}.lab-options{grid-template-columns:1fr;gap:9px}.lab-choice{min-height:76px;flex-direction:row;align-items:center;gap:14px;padding:12px 14px}.lab-choice-icon{font-size:24px}.lab-question-number{margin-top:6px}.lab-quiz{margin-top:26px}.lab-quiz h2{margin-bottom:21px}.lab-passport{padding:21px 16px}.lab-passport h2{font-size:33px}.lab-video-card{grid-template-columns:110px minmax(0,1fr)}.lab-video-card img{height:88px}.lab-score-row{grid-template-columns:90px 1fr 18px}.lab-score-row strong{font-size:10px}.lab-share-actions{grid-template-columns:1fr}#lab-image{grid-column:auto}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.lab-helix span{animation:none!important}.lab-progress>div,.lab-choice{transition:none!important}}

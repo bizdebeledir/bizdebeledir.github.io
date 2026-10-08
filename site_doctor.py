@@ -55,7 +55,7 @@ def audit(root=ROOT):
         if "https://bizdebeledir.github.io/video/"+vid+".html" not in locs:
             errors.append("MISSING_SITEMAP_VIDEO "+vid)
     for name in ("index.html","videos.html","shorts.html","favorites.html",
-                 "ideas.html","privacy.html","trending.html"):
+                 "ideas.html","privacy.html","trending.html","yumor-dnt.html"):
         f=base/name
         if not f.is_file():
             errors.append("PAGE_MISSING "+name);continue
