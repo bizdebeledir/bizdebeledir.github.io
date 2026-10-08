@@ -1,0 +1,136 @@
+:root{color-scheme:dark;--bg:#0a0c11;--surface:#171b23;--surface2:#202630;--stroke:#39424a;--ink:#fff;--sub:#acb8be;--mint:#c7ff80;--pink:#ff7896;--blue:#95caff}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body.park{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;overflow-x:hidden}
+button,a,input,textarea{font:inherit;-webkit-tap-highlight-color:transparent}
+button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}
+[hidden]{display:none!important}
+a{color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--mint);outline-offset:3px}
+.park-ambient{position:absolute;top:0;left:0;right:0;height:690px;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 48% 35% at 85% 23%,#db47803b,transparent 80%),radial-gradient(ellipse 60% 39% at 5% 59%,#7bbd3930,transparent 85%)}
+.park-header{display:flex;align-items:center;justify-content:space-between;max-width:1100px;padding:17px 18px;margin:0 auto;gap:12px}
+.park-brand,.park-header-right a{display:inline-flex;align-items:center;gap:7px;color:#e2ebe5;text-decoration:none;font-size:12px;font-weight:850;padding:9px 12px;border:1px solid #333d42;border-radius:12px;background:#161b20}
+.park-header-right{display:flex;align-items:center;gap:10px;color:#e2ffe3;font-size:10px;font-weight:950;letter-spacing:1px}
+.park-live,.spark-dot{background:var(--mint);border-radius:50%;width:8px;height:8px;display:inline-block;box-shadow:0 0 13px #b7ff718c;flex:0 0 auto}
+.park-main{max-width:1100px;margin:auto;padding:0 18px 55px}
+.park-hero{text-align:center;max-width:800px;margin:auto;padding:46px 0 76px}
+.park-overline{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border:1px solid #567342;border-radius:999px;color:#c8ff98;background:#202d20;font-size:10px;font-weight:950;letter-spacing:.7px}
+.park-carnival{font-size:76px;filter:drop-shadow(0 0 22px #f7698580);margin:20px auto 9px;line-height:1.1}
+.park-hero h1{font-size:clamp(37px,8.3vw,78px);font-weight:950;line-height:1.04;letter-spacing:-2.7px;margin:17px auto 17px}
+.park-hero h1 em{font-style:normal;color:var(--mint)}
+.park-hero p{color:#c1c8ce;max-width:590px;margin:0 auto;font-size:clamp(14px,3vw,17px);line-height:1.65}
+.park-hero-stats{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin:24px auto}
+.park-hero-stats span{padding:9px 14px;background:#1b2225;border:1px solid #3a4645;border-radius:999px;font-size:12px;color:#c0cdca}
+.park-hero-stats strong{color:#fff;margin-right:4px}
+.park-hero-cta,.park-action{display:inline-flex;align-items:center;justify-content:center;gap:12px;background:var(--mint);color:#132013;padding:14px 19px;border:0;border-radius:14px;text-decoration:none;font-size:14px;font-weight:950;min-height:47px}
+.park-hero-cta span{font-size:19px}
+.park-hero small{display:block;color:#98a8a9;font-size:10px;margin:16px auto 0}
+.park-catalog{padding:0 0 42px}
+.park-section-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:0 0 22px}
+.park-kicker{color:var(--mint);font-size:11px;letter-spacing:1px;font-weight:950}
+.park-section-head h2{font-size:clamp(23px,5vw,31px);letter-spacing:-.6px;line-height:1.2;margin:7px 0 0}
+.park-count{font-size:10px;color:#bed8c0;font-weight:800;white-space:nowrap}
+.park-filter{display:flex;gap:8px;overflow-x:auto;padding:5px 0 15px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.park-filter button{flex:0 0 auto;background:#202730;color:#c1ccd0;border:1px solid #39434d;border-radius:999px;padding:9px 13px;font-size:11px;font-weight:800;min-height:38px}
+.park-filter button.active{background:#c1fb90;color:#102013;border-color:#c1fb90}
+.park-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.park-card{position:relative;display:flex;flex-direction:column;min-height:212px;padding:17px 15px 16px;text-align:left;background:linear-gradient(150deg,#1e232c,#141a22);border:1px solid #373f49;border-radius:20px;color:#fff;transition:border-color .16s,transform .16s,box-shadow .16s}
+.park-card:hover,.park-card:focus-visible{border-color:#b9f784;box-shadow:0 0 27px #a4ff7b16;transform:translateY(-2px)}
+.park-card-num{font-size:10px;letter-spacing:1px;font-weight:950;color:#92a1a8}
+.park-card-icon{font-size:35px;display:block;margin:9px 0 7px;line-height:1.1}
+.park-card h3{font-size:16px;line-height:1.22;letter-spacing:-.3px;margin:4px 0 7px;overflow-wrap:anywhere}
+.park-card p{font-size:11px;color:#b5c3c9;line-height:1.45;margin:0 0 15px}
+.park-card-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;color:#c6dbba;font-size:10px;font-weight:850}
+.park-card-foot strong{color:var(--mint);font-size:17px}
+.park-card[data-group="Dostlarla"]{background:linear-gradient(140deg,#291e2e,#171a22)}
+.park-card[data-group="Hekayə"]{background:linear-gradient(140deg,#1a2930,#14191f)}
+.park-card[data-group="Oyun"]{background:linear-gradient(140deg,#2b2720,#161b22)}
+.park-card[data-group="Hər gün"]{background:linear-gradient(140deg,#29232d,#15171e)}
+.park-card[data-group="Kəşf"]{background:linear-gradient(140deg,#263025,#171b20)}
+.park-secret{position:absolute;right:10px;top:11px;color:#badb8c;border:1px solid #4d684a;background:#233021;border-radius:50%;width:28px;height:28px;display:grid;place-items:center;font-size:15px;opacity:.65}
+.park-secret:hover,.park-secret:focus-visible{opacity:1}
+.park-card:has(.park-secret){padding-right:32px}
+.park-disclaimer,.park-loading{font-size:11px;color:#95a8ac;margin:17px 0}
+.park-stage{margin:0 auto 38px;padding:24px;background:radial-gradient(circle at 85% 0,#34462940,transparent 44%),#141a20;border:1px solid #53635e;border-radius:25px;max-width:880px;min-height:280px;box-shadow:0 24px 75px #0007;scroll-margin-top:20px}
+.park-stage-top{display:flex;align-items:center;justify-content:space-between;gap:9px}
+.park-back,.park-outline{background:#232b30;color:#e0e8e7;border:1px solid #43545a;border-radius:12px;padding:10px 12px;font-size:12px;font-weight:850;min-height:42px}
+.park-index{font-size:10px;color:#a2bcb4;font-weight:850;letter-spacing:.8px}
+.park-stage-intro{display:flex;gap:17px;align-items:center;margin:25px 0 24px}
+.park-stage-icon{font-size:50px}
+.park-stage-intro h2{font-size:clamp(24px,5vw,33px);line-height:1.15;letter-spacing:-.7px;margin:3px 0 5px}
+.park-stage-intro p{margin:0;color:#b6c6c5;font-size:12px}
+.park-stage-body{min-height:170px}
+.park-stage-bottom{margin-top:27px;border-top:1px solid #3b484a;padding-top:18px;display:flex;justify-content:space-between;align-items:center;gap:13px}
+.park-inline-link{font-size:12px;color:#d7f6be;font-weight:800;text-decoration:none}
+.game-prompt{color:#d6e4e3;font-size:14px;line-height:1.65;margin:7px 0 17px}
+.game-headline{font-size:clamp(20px,5vw,28px);line-height:1.28;font-weight:900;margin:7px 0 17px}
+.game-question{font-size:18px;line-height:1.4;font-weight:850;margin:14px 0 19px}
+.game-options,.game-chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.game-option,.game-chip{border:1px solid #49575d;background:#222b32;color:#f6faf6;border-radius:15px;padding:13px 14px;min-height:48px;text-align:left;font-size:13px;font-weight:800;line-height:1.35}
+.game-option:hover,.game-option:focus-visible,.game-chip:hover{border-color:var(--mint)}
+.game-option.chosen{border-color:var(--mint);background:#334231;color:#e8ffd7}
+.game-info,.game-result,.game-card{border:1px solid #3b4b50;border-radius:16px;padding:17px;margin:14px 0;background:#1e252c;overflow-wrap:anywhere}
+.game-result{border-color:#7fac73;background:linear-gradient(110deg,#26342a,#20292c)}
+.game-result strong{display:block;color:#dcffc4;font-size:16px;margin-bottom:7px}
+.game-result p,.game-card p,.game-info p{font-size:13px;color:#c8d7d4;line-height:1.55;margin:8px 0}
+.game-note,.game-status{font-size:11px;color:#b6c9c5;line-height:1.5;margin:13px 0}
+.game-status[role="alert"]{color:#ff9aa6}
+.game-primary,.game-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 15px;border-radius:13px;min-height:45px;text-align:center;font-size:12px;font-weight:900;border:0;text-decoration:none;background:var(--mint);color:#132217;margin:7px 8px 7px 0}
+.game-secondary{background:#313a40;border:1px solid #54646c;color:#eaf6f2}
+.game-primary:disabled,.game-secondary:disabled{opacity:.45}
+.game-video{display:grid;grid-template-columns:minmax(110px,180px) 1fr;gap:13px;align-items:center;text-decoration:none;border:1px solid #48545a;border-radius:15px;overflow:hidden;background:#1a2228;margin:10px 0;color:#fff}
+.game-video img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;background:#272e31}
+.game-video div{padding:10px 11px 10px 0}
+.game-video strong{display:block;font-size:13px;line-height:1.36}
+.game-video small{display:block;color:#aabdb6;font-size:10px;margin-top:8px}
+.game-round{font-size:12px;color:#b8d1b0;font-weight:850;letter-spacing:.5px;margin:8px 0}
+.game-meter{height:9px;border-radius:999px;background:#4a5254;overflow:hidden;margin:13px 0}
+.game-meter>span{display:block;height:100%;background:var(--mint);border-radius:999px}
+.game-badge{display:inline-block;border:1px solid #5c764c;background:#29352b;color:#d7ffba;padding:6px 10px;border-radius:999px;font-size:11px;font-weight:850}
+.game-tv{border:13px solid #51402d;border-radius:30px;background:#171b20;box-shadow:inset 0 0 25px #0008,0 13px 23px #0007;max-width:610px;margin:18px auto;overflow:hidden}
+.game-screen{position:relative;min-height:200px;display:grid;place-items:center;background:linear-gradient(120deg,#12191e,#2a1f36);text-align:center;overflow:hidden}
+.game-screen img{width:100%;max-height:300px;object-fit:cover;filter:brightness(.65)}
+.game-screen .game-screen-overlay{position:absolute;inset:0;display:grid;place-items:center;background:#0005;color:#fff;font-size:17px;font-weight:900;padding:17px}
+.game-screen iframe{aspect-ratio:16/9;width:100%;border:0;display:block;min-height:225px}
+.game-tv-footer{padding:13px 17px;display:flex;align-items:center;justify-content:space-between;gap:10px;color:#fbd7ab;font-weight:850;font-size:13px}
+.game-remote{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin:15px 0}
+.game-remote button{border:1px solid #535c61;background:#293238;color:#fff;padding:10px 13px;border-radius:10px;min-height:42px;font-weight:800}
+.game-remote button.active{background:#bfef8e;color:#101c13}
+.game-input,.game-textarea{width:100%;padding:12px 14px;min-height:45px;border:1px solid #697679;background:#11171d;border-radius:12px;color:white;resize:vertical}
+.game-textarea{min-height:90px}
+.game-reaction{width:100%;min-height:210px;border:2px solid #4d5a62;border-radius:19px;background:#3a3439;color:#fff;font-weight:950;font-size:clamp(21px,5vw,30px);padding:24px;touch-action:manipulation}
+.game-reaction.waiting{background:#692a39;border-color:#aa5c6c}
+.game-reaction.ready{background:#2e7749;border-color:#a3ffb5}
+.game-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;max-width:540px}
+.game-tile{min-height:91px;border:1px solid #58676a;background:#243037;color:#fff;border-radius:17px;padding:9px;display:grid;place-items:center;font-size:36px}
+.game-tile.found{border-color:#bcff91;background:#325237}
+.game-tile small{font-size:11px}
+.game-poll-row{margin:15px 0}
+.game-poll-row header{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:#dcece1;font-weight:800}
+.game-poll-row .game-meter{margin:5px 0}
+.game-poll-row .game-meter span{background:#9fd5fc}
+.game-fieldset{border:0;padding:0;margin:0;width:100%}
+.game-fieldset legend{font-weight:900;margin-bottom:12px}
+.game-radio{display:flex;align-items:center;gap:10px;background:#202830;border:1px solid #48545a;border-radius:12px;margin:8px 0;padding:12px;font-size:12px;font-weight:700}
+.game-radio:has(input:checked){border-color:var(--mint)}
+.game-radio input{accent-color:var(--mint);width:17px;height:17px}
+.game-progress-text{font-size:11px;color:#b1c3bd;font-weight:850}
+.game-share-link{color:#bfffaa;overflow-wrap:anywhere;font-size:11px}
+.game-locked{color:#ffcb92}
+.park-footer-banner{display:flex;justify-content:space-between;align-items:center;gap:17px;padding:24px 27px;border:1px solid #4a565b;border-radius:24px;background:linear-gradient(120deg,#27222d,#1a2831)}
+.park-footer-banner span{font-size:31px}
+.park-footer-banner h2{font-size:24px;letter-spacing:-.5px;margin:6px 0}
+.park-footer-banner p{font-size:12px;color:#b4c1c0;margin:4px 0}
+.park-footer-banner>a{background:#fa164a;color:#fff;text-decoration:none;white-space:nowrap;padding:14px 17px;border-radius:13px;font-size:12px;font-weight:900}
+.park-footer{padding:24px 16px 34px;text-align:center;border-top:1px solid #222c31;color:#91a2aa;font-size:11px}
+.park-footer a{color:#bcd4c9;text-decoration:none}
+.park-footer p{margin:8px auto 0;max-width:570px}
+.park-noscript{text-align:center;padding:20px}
+@media(max-width:960px){.park-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){.park-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.park-card{min-height:195px;padding:14px 12px}.park-card h3{font-size:14px}.park-card p{font-size:10px}.park-card-icon{font-size:31px}.park-header{padding:13px}.park-main{padding:0 12px 32px}.park-hero{padding:22px 0 50px}.park-hero h1{letter-spacing:-1.4px}.park-hero-stats{gap:6px}.park-hero-stats span{font-size:10px;padding:8px}.park-stage{padding:16px}.park-stage-intro{gap:12px}.park-stage-icon{font-size:40px}.park-footer-banner{flex-direction:column;align-items:stretch;padding:19px}.park-footer-banner>a{text-align:center}}
+@media(max-width:360px){.park-card{min-height:210px}.park-card h3{font-size:13px}.game-options,.game-chips{grid-template-columns:1fr}.game-video{grid-template-columns:106px 1fr}.park-header-right span:not(.park-live){display:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+
+/* Card triggers are button elements, with independent secret icons as siblings. */
+.park-card-open{display:flex;flex-direction:column;align-items:stretch;flex:1;width:100%;min-height:100%;padding:0;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer}
+.park-card-open:focus-visible{outline:2px solid var(--mint);outline-offset:3px;border-radius:8px}

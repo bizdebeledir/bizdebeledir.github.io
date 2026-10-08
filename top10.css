@@ -222,3 +222,16 @@ section.bb-spotlight { padding: 28px 17px 29px; background: linear-gradient(180d
 .bb-dna-cta:focus-visible{outline:3px solid #fff;outline-offset:3px}
 @media(max-width:420px){.bb-dna-promo-layout{grid-template-columns:1fr;gap:12px;text-align:center}.bb-dna-orbit{margin:0 auto;width:73px;height:73px}.bb-dna-orbit span{font-size:36px}}
 @media(prefers-reduced-motion:reduce){.bb-dna-cta{transition:none}}
+
+/* Yumor Parkı promotion, CSS-only fast graphic */
+.bb-park-promo{padding:24px 16px;background:#0b0f14}
+.bb-park-promo-layout{display:grid;grid-template-columns:95px 1fr;gap:18px;align-items:center;max-width:760px;padding:22px!important;border:1px solid #71615a;border-radius:25px;background:radial-gradient(circle at 0 0,#e0a35a30,transparent 65%),linear-gradient(120deg,#292334,#19252a);box-shadow:0 16px 28px #0006}
+.bb-park-wheel{display:grid;place-items:center;font-size:53px;width:92px;height:92px;border:2px solid #d8e5a2;border-radius:27px;background:#212a25;box-shadow:0 0 20px #bbf48724}
+.bb-park-kicker{color:#d1ff90;font-size:10px;letter-spacing:1.1px;font-weight:900}
+.bb-park-promo h2{font-size:clamp(22px,5vw,30px);line-height:1.2;letter-spacing:-.5px;margin:6px 0 9px}
+.bb-park-promo h2 em{font-style:normal;color:#c7ff80}
+.bb-park-promo p{font-size:12px;color:#cad5d2;line-height:1.55;margin:0 0 14px}
+.bb-park-promo small{display:block;color:#b7c1bd;font-size:10px;margin-top:9px}
+.bb-park-promo-action{display:inline-flex;align-items:center;gap:12px;justify-content:center;background:#caff87;color:#152112;font-weight:950;font-size:12px;padding:12px 16px;text-decoration:none;border-radius:12px;min-height:44px}
+.bb-park-promo-action:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@media(max-width:420px){.bb-park-promo-layout{grid-template-columns:1fr;gap:12px;text-align:center}.bb-park-wheel{width:75px;height:75px;font-size:43px;margin:auto}}

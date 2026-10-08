@@ -25,3 +25,18 @@ CREATE TABLE IF NOT EXISTS idea_limits (
  window_start INTEGER NOT NULL,
  count INTEGER NOT NULL
 );
+
+-- Anonymous 20-in-1 Humor Park poll votes. Only hashes and selected option are persisted.
+CREATE TABLE IF NOT EXISTS park_votes (
+  poll_id TEXT NOT NULL,
+  voter_hash TEXT NOT NULL,
+  option_index INTEGER NOT NULL,
+  voted_at INTEGER NOT NULL,
+  PRIMARY KEY (poll_id,voter_hash)
+);
+CREATE INDEX IF NOT EXISTS park_votes_by_option ON park_votes(poll_id,option_index);
+CREATE TABLE IF NOT EXISTS park_vote_limits (
+  peer_hash TEXT PRIMARY KEY,
+  window_start INTEGER NOT NULL,
+  count INTEGER NOT NULL
+);

@@ -1165,7 +1165,7 @@ lines.extend([
     "  </url>"
 ])
 
-for extra_page in ("favorites.html","trending.html","ideas.html","yumor-dnt.html"):
+for extra_page in ("favorites.html","trending.html","ideas.html","yumor-dnt.html","yumor-parki.html"):
     lines.extend([
         "  <url>",
         "    <loc>" + SITE + "/" + extra_page + "</loc>",
@@ -1304,7 +1304,7 @@ with open(
 # ==================================================
 
 sitemap_url_count = (
-    7 + len(all_videos)
+    8 + len(all_videos)
 )
 
 

@@ -4,6 +4,10 @@
 const SITE = "https://bizdebeledir.github.io";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 const ORIGIN_HEADERS = {"Access-Control-Allow-Origin":SITE,"Vary":"Origin"};
+const PARK_POLL_IDS = Object.freeze({
+  tea_sugar:4, alarm:4, phone:4
+});
+
 
 function cors(origin) { return origin === SITE ? ORIGIN_HEADERS : {"Vary":"Origin"}; }
 function json(body, status=200, origin="") {
@@ -39,7 +43,7 @@ export default {
     const url=new URL(req.url);
     const origin=req.headers.get("Origin")||"";
     if(req.method==="OPTIONS"){
-      if(origin!==SITE || !["/v1/stats","/v1/ping","/v1/idea"].includes(url.pathname))
+      if(origin!==SITE || !["/v1/stats","/v1/ping","/v1/idea","/v1/polls","/v1/vote"].includes(url.pathname))
         return json({ok:false},403,origin);
       return new Response(null,{status:204,headers:{...ORIGIN_HEADERS,
         "Access-Control-Allow-Methods":"GET,POST,OPTIONS",
@@ -52,6 +56,62 @@ export default {
     if(url.pathname==="/v1/stats" && req.method==="GET"){
       try{return json(await stats(env.DB),200,origin);}
       catch{return json({ok:false,error:"STATISTICS_UNAVAILABLE"},503,origin);}
+    }
+    if(url.pathname==="/v1/polls" && req.method==="GET"){
+      try{
+        const rows=await env.DB.prepare(
+          "SELECT poll_id,option_index,COUNT(*) AS votes FROM park_votes "+
+          "GROUP BY poll_id,option_index").all();
+        const counts=Object.fromEntries(Object.entries(PARK_POLL_IDS).map(([k,n])=>[k,new Array(n).fill(0)]));
+        for(const x of rows.results||[]){
+          if(Object.hasOwn(counts,x.poll_id) && Number.isInteger(x.option_index) &&
+             x.option_index>=0 && x.option_index<counts[x.poll_id].length)
+            counts[x.poll_id][x.option_index]=Math.max(0,Number(x.votes)||0);
+        }
+        return json({ok:true,polls:Object.entries(counts).map(([id,values])=>({id,counts:values})),
+          method:"votes_recorded_in_d1"},200,origin);
+      }catch{return json({ok:false,error:"POLL_STORAGE_UNAVAILABLE"},503,origin);}
+    }
+    if(url.pathname==="/v1/vote" && req.method==="POST"){
+      if(origin!==SITE)return json({ok:false,error:"INVALID_ORIGIN"},403,origin);
+      if(typeof env.VISITOR_SALT!=="string" || env.VISITOR_SALT.length<24)
+        return json({ok:false,error:"SECURITY_NOT_CONFIGURED"},503,origin);
+      const raw=await req.text();
+      if(raw.length>1024)return json({ok:false,error:"BAD_REQUEST"},400,origin);
+      let input;
+      try{input=JSON.parse(raw);}catch{return json({ok:false,error:"BAD_REQUEST"},400,origin);}
+      const pollId=input?.pollId, idx=input?.optionIndex, visitor=input?.voterId;
+      if(!Object.hasOwn(PARK_POLL_IDS,pollId)||!Number.isInteger(idx)||
+         idx<0||idx>=PARK_POLL_IDS[pollId] ||typeof visitor!=="string"||!UUID.test(visitor))
+        return json({ok:false,error:"BAD_REQUEST"},400,origin);
+      try{
+        const now=Math.floor(Date.now()/1000);
+        const voter=await hashId(visitor,env.VISITOR_SALT);
+        const peer=await hashId((req.headers.get("CF-Connecting-IP")||"anonymous").slice(0,80),
+          env.VISITOR_SALT);
+        const existing=await env.DB.prepare(
+          "SELECT 1 AS duplicate FROM park_votes WHERE poll_id=? AND voter_hash=?")
+          .bind(pollId,voter).first();
+        if(existing)return json({ok:false,error:"ALREADY_VOTED"},409,origin);
+        const limits=await env.DB.prepare(
+          "SELECT window_start,count FROM park_vote_limits WHERE peer_hash=?")
+          .bind(peer).first();
+        if(limits&&now-Number(limits.window_start)<86400&&Number(limits.count)>=8)
+          return json({ok:false,error:"RATE_LIMIT"},429,origin);
+        const inserted=await env.DB.prepare(
+          "INSERT INTO park_votes(poll_id,voter_hash,option_index,voted_at) VALUES(?,?,?,?) "+
+          "ON CONFLICT(poll_id,voter_hash) DO NOTHING")
+          .bind(pollId,voter,idx,now).run();
+        if(Number(inserted?.meta?.changes||0)!==1)
+          return json({ok:false,error:"ALREADY_VOTED"},409,origin);
+        await env.DB.prepare(
+          "INSERT INTO park_vote_limits(peer_hash,window_start,count) VALUES(?,?,1) "+
+          "ON CONFLICT(peer_hash) DO UPDATE SET "+
+          "window_start=CASE WHEN ?-window_start>=86400 THEN ? ELSE window_start END,"+
+          "count=CASE WHEN ?-window_start>=86400 THEN 1 ELSE count+1 END")
+          .bind(peer,now,now,now,now).run();
+        return json({ok:true,message:"VOTE_RECORDED"},200,origin);
+      }catch{return json({ok:false,error:"POLL_STORAGE_UNAVAILABLE"},503,origin);}
     }
     if(url.pathname==="/v1/idea" && req.method==="POST"){
       if(origin!==SITE)return json({ok:false,error:"INVALID_ORIGIN"},403,origin);
@@ -120,5 +180,6 @@ export default {
     const before=Math.floor(Date.now()/1000)-30*86400;
     await env.DB.prepare("DELETE FROM visitors WHERE last_seen < ?").bind(before).run();
     await env.DB.prepare("DELETE FROM idea_limits WHERE window_start < ?").bind(Math.floor(Date.now()/1000)-86400).run();
+    await env.DB.prepare("DELETE FROM park_vote_limits WHERE window_start < ?").bind(Math.floor(Date.now()/1000)-86400).run();
   }
 };
