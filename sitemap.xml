@@ -1070,4 +1070,7 @@ Azərbaycan dilində komik səhnələr, gündəlik həyat yumoru və tanış və
       <video:player_loc>https://www.youtube.com/embed/I0X2CxbXT7s</video:player_loc>
     </video:video>
   </url>
+  <url>
+    <loc>https://bizdebeledir.github.io/shorts.html</loc>
+  </url>
 </urlset>

@@ -362,6 +362,9 @@
 
   </style>
 
+  <link rel="stylesheet" href="/top10.css">
+  <script src="/discovery.js" defer></script>
+  <script src="/site-actions.js" defer></script>
 </head>
 
 <body>
@@ -408,6 +411,12 @@
 
       </div>
 
+
+      <div class="bb-category-secondary">
+        <div class="bb-skinny-note">Mövzuya görə seç:</div>
+        <div id="bb-category-filters" class="bb-topic-chips"
+          role="group" aria-label="Mövzunu seç"></div>
+      </div>
 
       <!-- TARİX -->
 
@@ -527,6 +536,7 @@
       "all";
 
 
+    let currentTopic = "all";
     const grid =
       document.getElementById(
         "video-grid"
@@ -871,6 +881,8 @@
               matchesSearch
               &&
               matchesDate
+              &&
+              (!window.BBDiscover || window.BBDiscover.topicMatch(video, currentTopic))
             );
           }
         );
@@ -981,6 +993,43 @@
     }
 
 
+
+    // Preserve all existing search/date/sort behavior.
+    function setupCategories() {
+      const api = window.BBDiscover;
+      const holder = document.getElementById("bb-category-filters");
+      if (!api || !holder) return;
+      const requested = new URLSearchParams(location.search).get("topic");
+      currentTopic = api.topics.some(x => x.id === requested)
+        ? requested : api.preference();
+      for (const topic of api.topics) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "bb-topic-chip";
+        button.textContent = topic.label;
+        button.dataset.topic = topic.id;
+        button.classList.toggle("active", topic.id === currentTopic);
+        button.setAttribute("aria-pressed", String(topic.id === currentTopic));
+        button.addEventListener("click", () => {
+          currentTopic = topic.id;
+          api.setPreference(currentTopic);
+          api.track("select_content", {content_type: "topic", content_id: currentTopic});
+          holder.querySelectorAll("button").forEach(b => {
+            const active = b.dataset.topic === currentTopic;
+            b.classList.toggle("active", active);
+            b.setAttribute("aria-pressed", String(active));
+          });
+          renderVideos();
+        });
+        holder.appendChild(button);
+      }
+    }
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", setupCategories, {once: true});
+    } else {
+      setupCategories();
+    }
+
     /* =========================
        DÜYMƏLƏR
     ========================= */
@@ -1060,10 +1109,10 @@
           await fetch(
             "all-videos.json"
             + "?v="
-            + Date.now(),
+            + Math.floor(Date.now() / 300000),
             {
               cache:
-                "no-store"
+                "default"
             }
           );
 

@@ -569,6 +569,8 @@ for video in all_videos:
   content="{page_url}"
 >
 
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{video['thumbnail']}">
 <script type="application/ld+json">
 {json_ld}
 </script>
@@ -1067,6 +1069,9 @@ if (shareButton) {{
 }}
 
 </script>
+<script src="/discovery.js" defer></script>
+<script src="/site-actions.js" defer></script>
+<script src="/video-enhance.js" defer></script>
 <script src="/visitor.js" defer></script>
 
 </body>
@@ -1146,6 +1151,12 @@ lines.extend([
     "  </url>"
 ])
 
+
+lines.extend([
+    "  <url>",
+    "    <loc>" + SITE + "/shorts.html</loc>",
+    "  </url>"
+])
 
 # ==================================================
 # HƏR VİDEO ÜÇÜN VIDEO SITEMAP

@@ -1,0 +1,14 @@
+name = "bb-site-visitors"
+main = "src/index.mjs"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+# Create D1 first. Set the real database_id before deploying.
+[[d1_databases]]
+binding = "DB"
+database_name = "bb-site-visitors"
+database_id = "REPLACE_WITH_REAL_D1_DATABASE_ID"
+migrations_dir = "migrations"
+
+[triggers]
+crons = ["0 3 * * *"]

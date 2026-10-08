@@ -55,9 +55,9 @@ function safeThumbnail(url) {
 
 async function fetchJSON(file) {
   const response = await fetch(
-    `${file}?v=${Date.now()}`,
+    `${file}?v=${Math.floor(Date.now() / 300000)}`,
     {
-      cache: "no-store"
+      cache: "default"
     }
   );
 
@@ -393,6 +393,8 @@ async function loadPageData() {
   if (allResult.status === "fulfilled") {
     try {
       renderLatestVideos(allResult.value);
+      window.BBVids = allVideos;
+      window.dispatchEvent(new CustomEvent("bb:videos-ready", {detail: allVideos}));
     } catch (error) {
       console.error(
         "Son videolar göstərilmədi:",

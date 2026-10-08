@@ -111,6 +111,7 @@
     href="style.css"
   >
 
+  <link rel="stylesheet" href="/top10.css">
   <!-- Open Graph -->
   <meta
     property="og:title"
@@ -223,6 +224,7 @@
         class="quick-links"
         aria-label="Sayt keçidləri"
       >
+        <a class="quick-link" href="/shorts.html">🎬 İzlə</a>
         <a
           class="quick-link"
           href="/privacy.html"
@@ -439,6 +441,30 @@
 
   <main>
 
+    <!-- Daily highlight: real newest video data only -->
+    <section class="bb-spotlight" aria-label="Günün videosu">
+      <div class="container">
+        <div class="bb-kicker">🎬 HƏR GÜN BİR SEÇİM</div>
+        <div class="bb-feature-box">
+          <a class="bb-feature-visual" id="bb-feature-link" href="/videos.html">
+            <img id="bb-feature-cover" alt="Günün videosu" src="/profile.webp"
+              loading="lazy" decoding="async" width="270" height="390">
+          </a>
+          <div class="bb-feature-details">
+            <div class="bb-kicker">🔥 GÜNÜN VİDEOSU</div>
+            <h2 id="bb-feature-title">Bu günün videosu yüklənir…</h2>
+            <p>Hamımızın başına gələn tanış vəziyyətlər 😄</p>
+            <div class="bb-feature-meta" id="bb-feature-views">Baxış sayı yenilənir</div>
+            <div class="bb-feature-actions">
+              <a class="bb-feature-btn" href="/shorts.html">▶ İzlə</a>
+              <button class="bb-feature-btn secondary" id="bb-feature-share"
+                type="button" disabled>↗ Paylaş</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- TOP 3 -->
     <section class="section">
 
@@ -469,6 +495,21 @@
 
     </section>
 
+
+    <!-- Categories and local recommendation engine -->
+    <section class="bb-topic-panel" aria-label="Mövzuya görə videolar">
+      <div class="container">
+        <div class="bb-kicker">😂 SƏNƏ UYĞUN</div>
+        <h2>Hansı vəziyyət sənə tanışdır?</h2>
+        <p id="bb-topic-summary">Mövzu seç, videoları sənə uyğun göstərək.</p>
+        <div id="bb-topic-chips" class="bb-topic-chips" role="group"
+          aria-label="Video mövzuları"></div>
+        <div id="bb-recommended" class="bb-discovery-list" aria-live="polite">
+          <div class="loading">Videolar hazırlanır…</div>
+        </div>
+        <a class="bb-watch-link" href="/shorts.html">📱 Öz Shorts lentimizdə izlə →</a>
+      </div>
+    </section>
 
     <!-- SON VİDEOLAR -->
     <section class="section alt">
@@ -527,6 +568,7 @@
             🎬 Bütün videolar
           </a>
 
+          <a class="action-btn primary" href="/shorts.html">📱 Shorts lenti</a>
           <button
             class="action-btn random"
             id="random-video"
@@ -623,11 +665,14 @@
   </footer>
 
 
+  <script src="/discovery.js" defer></script>
+  <script src="/site-actions.js" defer></script>
   <script
     src="script.js"
     defer>
   </script>
 
+  <script src="/home-enhance.js" defer></script>
   <script src="/visitor.js" defer></script>
 
 </body>
