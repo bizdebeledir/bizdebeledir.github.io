@@ -238,6 +238,40 @@
         </a>
       </nav>
 
+      <!-- Real sayta gələn ziyarətçilər (anonim, işlədiyi andan) -->
+      <section class="visitor-panel" aria-label="Saytın ziyarətçi statistikası">
+        <div class="visitor-heading">
+          <div class="visitor-heading-title">
+            <span class="visitor-mark" aria-hidden="true">↗</span>
+            <span>
+              <strong>Saytda aktivlik</strong>
+              <small>Real ziyarətçilər</small>
+            </span>
+          </div>
+          <span class="visitor-signal" id="visitor-signal">YÜKLƏNİR</span>
+        </div>
+        <div class="visitor-grid">
+          <div class="visitor-item">
+            <span class="visitor-item-icon" aria-hidden="true">🟢</span>
+            <strong id="visitor-now" class="visitor-value">—</strong>
+            <span class="visitor-item-label">İndi saytda</span>
+          </div>
+          <div class="visitor-item">
+            <span class="visitor-item-icon" aria-hidden="true">🕒</span>
+            <strong id="visitor-day" class="visitor-value">—</strong>
+            <span class="visitor-item-label">Son 24 saat</span>
+          </div>
+          <div class="visitor-item">
+            <span class="visitor-item-icon" aria-hidden="true">📅</span>
+            <strong id="visitor-week" class="visitor-value">—</strong>
+            <span class="visitor-item-label">Son 7 gün</span>
+          </div>
+        </div>
+        <p class="visitor-info" id="visitor-info" role="status">
+          Real ziyarətçi statistikası yüklənir…
+        </p>
+      </section>
+
       <!-- STATİSTİKA -->
       <div class="stats">
 
@@ -593,6 +627,8 @@
     src="script.js"
     defer>
   </script>
+
+  <script src="/visitor.js" defer></script>
 
 </body>
 

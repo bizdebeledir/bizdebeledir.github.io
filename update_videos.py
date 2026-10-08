@@ -1067,6 +1067,7 @@ if (shareButton) {{
 }}
 
 </script>
+<script src="/visitor.js" defer></script>
 
 </body>
 </html>
