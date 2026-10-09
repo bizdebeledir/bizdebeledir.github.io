@@ -61,7 +61,7 @@ def card(v):
     if not re.fullmatch(r'[A-Za-z0-9_-]{11}',vid):return ""
     txt=x(title(v))
     return f'''<a class="studio-video topic-card" href="/video/{vid}.html">
-<img src="https://i.ytimg.com/vi/{vid}/hqdefault.jpg" loading="lazy" decoding="async" width="135" height="85" alt="">
+<img src="https://i.ytimg.com/vi/{vid}/hqdefault.jpg" loading="lazy" decoding="async" width="135" height="85" alt="Video önbaxışı: {txt}">
 <div><strong>{txt}</strong><small>🎬 Real videonu aç ↗</small></div></a>'''
 pdir=ROOT/"movzu"
 pdir.mkdir(parents=True,exist_ok=True)
@@ -72,7 +72,7 @@ for t in TOPICS:
     others=[v for v in VIDEOS if v.get('id') not in {i['id'] for i in found}][:4]
     related=[q for q in TOPICS if q['slug']!=slug][:4]
     name=t['emoji']+" "+t['label']+" | Bizdə Belədir"
-    desc=(t['intro']+" Azərbaycan gündəlik yumorundan real qısa videolar, tanış vəziyyətlər və əlaqəli mövzu keçidləri.")[:215]
+    desc=(t['intro']+" Real Azərbaycan yumoru videoları və tanış hadisələr.")[:154].rstrip(" ,.;:") + "."
     body=f'''<div data-topic="{slug}">
 <section class="topic-hero">
 <span class="studio-kicker">AZƏRBAYCAN MƏİŞƏT YUMORU</span>

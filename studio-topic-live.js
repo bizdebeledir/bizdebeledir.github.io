@@ -24,7 +24,8 @@
     card.className="studio-video topic-card";card.href=href;
     const img=document.createElement("img");
     img.src="https://i.ytimg.com/vi/"+encodeURIComponent(v.id)+"/hqdefault.jpg";
-    img.loading="lazy";img.decoding="async";img.alt="";img.width=135;img.height=85;
+    img.loading="lazy";img.decoding="async";
+    img.alt="Video önbaxışı: "+core.title(v);img.width=135;img.height=85;
     const text=document.createElement("div");
     const title=document.createElement("strong");
     title.textContent=core.title(v);
