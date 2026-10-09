@@ -1317,3 +1317,22 @@ _site_errors = run_site_doctor(os.getcwd())
 if _site_errors:
     raise RuntimeError("Site Doctor failed: " + "; ".join(_site_errors[:8]))
 print("SITE_DOCTOR_OK")
+
+
+# Keep editorial topic landing pages aligned with newly synced real videos.
+# A failure stops the workflow before publication rather than publishing broken SEO.
+import subprocess as _topic_subprocess
+import sys as _topic_sys
+_topic_subprocess.run(
+    [_topic_sys.executable, "studio_build_pages.py"], check=True
+)
+_topic_subprocess.run(
+    [_topic_sys.executable, "google_seo_doctor.py"], check=True
+)
+# Existing workflow stages only video/ and sitemap.xml. Stage topics separately.
+# This runs only in GitHub Actions; local runs do not change Git's staging area.
+if os.environ.get("GITHUB_ACTIONS") == "true":
+    _topic_subprocess.run(
+        ["git", "add", "--", "movzu/", "movzular.html"], check=True
+    )
+print("TOPIC_AUTO_REFRESH_OK")
