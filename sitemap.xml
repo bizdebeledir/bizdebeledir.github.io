@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
     <loc>https://bizdebeledir.github.io/</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-10-09</lastmod>
   </url>
   <url>
     <loc>https://bizdebeledir.github.io/videos.html</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-10-09</lastmod>
   </url>
   <url>
     <loc>https://bizdebeledir.github.io/shorts.html</loc>
@@ -19,6 +19,12 @@
   </url>
   <url>
     <loc>https://bizdebeledir.github.io/ideas.html</loc>
+  </url>
+  <url>
+    <loc>https://bizdebeledir.github.io/yumor-dnt.html</loc>
+  </url>
+  <url>
+    <loc>https://bizdebeledir.github.io/yumor-parki.html</loc>
   </url>
   <url>
     <loc>https://bizdebeledir.github.io/video/6VyNWKDRw38.html</loc>
@@ -1684,11 +1690,5 @@ Yeni gülməli memlər üçün abunə ol.
 #mem #gülməli #azərbaycan</video:description>
       <video:player_loc>https://www.youtube.com/embed/uNquO4ujtUc</video:player_loc>
     </video:video>
-  </url>
-  <url>
-    <loc>https://bizdebeledir.github.io/yumor-dnt.html</loc>
-  </url>
-  <url>
-    <loc>https://bizdebeledir.github.io/yumor-parki.html</loc>
   </url>
 </urlset>
