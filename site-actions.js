@@ -104,6 +104,11 @@
     if (videoMatch) {
       discovery?.remember(videoMatch[1]);
       track("select_content", {content_type:"video", content_id:videoMatch[1]});
+    } else if (/(?:^|\/)movzu\/([a-z]{2,15})\.html(?:[?#]|$)/.test(href)) {
+      const topic = href.match(/(?:^|\/)movzu\/([a-z]{2,15})\.html(?:[?#]|$)/);
+      if (topic) track("topic_open", {topic:topic[1]});
+    } else if (/(?:^|\/)movzular\.html(?:[?#]|$)/.test(href)) {
+      track("topic_index_open");
     } else if (/(?:youtube\.com|youtu\.be)/i.test(href)) {
       track("subscribe_click", {link_type:href.includes("sub_confirmation") ? "subscribe" : "youtube"});
     } else if (/(?:instagram\.com|tiktok\.com|t\.me|facebook\.com|threads\.com)/i.test(href)) {
