@@ -1,6 +1,11 @@
 "use strict";
 /* Phase II: local favorites, A/B CTA, navigation, opt-in notification routes. */
 (() => {
+  if(!window.BBMetrics && !document.querySelector('script[data-bb-city-metrics]')){
+    const m=document.createElement("script");
+    m.src="/city-metrics.js";m.defer=true;m.dataset.bbCityMetrics="true";
+    document.head.appendChild(m);
+  }
   const d=window.BBDiscover;
   if(!d)return;
   const css=document.createElement("link");

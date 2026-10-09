@@ -290,6 +290,9 @@ all_videos.sort(
 # Safe video list validation, sync status and 24h snapshot history.
 from video_sync import prepare as prepare_video_sync
 channel_stats = prepare_video_sync(all_videos, channel_stats)
+# Keep the weekly 8-video bracket stable as views and uploads update.
+from city_week import prepare as prepare_city_week
+channel_stats = prepare_city_week(all_videos, channel_stats)
 save_json("channel-stats.json", channel_stats)
 
 save_json(
@@ -1094,7 +1097,9 @@ if (shareButton) {{
         "w",
         encoding="utf-8"
     ) as file:
-        file.write(page)
+        # Add accurate breadcrumb / concise descriptions to the actual YouTube video page.
+        from city_seo import enhance as enhance_city_video_seo
+        file.write(enhance_city_video_seo(page, video))
 
 
 # ==================================================
@@ -1165,7 +1170,7 @@ lines.extend([
     "  </url>"
 ])
 
-for extra_page in ("favorites.html","trending.html","ideas.html","yumor-dnt.html","yumor-parki.html"):
+for extra_page in ("favorites.html","trending.html","ideas.html","yumor-dnt.html","yumor-parki.html","gulus-seheri.html"):
     lines.extend([
         "  <url>",
         "    <loc>" + SITE + "/" + extra_page + "</loc>",
@@ -1304,7 +1309,7 @@ with open(
 # ==================================================
 
 sitemap_url_count = (
-    8 + len(all_videos)
+    9 + len(all_videos)
 )
 
 

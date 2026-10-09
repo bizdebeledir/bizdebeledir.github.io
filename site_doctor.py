@@ -55,7 +55,8 @@ def audit(root=ROOT):
         if "https://bizdebeledir.github.io/video/"+vid+".html" not in locs:
             errors.append("MISSING_SITEMAP_VIDEO "+vid)
     for name in ("index.html","videos.html","shorts.html","favorites.html",
-                 "ideas.html","privacy.html","trending.html","yumor-dnt.html","yumor-parki.html"):
+                 "ideas.html","privacy.html","trending.html","yumor-dnt.html","yumor-parki.html",
+                 "gulus-seheri.html","offline.html"):
         f=base/name
         if not f.is_file():
             errors.append("PAGE_MISSING "+name);continue
@@ -67,6 +68,17 @@ def audit(root=ROOT):
             path=(base/asset.lstrip("/")).resolve()
             if base.resolve() not in path.parents or not path.is_file():
                 errors.append("MISSING_ASSET "+name+" "+asset)
+    fixture=channel.get("cityGames")
+    if fixture is not None:
+        try:
+            assert isinstance(fixture,dict)
+            assert len(fixture.get("ids",[]))==8
+            assert len(set(fixture["ids"]))==8
+            assert set(fixture["ids"]).issubset(set(ids))
+            import re
+            assert re.fullmatch(r"\d{4}W\d{2}",fixture["week"])
+        except (AssertionError,TypeError,KeyError,ValueError):
+            errors.append("CITY_WEEKLY_FIXTURE_INVALID")
     sync=channel.get("sync")
     if sync and sync.get("publicListedVideos") !=len(videos):
         errors.append("SYNC_COUNT_INCONSISTENCY")

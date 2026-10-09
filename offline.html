@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="az">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0c1018">
+<meta name="robots" content="noindex,follow">
+<title>📴 Offline Yumor Oyunları | Bizdə Belədir</title>
+<link rel="stylesheet" href="/gulus-seheri.css">
+<link rel="icon" href="/icon-192.png">
+<style>
+.offline-wrap{max-width:650px;margin:0 auto;padding:26px 16px 70px;text-align:center}
+.offline-label{display:inline-flex;background:#344335;color:#dcffb8;border-radius:99px;padding:8px 13px;font-size:12px;font-weight:900}
+.offline-wrap h1{font-size:clamp(31px,8vw,46px);line-height:1.15;margin:18px 0}
+.offline-wrap p{color:#c0d4cf;font-size:14px;line-height:1.6}
+.offline-button{display:block;width:100%;min-height:53px;background:#c8ff80;color:#142219;border:0;border-radius:13px;font-weight:950;font-size:14px;margin:15px 0}
+.offline-prompt{padding:23px 17px;border:1px solid #53665e;border-radius:18px;background:#1d2a30;margin:20px 0}
+.offline-prompt h2{font-size:19px;margin:0 0 10px}
+.offline-btn-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.offline-option{background:#2d3846;color:#fff;border:1px solid #526574;border-radius:12px;padding:11px 12px;min-height:44px;font-size:13px}
+.offline-result{color:#d4ffba!important;font-size:13px;font-weight:850;min-height:20px}
+</style>
+</head>
+<body class="city-app">
+<main class="offline-wrap">
+ <span class="offline-label">📴 İNTERNETSİZ REJİM</span>
+ <h1>Gülüş şəbəkəyə<br>bağlı deyil. 😄</h1>
+ <p>Əsas offline faylları əvvəlcədən hazırlandıqda bu oyunlar şəbəkəsiz işləyə bilər. YouTube videoları və real səsvermə üçün internetə qoşulmalısan.</p>
+ <div class="offline-prompt">
+  <h2>⚡ Sürətli refleks testi</h2>
+  <p>Qırmızı düymə yaşıllaşanda toxun. Vaxt yalnız bu cihazda hesablanır.</p>
+  <button type="button" class="offline-button" id="off-react">⚡ Başla</button>
+  <p id="off-result" class="offline-result" role="status"></p>
+ </div>
+ <div class="offline-prompt">
+  <h2>🧩 Mini-tapmaca</h2>
+  <p>Əlində tutduğun halda tez-tez axtardığın şey?</p>
+  <div class="offline-btn-row">
+   <button class="offline-option" data-answer="0">📺 Televizor</button>
+   <button class="offline-option" data-answer="1">📱 Telefon</button>
+   <button class="offline-option" data-answer="0">🛋️ Divan</button>
+  </div>
+  <p id="off-riddle" class="offline-result" role="status"></p>
+ </div>
+ <a href="/gulus-seheri.html" class="city-primary">🌆 Gülüş Şəhərinə qayıt</a>
+ <a href="/yumor-parki.html" class="city-secondary" style="display:inline-block;text-decoration:none">🎡 Digər oyunlar</a>
+ <p id="off-network">Şəbəkə vəziyyəti yoxlanılır…</p>
+</main>
+<script>
+(function(){
+ "use strict";
+ const btn=document.getElementById("off-react"),res=document.getElementById("off-result");
+ let timer=null,phase="idle",since=0;
+ btn.addEventListener("click",()=>{
+  if(phase==="waiting"){clearTimeout(timer);phase="idle";btn.textContent="🚫 Tez basdın! Yenidən başla";res.textContent="Səhv start.";return;}
+  if(phase==="ready"){const ms=Math.round(performance.now()-since);phase="done";btn.textContent="Yenidən oyna";btn.style.background="#c8ff80";res.textContent="Reaksiyan: "+ms+" ms";return;}
+  phase="waiting";btn.textContent="🔴 Hələ toxunma";btn.style.background="#fb8f9d";
+  timer=setTimeout(()=>{phase="ready";since=performance.now();btn.textContent="🟢 İNDİ!";btn.style.background="#96ffbb";},1000+Math.floor(Math.random()*2200));
+ });
+ document.querySelectorAll("[data-answer]").forEach(item=>item.addEventListener("click",()=>{
+  document.getElementById("off-riddle").textContent=item.dataset.answer==="1"?"✅ Düz tapdın!":"Bu dəfə olmadı. Yenidən cəhd et.";
+ }));
+ function network(){document.getElementById("off-network").textContent=navigator.onLine?
+  "🌐 Şəbəkə var. Real videoları aça bilərsən.":"📴 Hazırda internet yoxdur. Offline oyunlar əlçatandır.";}
+ network();window.addEventListener("online",network);window.addEventListener("offline",network);
+})();
+</script>
+</body>
+</html>

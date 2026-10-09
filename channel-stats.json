@@ -195,5 +195,19 @@
     "previousListedVideos": 81,
     "status": "ok",
     "note": "Channel videoCount may differ from public uploads (private or unlisted videos)."
+  },
+  "cityGames": {
+    "week": "2026W41",
+    "ids": [
+      "qdso2G30X0Q",
+      "OFd4v31kMwo",
+      "knHs1lVb-gw",
+      "Ig6Z6Ak3e_A",
+      "p1qSegkXHqg",
+      "8amBmFZWqKY",
+      "CJngJbciud8",
+      "we9HuByyqAs"
+    ],
+    "source": "YouTube public upload list"
   }
 }

@@ -1,0 +1,36 @@
+"use strict";
+const assert=require("node:assert/strict");
+const fs=require("node:fs"),path=require("node:path");
+const root=path.resolve(__dirname,"..");
+const core=require(root+"/city-core.js");
+const videos=JSON.parse(fs.readFileSync(root+"/all-videos.json","utf8"));
+const channel=JSON.parse(fs.readFileSync(root+"/channel-stats.json","utf8"));
+assert.equal(core.districts.length,10);
+assert.equal(new Set(core.districts.map(x=>x.id)).size,10);
+assert.equal(core.missions.length,10);
+assert.equal(core.moods.length,6);
+assert.equal(core.doors.length,4);
+assert(core.normalizeVideos(videos).length>=80);
+assert.equal(core.fold("QONŞU, ƏR, ÇAY!"),"qonsu er cay");
+const a=core.search(videos,"qonşu"),b=core.search(videos,"qonsu");
+assert.deepEqual(a.map(v=>v.id),b.map(v=>v.id),"AZ consonant transliteration");
+assert(a.length>0,"Exact topic search");
+const wrong=core.search(videos,"qonwu");
+assert(wrong.length>0,"Common misspelling tolerated");
+for(const mood of core.moods){
+ const items=core.recommendations(videos,mood.id);
+ assert.equal(items.length,3);
+ assert.equal(new Set(items.map(v=>v.id)).size,3);
+}
+const week=core.isoWeek();
+assert(/^\d{4}W\d{2}$/.test(week));
+assert.equal(core.localDay().length,10);
+assert.equal(core.safeFixture(channel.cityGames,videos).ids.length,8);
+assert.deepEqual(core.fixture(videos,week).ids,channel.cityGames.ids,"Fixture stays stable");
+assert(!core.safeFixture({week,ids:Array(8).fill(videos[0].id)},videos));
+assert(core.distance("qonsu","qonwu",1)<=1);
+const millis=Date.parse("2026-12-28T09:00:00Z");
+assert.equal(core.isoWeek(new Date(millis)),"2026W53");
+const next=Date.parse("2027-01-01T00:00:00Z");
+assert.equal(core.isoWeek(new Date(next)),"2026W53");
+console.log("CITY_CORE_REGRESSION_OK",videos.length, "current_week",week,"search",a.length,wrong.length);

@@ -235,3 +235,14 @@ section.bb-spotlight { padding: 28px 17px 29px; background: linear-gradient(180d
 .bb-park-promo-action{display:inline-flex;align-items:center;gap:12px;justify-content:center;background:#caff87;color:#152112;font-weight:950;font-size:12px;padding:12px 16px;text-decoration:none;border-radius:12px;min-height:44px}
 .bb-park-promo-action:focus-visible{outline:3px solid #fff;outline-offset:3px}
 @media(max-width:420px){.bb-park-promo-layout{grid-template-columns:1fr;gap:12px;text-align:center}.bb-park-wheel{width:75px;height:75px;font-size:43px;margin:auto}}
+
+/* Gülüş Şəhəri launch banner, small and without an external background image. */
+.bb-city-promo{padding:26px 14px 23px;background:#0c1318}
+.bb-city-panel{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:18px;padding:21px 23px;border:1px solid #66827e;background:linear-gradient(116deg,#1e3541,#2e253d);border-radius:23px}
+.bb-city-panel-icon{font-size:65px;line-height:1.1}
+.bb-city-panel h2{font-size:clamp(24px,5vw,34px);margin:5px 0;color:#fff;line-height:1.2}
+.bb-city-panel h2 em{font-style:normal;color:#c9ff91}
+.bb-city-panel p{font-size:12px;color:#cadcdd;line-height:1.6;margin:7px 0 11px}
+.bb-city-link{display:inline-flex;align-items:center;gap:10px;min-height:45px;border-radius:13px;padding:12px 17px;background:#c8ff88;color:#14241d;text-decoration:none;font-size:12px;font-weight:950}
+.bb-city-link:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@media(max-width:420px){.bb-city-panel{display:block;text-align:center;padding:19px}.bb-city-panel-icon{font-size:50px}}

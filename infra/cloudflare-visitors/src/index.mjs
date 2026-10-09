@@ -4,6 +4,29 @@
 const SITE = "https://bizdebeledir.github.io";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 const ORIGIN_HEADERS = {"Access-Control-Allow-Origin":SITE,"Vary":"Origin"};
+function cityWeek(offsetDays=0){
+  const at=new Date(Date.now()-offsetDays*86400000);
+  const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Baku",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(at);
+  const bits=Object.fromEntries(parts.map(x=>[x.type,Number(x.value)]));
+  const day=new Date(Date.UTC(bits.year,bits.month-1,bits.day));
+  day.setUTCDate(day.getUTCDate()+4-(day.getUTCDay()||7));
+  const year=day.getUTCFullYear();
+  const first=new Date(Date.UTC(year,0,1));
+  const num=Math.ceil((((day-first)/86400000)+1)/7);
+  return year+"W"+String(num).padStart(2,"0");
+}
+function allowedCityWeek(week){
+  return typeof week==="string" && /^\d{4}W\d{2}$/.test(week) &&
+    [cityWeek(),cityWeek(7)].includes(week);
+}
+function pollChoices(id){
+  if(Object.hasOwn(PARK_POLL_IDS,id))return PARK_POLL_IDS[id];
+  const match=typeof id==="string"&&id.match(/^city_cup_(\d{4}W\d{2})_m[0-3]$/);
+  if(match && allowedCityWeek(match[1]))return 2;
+  const director=typeof id==="string"&&id.match(/^city_director_(\d{4}W\d{2})$/);
+  if(director&&allowedCityWeek(director[1]))return 3;
+  return 0;
+}
 const PARK_POLL_IDS = Object.freeze({
   tea_sugar:4, alarm:4, phone:4
 });
@@ -43,7 +66,7 @@ export default {
     const url=new URL(req.url);
     const origin=req.headers.get("Origin")||"";
     if(req.method==="OPTIONS"){
-      if(origin!==SITE || !["/v1/stats","/v1/ping","/v1/idea","/v1/polls","/v1/vote"].includes(url.pathname))
+      if(origin!==SITE || !["/v1/stats","/v1/ping","/v1/idea","/v1/polls","/v1/vote","/v1/city-polls"].includes(url.pathname))
         return json({ok:false},403,origin);
       return new Response(null,{status:204,headers:{...ORIGIN_HEADERS,
         "Access-Control-Allow-Methods":"GET,POST,OPTIONS",
@@ -72,6 +95,27 @@ export default {
           method:"votes_recorded_in_d1"},200,origin);
       }catch{return json({ok:false,error:"POLL_STORAGE_UNAVAILABLE"},503,origin);}
     }
+    if(url.pathname==="/v1/city-polls" && req.method==="GET"){
+      const week=url.searchParams.get("week");
+      if(!allowedCityWeek(week))
+        return json({ok:false,error:"WEEK_UNAVAILABLE"},400,origin);
+      const ids=Array.from({length:4},(_,i)=>"city_cup_"+week+"_m"+i).concat("city_director_"+week);
+      try{
+        const query="SELECT poll_id,option_index,COUNT(*) AS votes FROM park_votes "+
+          "WHERE poll_id IN (?,?,?,?,?) GROUP BY poll_id,option_index";
+        const fetched=await env.DB.prepare(query).bind(...ids).all();
+        const counts=Object.fromEntries(ids.map(id=>[id,Array(pollChoices(id)).fill(0)]));
+        for(const row of fetched.results||[]){
+          if(Object.hasOwn(counts,row.poll_id)&&Number.isInteger(row.option_index)&&
+             row.option_index>=0 && row.option_index<counts[row.poll_id].length){
+            counts[row.poll_id][row.option_index]=Math.max(0,Number(row.votes)||0);
+          }
+        }
+        return json({ok:true,week,
+          polls:ids.map(id=>({id,counts:counts[id]})),
+          method:"real_unique_browser_votes"},200,origin);
+      }catch{return json({ok:false,error:"CITY_STORAGE_UNAVAILABLE"},503,origin);}
+    }
     if(url.pathname==="/v1/vote" && req.method==="POST"){
       if(origin!==SITE)return json({ok:false,error:"INVALID_ORIGIN"},403,origin);
       if(typeof env.VISITOR_SALT!=="string" || env.VISITOR_SALT.length<24)
@@ -81,8 +125,9 @@ export default {
       let input;
       try{input=JSON.parse(raw);}catch{return json({ok:false,error:"BAD_REQUEST"},400,origin);}
       const pollId=input?.pollId, idx=input?.optionIndex, visitor=input?.voterId;
-      if(!Object.hasOwn(PARK_POLL_IDS,pollId)||!Number.isInteger(idx)||
-         idx<0||idx>=PARK_POLL_IDS[pollId] ||typeof visitor!=="string"||!UUID.test(visitor))
+      const allowed=pollChoices(pollId);
+      if(!allowed||!Number.isInteger(idx)||idx<0||idx>=allowed ||
+         typeof visitor!=="string"||!UUID.test(visitor))
         return json({ok:false,error:"BAD_REQUEST"},400,origin);
       try{
         const now=Math.floor(Date.now()/1000);

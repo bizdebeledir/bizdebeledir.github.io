@@ -31,6 +31,8 @@
   }
   function track(name,extra={}){
     try{api.track("bb_park_"+name,extra);}catch{}
+    if(name==="open_game")window.BBMetrics?.emit("park_open",{area:"park"});
+    if(name==="video_open")window.BBMetrics?.emit("video_open",{area:"park"});
   }
   function secretTokens(){const arr=get("tokens",[]);return Array.isArray(arr)?arr.filter(x=>Number.isInteger(x)&&x>=1&&x<=5):[];}
   function addToken(number){
