@@ -1,0 +1,25 @@
+# Local and private ELMAR OS material must not be published.
+.env
+.env.*
+!.env.example
+*.sqlite
+*.sqlite3
+*.db
+*.db-*
+*.pem
+*.key
+*.p12
+*.bak
+*.backup
+**/credentials*.json
+**/client_secret*.json
+**/*refresh_token*
+**/oauth*token*
+**/secrets/
+**/__pycache__/
+*.pyc
+ELMAR_OS_MODULES/
+ELMAR_CONTROL_CENTER/
+YT_HUNTER_BEAST_MAX/
+private/
+backups/
