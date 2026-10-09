@@ -3,7 +3,9 @@
 (function(host){
  const PREFIX="bb_city_events_";
  const allowed=new Set(["city_visit","district_open","search","mood","video_open","door_solved","cup_vote",
-  "director_vote","park_open","share","offline_ready","mission_view","youtube_outbound","city_return"]);
+  "director_vote","park_open","share","offline_ready","mission_view","youtube_outbound","city_return",
+  "studio_open","bingo_complete","bingo_export","poster_export","playlist_shared",
+  "qr_generated","qr_export","archive_open","series_open","topic_open"]);
  const CACHE_DAYS=30,DAILY_MAX_EVENTS=500;
  function day(){
   try{

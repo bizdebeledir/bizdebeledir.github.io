@@ -87,6 +87,8 @@
     nav.className="phase2-nav";
     nav.setAttribute("aria-label","Yeni video bölmələri");
     nav.append(
+      a("🎯 BINGO və Mem","/yumor-studiyasi.html"),
+      a("📚 12 Mövzu","/movzular.html"),
       a("🎡 20 Oyun","/yumor-parki.html"),
       a("🧬 Yumor DNT","/yumor-dnt.html"),
       a("🔥 Trenddə","/trending.html"),

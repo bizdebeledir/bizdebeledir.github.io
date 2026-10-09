@@ -246,3 +246,17 @@ section.bb-spotlight { padding: 28px 17px 29px; background: linear-gradient(180d
 .bb-city-link{display:inline-flex;align-items:center;gap:10px;min-height:45px;border-radius:13px;padding:12px 17px;background:#c8ff88;color:#14241d;text-decoration:none;font-size:12px;font-weight:950}
 .bb-city-link:focus-visible{outline:3px solid #fff;outline-offset:3px}
 @media(max-width:420px){.bb-city-panel{display:block;text-align:center;padding:19px}.bb-city-panel-icon{font-size:50px}}
+
+/* Yumor Studiyası: single compact launch strip; no external images. */
+.bb-studio-strip{background:#0c141a;padding:17px 14px}
+.bb-studio-inner{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:13px;
+  background:linear-gradient(110deg,#263d35,#25283d);border:1px solid #73816b;border-radius:18px;padding:14px 17px}
+.bb-studio-mark{font-size:41px;line-height:1}
+.bb-studio-inner>div:nth-child(2){flex:1;min-width:0}
+.bb-studio-inner strong{color:#e7ffda;font-size:13px;line-height:1.4}
+.bb-studio-inner p{color:#c2ced2;margin:5px 0 0;font-size:11px;line-height:1.55}
+.bb-studio-inner a{background:#cdff8e;color:#142317;font-size:12px;font-weight:950;border-radius:11px;
+  padding:12px 13px;min-height:44px;display:inline-flex;align-items:center;text-decoration:none;white-space:nowrap}
+.bb-studio-inner a:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@media(max-width:520px){.bb-studio-inner{display:grid;grid-template-columns:46px 1fr;gap:9px}
+.bb-studio-inner a{grid-column:1/-1;justify-content:center}}

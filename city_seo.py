@@ -55,4 +55,10 @@ def enhance(source,video):
         )
         if source.count("</main>")!=1:raise RuntimeError("SEO_MAIN_INVALID")
         source=source.replace("</main>",nav+"</main>",1)
+    # Record only actual outbound YouTube clicks; no guessed subscribes.
+    if 'src="/city-metrics.js"' not in source:
+        if source.count("</head>")!=1:
+            raise RuntimeError("VIDEO_META_HEAD_INVALID")
+        source=source.replace("</head>",
+          '<script defer src="/city-metrics.js"></script>\n</head>',1)
     return source

@@ -56,7 +56,7 @@ def audit(root=ROOT):
             errors.append("MISSING_SITEMAP_VIDEO "+vid)
     for name in ("index.html","videos.html","shorts.html","favorites.html",
                  "ideas.html","privacy.html","trending.html","yumor-dnt.html","yumor-parki.html",
-                 "gulus-seheri.html","offline.html"):
+                 "gulus-seheri.html","offline.html","yumor-studiyasi.html","movzular.html"):
         f=base/name
         if not f.is_file():
             errors.append("PAGE_MISSING "+name);continue
@@ -82,6 +82,9 @@ def audit(root=ROOT):
     sync=channel.get("sync")
     if sync and sync.get("publicListedVideos") !=len(videos):
         errors.append("SYNC_COUNT_INCONSISTENCY")
+    # Read-only check for newly published topic portals and Studio assets.
+    from studio_link_doctor import audit as audit_studio_links
+    errors.extend(audit_studio_links(base))
     return errors
 
 if __name__=="__main__":

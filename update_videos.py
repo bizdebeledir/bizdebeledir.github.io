@@ -1170,12 +1170,20 @@ lines.extend([
     "  </url>"
 ])
 
-for extra_page in ("favorites.html","trending.html","ideas.html","yumor-dnt.html","yumor-parki.html","gulus-seheri.html"):
+for extra_page in ("favorites.html","trending.html","ideas.html","yumor-dnt.html","yumor-parki.html","gulus-seheri.html","yumor-studiyasi.html","movzular.html"):
     lines.extend([
         "  <url>",
         "    <loc>" + SITE + "/" + extra_page + "</loc>",
         "  </url>"
     ])
+
+import re as _studio_re
+for studio_topic in json.load(open("studio-topics.json",encoding="utf-8")):
+    slug=studio_topic["slug"]
+    if not _studio_re.fullmatch(r"[a-z]{2,15}",slug):
+        raise ValueError("INVALID_STUDIO_TOPIC_SLUG")
+    lines.extend(["  <url>","    <loc>" + SITE + "/movzu/" + slug + ".html</loc>","  </url>"])
+
 
 # ==================================================
 # HƏR VİDEO ÜÇÜN VIDEO SITEMAP
@@ -1309,7 +1317,7 @@ with open(
 # ==================================================
 
 sitemap_url_count = (
-    9 + len(all_videos)
+    11 + len(json.load(open("studio-topics.json",encoding="utf-8"))) + len(all_videos)
 )
 
 

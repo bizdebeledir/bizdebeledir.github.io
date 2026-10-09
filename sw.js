@@ -11,7 +11,10 @@ const OPTIONAL=[
  "/yumor-parki.html","/yumor-parki.css","/park-engine.js",
  "/park-app.js","/park-games-a.js","/park-games-b.js",
  "/yumor-dnt.html","/yumor-dnt.css","/yumor-dnt-core.js","/yumor-dnt.js",
- "/all-videos.json"
+ "/all-videos.json",
+ "/yumor-studiyasi.html","/yumor-studiyasi.css","/studio-core.js",
+ "/studio-app.js","/studio-tools-a.js","/studio-tools-b.js",
+ "/studio-topic-live.js","/vendor-qrcode.js","/movzular.html"
 ];
 const eligible=new Set([...PREP,...OPTIONAL,"/","/index.html"]);
 self.addEventListener("install",event=>{
