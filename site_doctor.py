@@ -82,6 +82,11 @@ def audit(root=ROOT):
     sync=channel.get("sync")
     if sync and sync.get("publicListedVideos") !=len(videos):
         errors.append("SYNC_COUNT_INCONSISTENCY")
+    # Validate crawlability, canonicals, structured video metadata and GA tags
+    # whenever the existing six-hour video synchronization runs.
+    from google_seo_doctor import audit as audit_google_seo
+    google_errors, _ = audit_google_seo(base)
+    errors.extend(google_errors)
     # Read-only check for newly published topic portals and Studio assets.
     from studio_link_doctor import audit as audit_studio_links
     errors.extend(audit_studio_links(base))
