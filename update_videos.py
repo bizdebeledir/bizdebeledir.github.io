@@ -1213,21 +1213,10 @@ for video in all_videos:
         else today
     )
 
-    title = (
-        video.get(
-            "title"
-        )
-        or "Bizdə Belədir"
-    )
-
-    description = (
-        video.get(
-            "description",
-            ""
-        ).strip()
-        or
-        "Bizdə Belədir kanalından Azərbaycan yumor videosu."
-    )
+    # Readable metadata from actual video title and opening description.
+    # Strip repetitive hashtags / generic engagement boilerplate.
+    from video_sitemap_quality import clean_video_text
+    title, description = clean_video_text(video)
 
     thumbnail = (
         video.get(
