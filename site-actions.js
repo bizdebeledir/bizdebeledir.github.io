@@ -100,6 +100,15 @@
     const link = target.closest("a[href]");
     if (!link) return;
     const href = link.getAttribute("href") || "";
+    // Anonymous GA4 navigation event: only paths, no identity or query strings.
+    try {
+      const next = new URL(href, window.location.href);
+      if (next.origin === window.location.origin &&
+          next.pathname !== window.location.pathname &&
+          /^\/(?:[A-Za-z0-9_-]+\/)*[A-Za-z0-9_-]+\.html$/.test(next.pathname)) {
+        track("site_navigation", {from_path: window.location.pathname, to_path: next.pathname});
+      }
+    } catch (_) { /* Bad link: preserve normal navigation. */ }
     const videoMatch = href.match(/(?:^|\/)video\/([A-Za-z0-9_-]{11})\.html(?:[?#]|$)/);
     if (videoMatch) {
       discovery?.remember(videoMatch[1]);
