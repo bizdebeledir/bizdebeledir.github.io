@@ -1,9 +1,9 @@
 {
   "channelId": "UCdMcPZQSLqbmXG1Z8srsj-w",
   "title": "Bizdə Belədir",
-  "subscribers": 1030,
-  "views": 526606,
-  "videos": 85,
+  "subscribers": 1050,
+  "views": 544892,
+  "videos": 87,
   "hiddenSubscriberCount": false,
   "videoSnapshots": [
     {
@@ -621,122 +621,214 @@
         "CJngJbciud8": 482,
         "uNquO4ujtUc": 678
       }
+    },
+    {
+      "at": 1791635512,
+      "views": {
+        "CKo45HSHjBs": 83,
+        "sBWXJEpQky4": 266,
+        "GJHz8SIIvyw": 2670,
+        "8lkJF5GVW9k": 643,
+        "DNnGZBLtmrw": 9277,
+        "e_uHMxOVPfc": 11925,
+        "6VyNWKDRw38": 1162,
+        "QT5Zoq7L7dI": 4959,
+        "Osvcoqq7oCg": 1092,
+        "8amBmFZWqKY": 1053,
+        "oqyG-6EWtG4": 8753,
+        "YM-dAHmaRKE": 37680,
+        "QHfSOklt7yU": 2069,
+        "xGoXvFRqReg": 9372,
+        "ys7jsl6vlAs": 45650,
+        "LRQyrwJAzEg": 6551,
+        "fqpXrs_askk": 28665,
+        "vkSL_4At5sc": 290,
+        "VT44h7orv2c": 707,
+        "DrFK3JcDGyU": 1226,
+        "avlI232fqvY": 1775,
+        "w1_J5_sutmA": 18688,
+        "8drzl-rGRD0": 2914,
+        "Ig6Z6Ak3e_A": 18279,
+        "YhR495KH7oU": 58237,
+        "zdyC7_JYheY": 12137,
+        "EyMhccoCcmw": 28399,
+        "dTDxpK0Y6Mc": 41816,
+        "OMfzGDZQsVo": 33354,
+        "VKoJ7S9YOqg": 1879,
+        "mj5H_I1L4MQ": 3591,
+        "dt50EO3eZI8": 1307,
+        "Y6-8eNw1mbg": 8271,
+        "ULCi8SjxN_E": 338,
+        "eDUhb9bFYuI": 7649,
+        "SwZXB7hs2f8": 1346,
+        "hIlb6qCbbJs": 1663,
+        "-9pAzSVWBb4": 16902,
+        "kfE6Y9ObGUs": 265,
+        "i3qOlsh1xjo": 1828,
+        "rFiXfP21WBk": 12040,
+        "OzapE6D6iFQ": 929,
+        "noyr6XaxnPI": 19286,
+        "p1qSegkXHqg": 1483,
+        "8749CRP3VXw": 4128,
+        "3P5TSIkdbB0": 2157,
+        "xDGlk64owvA": 4634,
+        "WGxuTEN5_30": 1035,
+        "aTkqTsKs0ZU": 1339,
+        "7vAIEAmX-Ds": 1348,
+        "edwEForyEuw": 3108,
+        "knHs1lVb-gw": 1316,
+        "we9HuByyqAs": 2274,
+        "OFd4v31kMwo": 2821,
+        "AbE57TRy4s8": 1174,
+        "I0X2CxbXT7s": 1142,
+        "WPpGiq8I7xI": 307,
+        "1zdLx6npiG0": 1646,
+        "oEYsnF7IkyA": 7060,
+        "Xvrk6sSI4z4": 4835,
+        "crN54fjAqJs": 2308,
+        "qoZqSKrtwzc": 6016,
+        "xRrmbeE0Kg8": 14413,
+        "8NcjMCT8HPo": 1201,
+        "yhnpH0dF66I": 11907,
+        "EcqxFdZIvvA": 17852,
+        "rloLrD-ow-Y": 345,
+        "L3TGHBKTw0w": 2832,
+        "0Bfu7zl_i9A": 1817,
+        "GPBS-ZDtIEQ": 3569,
+        "L-apMnmys_k": 1263,
+        "iIyqgzLeIpg": 2786,
+        "hAHe_7zXdxc": 394,
+        "kZcSv-7sSZM": 4396,
+        "bdsMBlbTtVc": 366,
+        "jbHoCHXkKs8": 642,
+        "wuoWRQv6oJE": 278,
+        "U-t0UiEWZf0": 4135,
+        "Tkxui4jTumk": 739,
+        "MiOTSvrztyc": 78,
+        "aCkccThqyuQ": 67,
+        "henYrIpFf3Q": 711,
+        "tDW1_WGPs1g": 398,
+        "ui4oQ-0BfuI": 902,
+        "qdso2G30X0Q": 313,
+        "CJngJbciud8": 482,
+        "uNquO4ujtUc": 678
+      }
     }
   ],
   "trends": {
     "available": true,
     "method": "YouTube Data API view count differences",
-    "observedAt": 1791613966,
-    "baselineAt": 1791527754,
-    "windowHours": 23.95,
+    "observedAt": 1791635512,
+    "baselineAt": 1791549202,
+    "windowHours": 23.98,
     "videos": [
       {
+        "id": "e_uHMxOVPfc",
+        "delta": 10575
+      },
+      {
+        "id": "DNnGZBLtmrw",
+        "delta": 9051
+      },
+      {
         "id": "fqpXrs_askk",
-        "delta": 12047
-      },
-      {
-        "id": "oqyG-6EWtG4",
-        "delta": 3055
-      },
-      {
-        "id": "YhR495KH7oU",
-        "delta": 2669
+        "delta": 8472
       },
       {
         "id": "ys7jsl6vlAs",
-        "delta": 1940
+        "delta": 3715
       },
       {
         "id": "QT5Zoq7L7dI",
-        "delta": 1856
+        "delta": 3293
       },
       {
-        "id": "xGoXvFRqReg",
-        "delta": 1227
+        "id": "oqyG-6EWtG4",
+        "delta": 2726
+      },
+      {
+        "id": "YhR495KH7oU",
+        "delta": 2288
       },
       {
         "id": "LRQyrwJAzEg",
-        "delta": 824
+        "delta": 1102
+      },
+      {
+        "id": "xGoXvFRqReg",
+        "delta": 975
       },
       {
         "id": "EyMhccoCcmw",
-        "delta": 783
-      },
-      {
-        "id": "6VyNWKDRw38",
-        "delta": 624
-      },
-      {
-        "id": "dTDxpK0Y6Mc",
-        "delta": 283
+        "delta": 647
       },
       {
         "id": "YM-dAHmaRKE",
-        "delta": 250
+        "delta": 252
+      },
+      {
+        "id": "dTDxpK0Y6Mc",
+        "delta": 231
       },
       {
         "id": "QHfSOklt7yU",
-        "delta": 237
+        "delta": 222
+      },
+      {
+        "id": "6VyNWKDRw38",
+        "delta": 216
       },
       {
         "id": "Ig6Z6Ak3e_A",
-        "delta": 170
-      },
-      {
-        "id": "w1_J5_sutmA",
-        "delta": 156
+        "delta": 164
       },
       {
         "id": "Osvcoqq7oCg",
-        "delta": 130
+        "delta": 139
       },
       {
-        "id": "8drzl-rGRD0",
-        "delta": 97
+        "id": "w1_J5_sutmA",
+        "delta": 96
       },
       {
         "id": "8amBmFZWqKY",
-        "delta": 79
+        "delta": 82
       },
       {
-        "id": "Y6-8eNw1mbg",
-        "delta": 57
-      },
-      {
-        "id": "DrFK3JcDGyU",
-        "delta": 55
+        "id": "8drzl-rGRD0",
+        "delta": 82
       },
       {
         "id": "zdyC7_JYheY",
-        "delta": 54
+        "delta": 60
+      },
+      {
+        "id": "DrFK3JcDGyU",
+        "delta": 45
+      },
+      {
+        "id": "Y6-8eNw1mbg",
+        "delta": 42
       },
       {
         "id": "avlI232fqvY",
-        "delta": 49
+        "delta": 34
       },
       {
         "id": "rFiXfP21WBk",
-        "delta": 30
+        "delta": 29
       },
       {
         "id": "noyr6XaxnPI",
-        "delta": 27
-      },
-      {
-        "id": "VT44h7orv2c",
-        "delta": 18
-      },
-      {
-        "id": "i3qOlsh1xjo",
-        "delta": 18
+        "delta": 25
       }
     ],
     "note": "Observed view changes, not realtime analytics"
   },
   "sync": {
-    "observedAt": 1791613966,
-    "publicListedVideos": 85,
-    "channelReportedVideos": 85,
+    "observedAt": 1791635512,
+    "publicListedVideos": 87,
+    "channelReportedVideos": 87,
     "previousListedVideos": 85,
     "status": "ok",
     "note": "Channel videoCount may differ from public uploads (private or unlisted videos)."
