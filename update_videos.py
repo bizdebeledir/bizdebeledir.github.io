@@ -1348,3 +1348,24 @@ if not _link_result["ok"]:
     }))
 print("LINK_GUARD_OK",_link_result["checked_pages"],
       "video pages, canonical repairs:",_link_result["repairs"])
+
+# BB345: reuse existing GitHub 6-hour refresh to trigger phone-free Cloudflare
+# read-only channel/link verification, without consuming another Cron Trigger.
+# Cloud errors MUST NEVER stop YouTube video updates.
+try:
+    import urllib.request as _bb_cloud_request
+    _req = _bb_cloud_request.Request(
+        "https://elmar-channel-guardian-v1.haciyevelmar.workers.dev/status",
+        headers={"User-Agent":"Bizde-Beledir-GitHub-Cloud345/1.0"})
+    with _bb_cloud_request.urlopen(_req, timeout=45) as _resp:
+        _cloud_status = json.load(_resp)
+    _cloud_alerts = _cloud_status.get("alerts") or []
+    print("BB_CLOUD345", _cloud_status.get("status"), "alerts:", len(_cloud_alerts))
+    if os.getenv("GITHUB_STEP_SUMMARY"):
+        with open(os.environ["GITHUB_STEP_SUMMARY"],"a",encoding="utf8") as _sum:
+            _sum.write("\n### Bizdə Belədir: Cloud Link Guard\n"+
+                "Status: "+str(_cloud_status.get("status"))+
+                " | Problems: "+", ".join(str(x) for x in _cloud_alerts[:5])+
+                " | Checked: "+str(_cloud_status.get("checkedAt"))+"\n")
+except Exception as _exc:
+    print("BB_CLOUD345_CHECK_UNAVAILABLE",type(_exc).__name__)
