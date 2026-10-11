@@ -77,7 +77,12 @@
    if(!a)return;
    const url=new URL(a.href,host.location.href);
    if(url.hostname==="youtube.com"||url.hostname==="www.youtube.com"||url.hostname==="m.youtube.com"||url.hostname==="youtu.be"){
-    emit("youtube_outbound");return;
+    const page=(host.location.pathname||"/").toLowerCase();
+    const area=page.startsWith("/video/")?"video":page.startsWith("/movzu/")?"topic":
+      page.startsWith("/gulus-seheri")?"city":page==="/"||page==="/index.html"?"home":"other";
+    const variant=url.searchParams.get("sub_confirmation")==="1"?"subscribe":
+      url.pathname.includes("/shorts/")||url.pathname.includes("/watch")?"video":"channel";
+    emit("youtube_outbound",{area,variant});return;
    }
    if(url.origin===host.location.origin&&
       (url.pathname.startsWith("/video/")||url.pathname==="/shorts.html")){
