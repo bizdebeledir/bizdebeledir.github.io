@@ -1336,3 +1336,15 @@ if os.environ.get("GITHUB_ACTIONS") == "true":
         ["git", "add", "--", "movzu/", "movzular.html"], check=True
     )
 print("TOPIC_AUTO_REFRESH_OK")
+
+# BB345: automatically correct only provable canonical Youtube ID mismatches.
+# Uses the authoritative catalog freshly generated above; never invents video IDs.
+from site_video_link_guard import audit as _link_guard_audit
+_link_result = _link_guard_audit(repair=True)
+if not _link_result["ok"]:
+    raise RuntimeError("LINK_GUARD_FAILED: " + str({
+        "missing":len(_link_result["missing_pages"]),
+        "unknown":len(_link_result["unknown_targets"])
+    }))
+print("LINK_GUARD_OK",_link_result["checked_pages"],
+      "video pages, canonical repairs:",_link_result["repairs"])
