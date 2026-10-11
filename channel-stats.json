@@ -1189,137 +1189,235 @@
         "CJngJbciud8": 486,
         "uNquO4ujtUc": 680
       }
+    },
+    {
+      "at": 1791750015,
+      "views": {
+        "e3NcnOckow8": 1129,
+        "o6m-w3a3Blo": 2130,
+        "nmxisAf9oeo": 1531,
+        "AWCIAYVa3hQ": 986,
+        "bBFmti-vs8w": 4820,
+        "e37gjjYuTfo": 1172,
+        "CKo45HSHjBs": 1309,
+        "sBWXJEpQky4": 849,
+        "GJHz8SIIvyw": 5407,
+        "8lkJF5GVW9k": 957,
+        "DNnGZBLtmrw": 29681,
+        "e_uHMxOVPfc": 31704,
+        "6VyNWKDRw38": 1793,
+        "QT5Zoq7L7dI": 14484,
+        "Osvcoqq7oCg": 1367,
+        "8amBmFZWqKY": 1791,
+        "oqyG-6EWtG4": 14560,
+        "YM-dAHmaRKE": 39481,
+        "QHfSOklt7yU": 2089,
+        "xGoXvFRqReg": 9552,
+        "ys7jsl6vlAs": 49149,
+        "LRQyrwJAzEg": 6832,
+        "fqpXrs_askk": 28819,
+        "vkSL_4At5sc": 312,
+        "VT44h7orv2c": 730,
+        "DrFK3JcDGyU": 1264,
+        "avlI232fqvY": 1796,
+        "w1_J5_sutmA": 18810,
+        "8drzl-rGRD0": 2965,
+        "Ig6Z6Ak3e_A": 18396,
+        "YhR495KH7oU": 59383,
+        "zdyC7_JYheY": 12258,
+        "EyMhccoCcmw": 28462,
+        "dTDxpK0Y6Mc": 42063,
+        "OMfzGDZQsVo": 33389,
+        "VKoJ7S9YOqg": 1885,
+        "mj5H_I1L4MQ": 3619,
+        "dt50EO3eZI8": 1312,
+        "Y6-8eNw1mbg": 8289,
+        "ULCi8SjxN_E": 362,
+        "eDUhb9bFYuI": 7661,
+        "SwZXB7hs2f8": 1349,
+        "hIlb6qCbbJs": 1669,
+        "-9pAzSVWBb4": 16923,
+        "kfE6Y9ObGUs": 269,
+        "i3qOlsh1xjo": 1834,
+        "rFiXfP21WBk": 12069,
+        "OzapE6D6iFQ": 930,
+        "noyr6XaxnPI": 19299,
+        "p1qSegkXHqg": 1484,
+        "8749CRP3VXw": 4130,
+        "3P5TSIkdbB0": 2159,
+        "xDGlk64owvA": 4636,
+        "WGxuTEN5_30": 1036,
+        "aTkqTsKs0ZU": 1339,
+        "7vAIEAmX-Ds": 1350,
+        "edwEForyEuw": 3109,
+        "knHs1lVb-gw": 1316,
+        "we9HuByyqAs": 2274,
+        "OFd4v31kMwo": 2821,
+        "AbE57TRy4s8": 1174,
+        "I0X2CxbXT7s": 1143,
+        "WPpGiq8I7xI": 307,
+        "1zdLx6npiG0": 1646,
+        "oEYsnF7IkyA": 7062,
+        "Xvrk6sSI4z4": 4837,
+        "crN54fjAqJs": 2308,
+        "qoZqSKrtwzc": 6018,
+        "xRrmbeE0Kg8": 14416,
+        "8NcjMCT8HPo": 1201,
+        "yhnpH0dF66I": 11915,
+        "EcqxFdZIvvA": 17882,
+        "rloLrD-ow-Y": 346,
+        "L3TGHBKTw0w": 2832,
+        "0Bfu7zl_i9A": 1817,
+        "GPBS-ZDtIEQ": 3573,
+        "L-apMnmys_k": 1263,
+        "iIyqgzLeIpg": 2786,
+        "hAHe_7zXdxc": 395,
+        "kZcSv-7sSZM": 4409,
+        "bdsMBlbTtVc": 366,
+        "jbHoCHXkKs8": 642,
+        "wuoWRQv6oJE": 278,
+        "U-t0UiEWZf0": 4136,
+        "Tkxui4jTumk": 739,
+        "MiOTSvrztyc": 78,
+        "aCkccThqyuQ": 67,
+        "henYrIpFf3Q": 711,
+        "tDW1_WGPs1g": 398,
+        "ui4oQ-0BfuI": 902,
+        "qdso2G30X0Q": 321,
+        "CJngJbciud8": 486,
+        "uNquO4ujtUc": 681
+      }
     }
   ],
   "trends": {
     "available": true,
     "method": "YouTube Data API view count differences",
-    "observedAt": 1791743423,
+    "observedAt": 1791750015,
     "baselineAt": 1791656991,
-    "windowHours": 24.01,
+    "windowHours": 25.84,
     "videos": [
       {
         "id": "DNnGZBLtmrw",
-        "delta": 18586
+        "delta": 18740
       },
       {
         "id": "QT5Zoq7L7dI",
-        "delta": 6189
+        "delta": 7046
       },
       {
         "id": "e_uHMxOVPfc",
-        "delta": 4537
+        "delta": 4843
       },
       {
         "id": "oqyG-6EWtG4",
-        "delta": 4217
+        "delta": 4702
       },
       {
         "id": "bBFmti-vs8w",
-        "delta": 4189
+        "delta": 4424
       },
       {
         "id": "ys7jsl6vlAs",
-        "delta": 2556
+        "delta": 2443
       },
       {
         "id": "GJHz8SIIvyw",
-        "delta": 1587
+        "delta": 1855
       },
       {
         "id": "YM-dAHmaRKE",
-        "delta": 1147
+        "delta": 1586
       },
       {
         "id": "YhR495KH7oU",
-        "delta": 875
+        "delta": 847
       },
       {
         "id": "e37gjjYuTfo",
-        "delta": 698
+        "delta": 722
       },
       {
         "id": "CKo45HSHjBs",
-        "delta": 612
+        "delta": 687
+      },
+      {
+        "id": "8amBmFZWqKY",
+        "delta": 647
       },
       {
         "id": "6VyNWKDRw38",
         "delta": 552
       },
       {
-        "id": "8amBmFZWqKY",
-        "delta": 436
-      },
-      {
         "id": "sBWXJEpQky4",
-        "delta": 388
+        "delta": 414
       },
       {
         "id": "8lkJF5GVW9k",
-        "delta": 223
+        "delta": 218
       },
       {
         "id": "Osvcoqq7oCg",
-        "delta": 187
+        "delta": 183
       },
       {
         "id": "LRQyrwJAzEg",
-        "delta": 146
+        "delta": 151
       },
       {
         "id": "dTDxpK0Y6Mc",
-        "delta": 127
+        "delta": 134
       },
       {
         "id": "xGoXvFRqReg",
-        "delta": 116
-      },
-      {
-        "id": "zdyC7_JYheY",
-        "delta": 87
+        "delta": 126
       },
       {
         "id": "w1_J5_sutmA",
-        "delta": 80
+        "delta": 100
+      },
+      {
+        "id": "zdyC7_JYheY",
+        "delta": 84
       },
       {
         "id": "Ig6Z6Ak3e_A",
-        "delta": 61
+        "delta": 62
       },
       {
         "id": "EyMhccoCcmw",
-        "delta": 46
+        "delta": 47
       },
       {
         "id": "8drzl-rGRD0",
-        "delta": 30
+        "delta": 34
       },
       {
         "id": "fqpXrs_askk",
-        "delta": 29
+        "delta": 33
       }
     ],
     "note": "Observed view changes, not realtime analytics"
   },
   "sync": {
-    "observedAt": 1791743423,
+    "observedAt": 1791750015,
     "publicListedVideos": 93,
     "channelReportedVideos": 93,
-    "previousListedVideos": 91,
+    "previousListedVideos": 93,
     "status": "ok",
     "note": "Channel videoCount may differ from public uploads (private or unlisted videos)."
   },
   "cityGames": {
-    "week": "2026W41",
+    "week": "2026W42",
     "ids": [
-      "qdso2G30X0Q",
-      "OFd4v31kMwo",
-      "knHs1lVb-gw",
-      "Ig6Z6Ak3e_A",
-      "p1qSegkXHqg",
-      "8amBmFZWqKY",
+      "o6m-w3a3Blo",
       "CJngJbciud8",
-      "we9HuByyqAs"
+      "LRQyrwJAzEg",
+      "p1qSegkXHqg",
+      "vkSL_4At5sc",
+      "avlI232fqvY",
+      "AWCIAYVa3hQ",
+      "xGoXvFRqReg"
     ],
     "source": "YouTube public upload list"
   }
