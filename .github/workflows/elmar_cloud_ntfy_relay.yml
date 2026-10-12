@@ -1,0 +1,58 @@
+name: ELMAR Cloud Ntfy Relay
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: elmar-cloud-ntfy-relay
+  cancel-in-progress: false
+
+jobs:
+  relay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    env:
+      ELMAR_CLOUD_URL: ${{ secrets.ELMAR_CLOUD_URL }}
+      ELMAR_RELAY_KEY: ${{ secrets.ELMAR_RELAY_KEY }}
+      ELMAR_NTFY_TOPIC: ${{ secrets.ELMAR_NTFY_TOPIC }}
+    steps:
+      - name: Deliver queued task IDs via ntfy
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, os, re, sys, urllib.request, urllib.error
+          base = os.environ["ELMAR_CLOUD_URL"].rstrip("/")
+          key = os.environ["ELMAR_RELAY_KEY"]
+          topic = os.environ["ELMAR_NTFY_TOPIC"]
+          if not base.startswith("https://") or not re.fullmatch(r"[A-Za-z0-9_-]{28,100}", topic):
+              raise SystemExit("Invalid relay settings")
+          req = urllib.request.Request(
+              base + "/v1/pending",
+              headers={"Authorization": "Bearer " + key, "User-Agent": "ELMAR-GitHub-Relay/1.0"})
+          with urllib.request.urlopen(req, timeout=20) as response:
+              queue = json.load(response)
+          if queue.get("ok") is not True or not isinstance(queue.get("ids"), list):
+              raise SystemExit("Queue read failed")
+          published = 0
+          for tid in queue["ids"][:16]:
+              if not isinstance(tid, str) or not re.fullmatch(r"[0-9a-f-]{36}", tid):
+                  raise SystemExit("Invalid task ID")
+              push = urllib.request.Request(
+                  "https://ntfy.sh/" + topic,
+                  data=("Task ready " + tid).encode("ascii"),
+                  method="POST",
+                  headers={"Title": "ELMAR OS task", "Priority": "4", "User-Agent": "ELMAR-GitHub-Relay/1.0"})
+              try:
+                  with urllib.request.urlopen(push, timeout=20) as result:
+                      if result.status != 200:
+                          raise SystemExit("Ntfy push failed")
+                      published += 1
+              except urllib.error.HTTPError as error:
+                  print("Ntfy upstream HTTP", error.code)
+                  raise SystemExit(2) from None
+          print("RELAY_OK: notifications sent", published)
+          PY
