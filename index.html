@@ -138,21 +138,39 @@
     content="https://bizdebeledir.github.io/profile.webp"
   >
 
-  <!-- Structured Data -->
+  <meta property="og:site_name" content="Bizdə Belədir">
+
+  <!-- Google üçün təşkilat və sayt adının məlumatı -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Bizdə Belədir",
-    "url": "https://bizdebeledir.github.io/",
-    "logo": "https://bizdebeledir.github.io/profile.webp",
-    "sameAs": [
-      "https://youtube.com/@bizde.beledir",
-      "https://www.instagram.com/bizde.beledir",
-      "https://www.tiktok.com/@bizde.beledir",
-      "https://t.me/Bizdebeledir",
-      "https://www.facebook.com/share/1JU7XLwLea/",
-      "https://www.threads.com/@bizde.beledir"
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://bizdebeledir.github.io/#organization",
+        "name": "Bizdə Belədir",
+        "url": "https://bizdebeledir.github.io/",
+        "logo": "https://bizdebeledir.github.io/profile.webp",
+        "sameAs": [
+          "https://youtube.com/@bizde.beledir",
+          "https://www.instagram.com/bizde.beledir",
+          "https://www.tiktok.com/@bizde.beledir",
+          "https://t.me/Bizdebeledir",
+          "https://www.facebook.com/share/1JU7XLwLea/",
+          "https://www.threads.com/@bizde.beledir"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://bizdebeledir.github.io/#website",
+        "name": "Bizdə Belədir",
+        "alternateName": "Bizde Beledir",
+        "url": "https://bizdebeledir.github.io/",
+        "inLanguage": "az",
+        "publisher": {
+          "@id": "https://bizdebeledir.github.io/#organization"
+        }
+      }
     ]
   }
   </script>
