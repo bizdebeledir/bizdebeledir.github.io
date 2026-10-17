@@ -14,6 +14,16 @@ const elements = {
   shareButton: document.getElementById("share-site")
 };
 
+// Keep video cards readable when YouTube's thumbnail host is unavailable.
+document.addEventListener("error", event => {
+  const img = event.target;
+  if (!img || img.tagName !== "IMG" || !img.matches(".video-card .thumb-wrap img")) return;
+  const wrap = img.closest(".thumb-wrap");
+  if (wrap) wrap.classList.add("thumbnail-missing");
+  img.alt = "";
+  img.remove();
+}, true);
+
 
 /* =========================
    KÖMƏKÇİ FUNKSİYALAR
@@ -130,7 +140,7 @@ function createVideoCard(video, options = {}) {
 
         <img
           src="${thumbnail}"
-          alt="${title}"
+          alt=""
           loading="lazy"
           decoding="async"
           width="480"

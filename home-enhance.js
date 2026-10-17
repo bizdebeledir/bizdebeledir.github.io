@@ -14,6 +14,13 @@
     label: document.getElementById("bb-topic-summary")
   };
   if (!nodes.link || !nodes.items) return;
+  if (nodes.cover) {
+    nodes.cover.addEventListener("error", () => {
+      if (nodes.cover.dataset.brandFallback === "1") return;
+      nodes.cover.dataset.brandFallback = "1";
+      nodes.cover.src = "/profile.webp";
+    }, {once:true});
+  }
   let vids = [];
   let selected = d.preference();
 
@@ -23,6 +30,10 @@
     a.href = d.videoURL(video);
     a.setAttribute("aria-label", d.title(video));
     const img = document.createElement("img");
+    img.addEventListener("error", () => {
+      a.classList.add("thumbnail-missing");
+      img.remove();
+    }, {once:true});
     img.src = "https://i.ytimg.com/vi/" + encodeURIComponent(video.id) + "/hqdefault.jpg";
     img.alt = "";
     img.width = 160;

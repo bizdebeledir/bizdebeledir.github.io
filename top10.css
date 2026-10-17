@@ -101,11 +101,13 @@ section.bb-spotlight { padding: 28px 17px 29px; background: linear-gradient(180d
 .bb-topic-chips {
   display: flex;
   overflow-x: auto;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   gap: 8px;
   padding: 5px 0 13px;
   -webkit-overflow-scrolling: touch;
 }
+.bb-topic-chips::-webkit-scrollbar { display:none; }
 .bb-topic-chip {
   white-space: nowrap;
   flex: 0 0 auto;
@@ -130,6 +132,13 @@ section.bb-spotlight { padding: 28px 17px 29px; background: linear-gradient(180d
   text-decoration:none;
 }
 .bb-discovery-card img { aspect-ratio: 16/10; width: 100%; height: auto; object-fit: cover; }
+.bb-discovery-card.thumbnail-missing::before {
+  content:"▶"; display:grid; place-items:center; width:100%; aspect-ratio:16/10;
+  color:#fff; font-size:24px; background:radial-gradient(circle at 50% 35%,#405844,#1d2929 72%);
+}
+.thumb-wrap.thumbnail-missing { display:grid; place-items:center; background:radial-gradient(circle at 50% 35%,#405844,#1d2929 72%); }
+.thumb-wrap.thumbnail-missing::before { content:"🎬"; font-size:48px; opacity:.9; }
+
 .bb-discovery-copy { padding:8px 11px 8px 0; min-width:0; }
 .bb-discovery-copy strong {
   display:-webkit-box;
@@ -146,13 +155,14 @@ section.bb-spotlight { padding: 28px 17px 29px; background: linear-gradient(180d
   text-decoration:none;font-size:14px;font-weight:900;
 }
 .bb-subscribe {
-  position:fixed;
-  z-index:30;
-  left:50%;
-  bottom:calc(12px + env(safe-area-inset-bottom));
-  transform:translate(-50%,150%);
+  position:relative;
+  z-index:5;
+  left:auto;
+  bottom:auto;
+  transform:none;
   opacity:0;
   visibility:hidden;
+  margin:14px auto calc(14px + env(safe-area-inset-bottom));
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -167,7 +177,7 @@ section.bb-spotlight { padding: 28px 17px 29px; background: linear-gradient(180d
   background:#1b1b1e;
   transition:transform .25s ease, opacity .25s ease, visibility .25s;
 }
-.bb-subscribe.visible {transform:translate(-50%,0);opacity:1;visibility:visible;}
+.bb-subscribe.visible {transform:none;opacity:1;visibility:visible;}
 .bb-subscribe-label {font-size:12px;font-weight:800;line-height:1.3}
 .bb-subscribe-link {
   white-space:nowrap;text-decoration:none;border-radius:9px;
