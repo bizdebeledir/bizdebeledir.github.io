@@ -10,7 +10,7 @@
   if(!d)return;
   const css=document.createElement("link");
   css.rel="stylesheet";
-  css.href="/phase2.css";
+  css.href="/phase2.css?v=20261018b";
   document.head.appendChild(css);
 
   function a(label,href,extraClass="") {
