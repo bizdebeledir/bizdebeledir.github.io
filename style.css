@@ -641,6 +641,7 @@ footer {
 /* SOCIAL FOLLOW UX 20261009 — yalnız əsas səhifədəki yeni bölmə */
 .social-follow {
   margin-top: 14px;
+  margin-bottom: 18px;
   padding: 16px 11px 13px;
   border: 1px solid rgba(133, 219, 192, .21);
   border-radius: 21px;
