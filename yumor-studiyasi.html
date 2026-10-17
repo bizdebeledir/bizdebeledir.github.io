@@ -26,6 +26,7 @@
 <script defer src="/studio-tools-b.js"></script>
 <script defer src="/studio-app.js"></script>
 <script defer src="/visitor.js"></script>
+  <link rel="stylesheet" href="/latest-videos.css">
 </head>
 <body class="studio">
 <header class="studio-header"><a href="/">← Bizdə Belədir</a><span>🎯 YUMOR STUDİYASI</span><a href="/gulus-seheri.html">🌆 Şəhər</a></header>
@@ -61,8 +62,23 @@
     <a href="/gulus-seheri.html">🌆 Gülüş Şəhəri</a>
     <a href="/videos.html">🎬 Bütün videolar</a>
   </section>
+<section class="latest-videos" data-latest-videos aria-labelledby="latest-videos-title">
+  <div class="latest-videos__heading">
+    <div>
+      <p class="latest-videos__eyebrow">KANALDAN AVTOMATİK YENİLƏNİR</p>
+      <h2 id="latest-videos-title">Ən son videolar</h2>
+      <p class="latest-videos__intro">Yeni videolar kanal siyahısı yeniləndikcə burada görünəcək.</p>
+    </div>
+    <p class="latest-videos__status" data-latest-status role="status" aria-live="polite">Siyahı yüklənir…</p>
+  </div>
+  <div class="latest-videos__grid" data-latest-list>
+    <p class="latest-videos__fallback">Videolar yüklənir. <a href="/videos.html">Bütün videolara bax</a>.</p>
+  </div>
+  <a class="latest-videos__more" href="/videos.html">Bütün videolara bax ↗</a>
+</section>
 </main>
 <footer class="studio-footer"><a href="/privacy.html">🔐 Məxfilik</a> · <a href="/">Ana səhifə</a><p>Canlı səsvermə və saxta baxış yoxdur. Paylaşım kartları və BINGO nəticələri bu brauzerdə yaradılır. Videolar YouTube-da qalır.</p></footer>
 <noscript><p class="studio-noscript">Interaktiv studiya üçün JavaScript lazımdır. <a href="/movzular.html">12 mövzu səhifəsini aça bilərsən.</a></p></noscript>
+  <script defer src="/latest-videos.js"></script>
 </body>
 </html>

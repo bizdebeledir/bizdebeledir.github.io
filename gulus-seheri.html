@@ -27,6 +27,7 @@
 <script defer src="/city-modes-b.js"></script>
 <script defer src="/city-app.js"></script>
 <script defer src="/visitor.js"></script>
+  <link rel="stylesheet" href="/latest-videos.css">
 </head>
 <body class="city-app">
 <header class="city-topbar">
@@ -79,11 +80,26 @@
   <div id="city-stage-body" aria-live="polite"></div>
  </section>
  <section class="city-footer-cta"><div><h2>🎡 Daha 20 oyun</h2><p>Gülüş Parkı da yanındadır. Video, detektiv, reaksiya və səsli tapmacalar!</p></div><a href="/yumor-parki.html">Oyun parkına keç →</a></section>
+<section class="latest-videos" data-latest-videos aria-labelledby="latest-videos-title">
+  <div class="latest-videos__heading">
+    <div>
+      <p class="latest-videos__eyebrow">KANALDAN AVTOMATİK YENİLƏNİR</p>
+      <h2 id="latest-videos-title">Ən son videolar</h2>
+      <p class="latest-videos__intro">Yeni videolar kanal siyahısı yeniləndikcə burada görünəcək.</p>
+    </div>
+    <p class="latest-videos__status" data-latest-status role="status" aria-live="polite">Siyahı yüklənir…</p>
+  </div>
+  <div class="latest-videos__grid" data-latest-list>
+    <p class="latest-videos__fallback">Videolar yüklənir. <a href="/videos.html">Bütün videolara bax</a>.</p>
+  </div>
+  <a class="latest-videos__more" href="/videos.html">Bütün videolara bax ↗</a>
+</section>
 </main>
 <footer class="city-footer">
  <a href="/">Ana səhifə</a> · <a href="/videos.html">Bütün videolar</a> · <a href="/privacy.html">Məxfilik</a>
  <p>İnteraktiv oyunlar əyləncə üçündür. Sayt şəxsi məlumat tələb etmir. Video izləmək üçün internet və YouTube tələb olunur.</p>
 </footer>
 <noscript><p class="city-noscript">İnteraktiv bölmələr üçün JavaScript lazımdır. <a href="/videos.html">Bütün videoları aç.</a></p></noscript>
+  <script defer src="/latest-videos.js"></script>
 </body>
 </html>
