@@ -40,8 +40,8 @@
 @media(max-width:390px){.phase2-nav a{font-size:11px;padding:9px}.phase2-notification a{font-size:11px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 /* Previous site-actions subscribe panel shared on every content page. */
-.bb-subscribe{position:fixed;z-index:30;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translate(-50%,150%);opacity:0;visibility:hidden;display:flex;align-items:center;justify-content:space-between;max-width:500px;width:calc(100% - 24px);gap:8px;padding:9px 10px 9px 15px;border-radius:17px;border:1px solid #4c4c4c;box-shadow:0 12px 32px #000d;color:#fff;background:#1b1b1e;transition:transform .25s ease,opacity .25s ease}
-.bb-subscribe.visible{transform:translate(-50%,0);opacity:1;visibility:visible}
+.bb-subscribe{position:relative;z-index:5;left:auto;bottom:auto;transform:none;opacity:0;visibility:hidden;display:flex;align-items:center;justify-content:space-between;max-width:500px;width:calc(100% - 24px);margin:14px auto calc(14px + env(safe-area-inset-bottom));gap:8px;padding:9px 10px 9px 15px;border-radius:17px;border:1px solid #4c4c4c;box-shadow:0 12px 32px #000d;color:#fff;background:#1b1b1e;transition:opacity .25s ease}
+.bb-subscribe.visible{transform:none;opacity:1;visibility:visible}
 .bb-subscribe-label{font-size:12px;font-weight:800}
 .bb-subscribe-link{white-space:nowrap;text-decoration:none;border-radius:9px;background:#ff0033;color:white;padding:10px 12px;font-size:12px;font-weight:900}
 .bb-subscribe-close{color:#ccc;background:transparent;border:0;font-size:23px;padding:4px 7px}
