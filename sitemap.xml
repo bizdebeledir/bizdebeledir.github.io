@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
     <loc>https://bizdebeledir.github.io/</loc>
-    <lastmod>2026-11-11</lastmod>
+    <lastmod>2026-11-12</lastmod>
   </url>
   <url>
     <loc>https://bizdebeledir.github.io/videos.html</loc>
-    <lastmod>2026-11-11</lastmod>
+    <lastmod>2026-11-12</lastmod>
   </url>
   <url>
     <loc>https://bizdebeledir.github.io/shorts.html</loc>
@@ -70,6 +70,26 @@
   </url>
   <url>
     <loc>https://bizdebeledir.github.io/movzu/dost.html</loc>
+  </url>
+  <url>
+    <loc>https://bizdebeledir.github.io/video/az_FbMZr3p0.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/az_FbMZr3p0/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Gecə video dəyişdi, telefonun səsindən diksindim! 😂</video:title>
+      <video:description>Gecə video dəyişdi, telefonun səsindən diksindim! 😂. Hamı yatıb, telefonda sakitcə video izləyirəm. Növbəti video elə gur səslə başladı ki, telefonu yorğanın altında gizlətdim! 😂.</video:description>
+      <video:player_loc>https://www.youtube.com/embed/az_FbMZr3p0</video:player_loc>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://bizdebeledir.github.io/video/Netb5nnTkFI.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/Netb5nnTkFI/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>İşığı söndürən kimi ağcaqanad yenə başladı! 🦟</video:title>
+      <video:description>İşığı söndürən kimi ağcaqanad yenə başladı! 🦟. Yatmaq istəyirəm, qulağımın dibində vızıldayır. İşığı yandırıram, sakitlik olur, söndürən kimi yenə gəlir! 😂.</video:description>
+      <video:player_loc>https://www.youtube.com/embed/Netb5nnTkFI</video:player_loc>
+    </video:video>
   </url>
   <url>
     <loc>https://bizdebeledir.github.io/video/K7L981DgBSo.html</loc>
